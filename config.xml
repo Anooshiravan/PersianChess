@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+    <widget xmlns   = "http://www.w3.org/ns/widgets"
+        xmlns:gap   = "http://phonegap.com/ns/1.0"
+        id          = "com.persianchess.www"
+        versionCode = "109" 
+        version     = "1.0.9" >
+
+    <!-- versionCode is optional and Android only -->
+
+    <name>Persian Chess</name>
+
+    <platform name="android">
+              <icon src="res/android/ldpi.png" density="ldpi" />
+              <icon src="res/android/mdpi.png" density="mdpi" />
+              <icon src="res/android/hdpi.png" density="hdpi" />
+              <icon src="res/android/xhdpi.png" density="xhdpi" />
+    </platform>
+
+    <icon src="logo.png" />
+    <description>
+        Chess 911 Variant Board Game 
+    </description>
+
+    <author href="https://www.persianchess.com" email="aahmadi@schubergphilis.com">
+        Anooshiravan Ahmadi 
+    </author>
+
+    <gap:platform name="android" />
+    <preference name="permissions" value="none"/>
+</widget>

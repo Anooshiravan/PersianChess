@@ -1,0 +1,218 @@
+<!--
+  _____              _                _____ _                   
+ |  __ \            (_)              / ____| |                  
+ | |__) |__ _ __ ___ _  __ _ _ __   | |    | |__   ___  ___ ___ 
+ |  ___/ _ \ '__/ __| |/ _` | '_ \  | |    | '_ \ / _ \/ __/ __|
+ | |  |  __/ |  \__ \ | (_| | | | | | |____| | | |  __/\__ \__ \
+ |_|   \___|_|  |___/_|\__,_|_| |_|  \_____|_| |_|\___||___/___/
+                                                                
+----------------------------------------------------------------
+ Persian Chess (www.PersianChess.com)
+ Copyright 2014 Anooshiravan Ahmadi - MCE @ Schuberg Philis
+ Released under the GPL license
+ Based on the open source projects mentioned at:
+ http://www.PersianChess.com/Copyright
+ Redistribution of this game design, rules and the engine 
+ requires written permission from the author.
+----------------------------------------------------------------
+-->
+
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8" />
+<link rel='stylesheet' href='css/chess911-standalone.css' type='text/css' media='all' />
+        <script src="js/json3.min.js"></script>
+        <script src="js/jquery-1.10.1.min.js"></script>
+        <script src="phonegap.js"></script>
+</head>
+<body>
+
+<div>
+<div id="board">
+        <script src="js/defs.js"></script>
+        <script src="js/io.js"></script>
+        <script src="js/board.js"></script>
+        <script src="js/book.js"></script>
+        <script src="js/movegen.js"></script>
+        <script src="js/makemove.js"></script>
+        <script src="js/perft.js"></script>
+        <script src="js/evaluate.js"></script>
+        <script src="js/pvtable.js"></script>
+        <script src="js/search.js"></script>
+        <script src="js/protocol.js"></script>
+        <script src="js/main.js"></script>
+        <script src="js/chessboard-0.3.0.js"></script>
+        <script src="js/adapter.js"></script>
+</div>
+
+<div id="side">
+    <img src="img/footer/blue.png" id="theme-button" onclick="ChangeTheme();">
+    <img src="img/footer/new.png" id="new-button" title="New Game" onclick="ResetGUI();">
+    <img src="img/footer/flip.png" id="flip-button" title="Flip Board" onclick="Flip();">
+    <img src="img/footer/takeback.png" id="takeback-button" title="Take Back" onclick="TakeBack();">
+    <img src="img/footer/play.png" id="play-button" title="Move Now" onclick="MoveNow();">
+    <img src="img/footer/run.png" id="run-button" title="Start Engine Demo" onclick="StartDemo();">
+    <img src="img/footer/stop.png" id="stop-button" title="Stop Demo" onclick="StopDemo();">
+    <img src="img/footer/fen.png" id="fen-button" title="Show/Set FEN" onclick="SetFen();">
+    <img src="img/footer/save.png" id="save-button" title="Save PGN" onclick="ShowPGN();">
+    <img src="img/footer/help.png" id="help-button" title="Help" onclick="Help();">
+</div>
+
+<div id="console" class="console">
+
+<select id="ThinkTimeChoice">
+  <option value="2">2 Sec</option>
+  <option selected="selected" value="3">3 Sec</option>
+  <option value="5">5 Sec</option>
+  <option value="7">7 Sec</option>
+  <option value="10">10 Sec</option>
+  <option value="15">15 Sec</option>
+  <option value="20">20 Sec</option>
+  <option value="25">25 Sec</option>
+  <option value="30">30 Sec</option>
+  <option value="45">45 Sec</option>
+  <option value="60">60 Sec</option>
+</select>&nbsp;
+
+<select id="VariantChoice" onchange="ResetGUI()">
+  <option value="Persian" selected="selected">Variant: Persian Chess</option>
+  <option value="Citadel">Variant: Classic Citadel</option>
+  <option value="ASE">Variant: ASE 911</option>
+</select>
+
+<textarea name="movelist" id="movelist" disabled="disabled" >
+IMPORTANT: 
+Some users with apparently insufficient knowledge about the design of a Chess variant, are under-rating this game, without pointing me to an specific issue or bug that I can really work on. Unfortunately this behavior reduces the chance that other users also download, try and learn Chess 911.
+Please DO NOT let this happen! Chess 911 is the result of 9 years (on and off) design and development work. If you play and like this game, then please give it an appropriate rating and review on Google Play.
+</textarea>
+
+</div>
+
+</div>
+
+<script>           
+
+// Capture back button
+document.addEventListener("deviceready", onDeviceReady, false);
+function onDeviceReady(){
+    document.addEventListener("backbutton", function(e){
+       TakeBack();
+    }, false);
+}
+
+
+// Sizing the screen
+
+window.addEventListener("touchmove", function(e) {
+    e.preventDefault();
+}, false);
+
+var winHeight = $(window).height();
+var winWidth = $(window).width();
+
+      if (winWidth > winHeight) // Landscape
+      {
+        document.getElementById("board").style.width= winHeight + 4 + 'px';
+        imgsize = (Math.round(winHeight / 11) - 1) + 'px';
+        imgResize(imgsize);
+        document.getElementById("board").style.float = "left";
+        
+        document.getElementById("console").style.float = "left";
+        document.getElementById("console").style.width = (winWidth - winHeight - Math.round(winHeight / 11) - 25) + 'px';
+        document.getElementById("console").style.marginLeft = '15px';
+        document.getElementById("movelist").size = "200";
+        document.getElementById("movelist").style.width = (winWidth - winHeight - Math.round(winHeight / 11) - 35) + 'px';
+        document.getElementById("movelist").style.height = winHeight - 45 + 'px';
+        document.getElementById("movelist").style.overflowY="scroll";
+        
+        document.getElementById("side").style.float = "right";
+        document.getElementById("side").style.width = imgsize;
+
+
+        board.resize();
+      }
+      else
+      {
+        document.getElementById("board").style.width= winWidth + 4 + 'px';
+        imgsize = (Math.round(winWidth / 11) - 1) + 'px';
+        imgResize(imgsize);
+        document.getElementById("board").style.float = "left";
+
+        document.getElementById("console").style.float = "left";
+        document.getElementById("console").style.width = (winWidth - 10) + 'px';
+        document.getElementById("console").style.marginTop = '10px';
+        document.getElementById("console").style.marginLeft = '0px';
+        document.getElementById("movelist").size = "200";
+        document.getElementById("movelist").style.width = (winWidth - 15) + 'px';
+        document.getElementById("movelist").style.height = winHeight - winWidth - Math.round(winWidth / 11) - 50 + 'px';
+
+        document.getElementById("side").style.float = "left";
+        document.getElementById("side").style.width = winWidth + 'px';
+        board.resize();
+      }
+
+ // Handling orientation 
+  function doOnOrientationChange()
+  {
+    var imgsize;
+      if (winWidth > winHeight)
+      {
+        document.getElementById("board").style.width= winHeight + 4 + 'px';
+        imgsize = (Math.round(winHeight / 11) - 1) + 'px';
+        imgResize(imgsize);
+        document.getElementById("board").style.float = "left";
+
+        document.getElementById("console").style.float = "left";
+        document.getElementById("console").style.width = (winWidth - winHeight - Math.round(winHeight / 11) - 25) + 'px';
+        document.getElementById("console").style.marginLeft = '15px';
+        document.getElementById("movelist").size = "200";
+        document.getElementById("movelist").style.width = (winWidth - winHeight - Math.round(winHeight / 11) - 35) + 'px';
+        document.getElementById("movelist").style.height = winHeight - 45 + 'px';
+
+        document.getElementById("side").style.float = "right";
+        document.getElementById("side").style.width = imgsize;
+        board.resize();
+      }
+      else
+      {
+        document.getElementById("board").style.width= winWidth + 4 + 'px';
+        imgsize = (Math.round(winWidth / 11) - 1) + 'px';
+        imgResize(imgsize);
+        document.getElementById("board").style.float = "left";
+
+        document.getElementById("console").style.float = "left";
+        document.getElementById("console").style.width = (winWidth - 10) + 'px';
+        document.getElementById("console").style.marginTop = '10px';
+        document.getElementById("console").style.marginLeft = '0px';
+        document.getElementById("movelist").size = "200";
+        document.getElementById("movelist").style.width = (winWidth - 15) + 'px';
+        document.getElementById("movelist").style.height = winHeight - winWidth - Math.round(winWidth / 11) - 50 + 'px';
+
+        document.getElementById("side").style.float = "left";
+        document.getElementById("side").style.width = winWidth + 'px';
+        board.resize();
+      }
+      winWidth = $(window).width();
+      winHeight = $(window).height();
+  }
+  window.addEventListener('orientationchange', doOnOrientationChange);
+
+function imgResize(imgsize)
+{
+        document.getElementById("theme-button").style.height = document.getElementById("theme-button").style.width = 
+        document.getElementById("flip-button").style.height = document.getElementById("flip-button").style.width =
+        document.getElementById("save-button").style.height = document.getElementById("save-button").style.width =
+        document.getElementById("new-button").style.height = document.getElementById("new-button").style.width =
+        document.getElementById("fen-button").style.height = document.getElementById("fen-button").style.width =
+        document.getElementById("run-button").style.height = document.getElementById("run-button").style.width =
+        document.getElementById("stop-button").style.height = document.getElementById("stop-button").style.width =
+        document.getElementById("takeback-button").style.height = document.getElementById("takeback-button").style.width =
+        document.getElementById("play-button").style.height = document.getElementById("play-button").style.width =
+        document.getElementById("help-button").style.height = document.getElementById("help-button").style.width =
+        imgsize;
+}
+</script>
+
+</body>
+</html>
