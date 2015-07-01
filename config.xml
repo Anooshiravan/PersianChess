@@ -18,11 +18,11 @@
 
     <icon src="logo.png" />
     <description>
-        Chess 911 Variant Board Game 
+        Chess variant: Persian Chess 
     </description>
 
     <author href="https://www.persianchess.com" email="aahmadi@schubergphilis.com">
-        Anooshiravan Ahmadi 
+        Anooshiravan Ahmadi
     </author>
 
     <gap:platform name="android" />
