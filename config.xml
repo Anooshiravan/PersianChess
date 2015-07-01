@@ -16,7 +16,7 @@
               <icon src="res/android/xhdpi.png" density="xhdpi" />
     </platform>
 
-    <icon src="logo.png" />
+    <icon src="img/logo.png" />
     <description>
         Chess variant: Persian Chess 
     </description>
