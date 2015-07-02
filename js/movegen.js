@@ -45,8 +45,11 @@ function MOVE(from, to, captured, promoted, flag) {
     if (brd_pieces[from] == PIECES.EMPTY) {
         return NOMOVE;
     }
-    // NO Center SQ
+    // NO Center SQ for Egyptian Eye
     if (to == 97 && variant == "ASE") return NOMOVE;
+
+    // NO Center SQ for Persian Princess (except for Pawns and Princess)
+    if (to == 97 && variant == "Persian" && brd_pieces[from] != PIECES.wS && brd_pieces[from] != PIECES.bS && brd_pieces[from] != PIECES.wP && brd_pieces[from] != PIECES.bP) return NOMOVE;
 
     return (from | (to << 8) | (captured << 16) | (promoted << 22) | flag);
 }
