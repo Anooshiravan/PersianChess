@@ -45,7 +45,21 @@ function NewGame() {
 
 function ResetGUI() {
     variant = document.getElementById("VariantChoice").value;
-    var reset = confirm("Do you want to start a new game in \"" + variant + "\" variant?");
+    variantname = ""
+    switch(variant) {
+        case "Persian":
+            variantname = "Persian Princess"
+            break;
+        case "ASE":
+            variantname = "Egyptian Eye"
+            break;
+        case "Citadel":
+            variantname = "Celtic Citadel"
+            break;
+        default:
+            break;
+        }
+    var reset = confirm("Do you want to start a new game in \"" + variantname + "\" variant?");
     if (reset == true) {
         board.redraw();
         switch(variant) {
@@ -56,6 +70,7 @@ function ResetGUI() {
             board.theme ("brown");
             break;
         case "Citadel":
+            
             board.theme ("blue");
             break;
         default:
@@ -64,6 +79,10 @@ function ResetGUI() {
         clearTimeout(EngineDemoTimer);
         NewGame();
         board.position('start', true);
+        if (variant == "Citadel")
+        {
+            board.position(START_FEN_CITADEL);
+        }
     }
 }
 
@@ -342,5 +361,5 @@ function AlertEndGame() {
 
 
 function Help() {
-    alert("Please refer to www.chess911.com for help and the game rules.");
+    alert("Persian Chess is invented and programmed by Anooshiravan Ahmadi MCE\r\nPlease refer to www.PersianChess.com for the detailed game rules.");
 }
