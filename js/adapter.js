@@ -96,6 +96,19 @@ function ResetGUI() {
     }
 }
 
+function AltFEN()
+{
+    alt_fen_number = document.getElementById("AltFen").value;
+    var alt_fen_reset = confirm("Do you want to set the position to Training Position #" + alt_fen_number + " ? These are so-called \"handicap\" positions with different level of advantage for White.");
+    var tp_fen_name = "TP_FEN_" + alt_fen_number;
+    var TP_FEN = window[tp_fen_name];
+    if (alt_fen_reset == true) {
+        ParseFen(TP_FEN);
+        board.position(TP_FEN);
+    }
+}
+
+
 function MoveGUIPiece() {
     var fen = BoardToFen().replace(/ .+$/, '');
     board.position(fen);
