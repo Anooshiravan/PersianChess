@@ -217,7 +217,7 @@ function EngineDemo() {
 
 function StartDemo() {
     
-    var demo = confirm("Starting Engine Demo.\nChess 911 Engine will play 10 moves or until you click on the stop button.");
+    var demo = confirm("Starting Engine Demo.\nPersian Chess Engine will play 10 moves or until you click on the stop button.");
     if (demo == true) {
         engineplay = 0;
         EngineDemo();
