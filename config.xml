@@ -2,8 +2,8 @@
     <widget xmlns   = "http://www.w3.org/ns/widgets"
         xmlns:gap   = "http://phonegap.com/ns/1.0"
         id          = "com.persianchess.www"
-        versionCode = "110" 
-        version     = "1.1.0" >
+        versionCode = "111" 
+        version     = "1.1.1" >
 
     <!-- versionCode is optional and Android only -->
 

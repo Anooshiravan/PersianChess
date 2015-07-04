@@ -33,7 +33,17 @@ var output = "";
 
 function NewGame() {
     clearTimeout(EngineDemoTimer);
-    ParseFen(START_FEN);
+    if (variant == "Citadel")
+        {
+            START_FEN = (START_FEN_CITADEL);
+            ParseFen(START_FEN_CITADEL);
+        }
+    else
+    {
+        START_FEN = (START_FEN_NON_CITADEL);
+        ParseFen(START_FEN_NON_CITADEL);
+    }
+    
     PrintBoard();
     GameController.PlayerSide = brd_side;
     GameController.GameSaved = BOOL.FALSE;
