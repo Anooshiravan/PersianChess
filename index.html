@@ -116,7 +116,15 @@ window.addEventListener("touchmove", function(e) {
     e.preventDefault();
 }, false);
 
-var winHeight = $(window).height();
+window.onresize = function(event) {
+    screenResize();
+};
+
+screenResize();
+
+function screenResize()
+{
+    var winHeight = $(window).height();
 var winWidth = $(window).width();
 
       if (winWidth > winHeight) // Landscape
@@ -158,7 +166,9 @@ var winWidth = $(window).width();
         document.getElementById("side").style.float = "left";
         document.getElementById("side").style.width = winWidth + 'px';
         board.resize();
-      }
+    }
+}
+
 
  // Handling orientation 
   function doOnOrientationChange()
