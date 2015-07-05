@@ -130,7 +130,7 @@ function screenResize()
       if (winWidth > winHeight) // Landscape
       {
         document.getElementById("board").style.width= winHeight + 4 + 'px';
-        imgsize = (Math.round(winHeight / 11) - 1) + 'px';
+        imgsize = (Math.round(winHeight / 10) - 5) + 'px';
         imgResize(imgsize);
         document.getElementById("board").style.float = "left";
         
@@ -151,7 +151,7 @@ function screenResize()
       else
       {
         document.getElementById("board").style.width= winWidth + 4 + 'px';
-        imgsize = (Math.round(winWidth / 11) - 1) + 'px';
+        imgsize = (Math.round(winWidth / 10) - 5) + 'px';
         imgResize(imgsize);
         document.getElementById("board").style.float = "left";
 
@@ -177,7 +177,7 @@ function screenResize()
       if (winWidth > winHeight)
       {
         document.getElementById("board").style.width= winHeight + 4 + 'px';
-        imgsize = (Math.round(winHeight / 11) - 1) + 'px';
+        imgsize = (Math.round(winHeight / 10) - 5) + 'px';
         imgResize(imgsize);
         document.getElementById("board").style.float = "left";
 
@@ -195,7 +195,7 @@ function screenResize()
       else
       {
         document.getElementById("board").style.width= winWidth + 4 + 'px';
-        imgsize = (Math.round(winWidth / 11) - 1) + 'px';
+        imgsize = (Math.round(winWidth / 10) - 5) + 'px';
         imgResize(imgsize);
         document.getElementById("board").style.float = "left";
 
