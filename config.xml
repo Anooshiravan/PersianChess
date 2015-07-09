@@ -17,6 +17,8 @@
     </platform>
 
     <icon src="img/logo.png" />
+    <gap:splash src="splash.png" />
+    
     <description>
         Chess variant: Persian Chess 
     </description>
