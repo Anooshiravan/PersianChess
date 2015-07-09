@@ -391,5 +391,5 @@ function AlertEndGame() {
 
 
 function Help() {
-    alert("Persian Chess is invented and programmed by Anooshiravan Ahmadi MCE\r\nPlease refer to www.PersianChess.com for the detailed game rules.");
+    alert("Persian Chess is invented and programmed by:\r\nAnooshiravan Ahmadi\r\nPlease refer to www.PersianChess.com for the detailed game rules.");
 }
