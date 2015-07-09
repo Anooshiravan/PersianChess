@@ -336,12 +336,19 @@ function StartSearch() {
     CheckAndSet();
 }
 
-function ShowPGN() {
+function SendPGN() {
+    var reset = confirm("Do you want to send this game as PGN format by email?");
+    if (reset == true) {
+    var emailbody = "";
     if (document.getElementById('movelist').value != '')
-    {
-        alert(document.getElementById('movelist').value);
+        {
+            emailbody = document.getElementById('movelist').value;
+            emailbody = emailbody.replace(/(?:\r\n|\r|\n)/g, '%0D%0A');
+            window.open("mailto:?subject=Persian Chess game&body=" + emailbody);
+        }
     }
 }
+
 
 function addNoteToMoveList(note)
 {
