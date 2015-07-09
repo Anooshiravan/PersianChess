@@ -35,6 +35,7 @@
     // Define 85SQ board squares
     //------------------------------------------------------------------------------
 
+    var thinking = false;
     var SQ85 = new Array();
 
     // row 1
@@ -1888,10 +1889,12 @@ widget.highlight = function() {
             
             if (bool == true)
             {
-                $('#' + SQUARE_ELS_IDS[waitsquare]).addClass(CSS.wait)
+                thinking = true;
+                $('#' + SQUARE_ELS_IDS[waitsquare]).addClass(CSS.wait);
             }
             else
             {
+                thinking = false;
                 $('#' + SQUARE_ELS_IDS[waitsquare]).removeClass(CSS.wait)
             }
         };
@@ -1958,6 +1961,8 @@ widget.highlight = function() {
         function mousedownSquare(e) {
             // do nothing if we're not draggable
             if (cfg.draggable !== true) return;
+            // do nothing if the board is in thinking state
+            if (thinking == true) return;
 
             var square = $(this).attr('data-square');
 
