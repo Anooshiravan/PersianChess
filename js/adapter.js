@@ -103,6 +103,7 @@ function AltFEN()
     var tp_fen_name = "TP_FEN_" + alt_fen_number;
     var TP_FEN = window[tp_fen_name];
     if (alt_fen_reset == true) {
+        board.removehighlights();
         if (alt_fen_number == "0")
         {
             ResetGUI();
