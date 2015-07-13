@@ -19,10 +19,6 @@
 
 var variant = "Persian"
 
-var PIECES =  { EMPTY : 0, wP : 1, wN : 2, wB : 3, wR : 4, wS : 5, wF : 6, wQ : 7, wK : 8, bP : 9, bN : 10, bB : 11, bR : 12, bS : 13, bF : 14, bQ : 15, bK : 16 };
-var PIECE_NAMES = ['EMPTY', 'wP', 'wN', 'wB', 'wR', 'wS', 'wF', 'wQ', 'wK', 'bP', 'bN', 'bB', 'bR', 'bS', 'bF', 'bQ', 'bK'];
-var PieceVal= [ 0, 100, 325, 325, 550, 750, 900, 1000, 50000, 100, 325, 325, 550, 750, 900, 1000, 50000  ];
-
 var BRD_SQ_NUM = 195;
 
 var MAXGAMEMOVES = 2048;
@@ -108,6 +104,10 @@ var PceChar = ".PNBRSFQKpnbrsfqk";
 var SideChar = "wb-";
 var RankChar = "123456789";
 var FileChar = "abcdefghijk";
+
+var PIECES =  { EMPTY : 0, wP : 1, wN : 2, wB : 3, wR : 4, wS : 5, wF : 6, wQ : 7, wK : 8, bP : 9, bN : 10, bB : 11, bR : 12, bS : 13, bF : 14, bQ : 15, bK : 16 };
+var PIECE_NAMES = ['EMPTY', 'wP', 'wN', 'wB', 'wR', 'wS', 'wF', 'wQ', 'wK', 'bP', 'bN', 'bB', 'bR', 'bS', 'bF', 'bQ', 'bK'];
+var PieceVal= [ 0, 100, 325, 325, 550, 750, 900, 1000, 50000, 100, 325, 325, 550, 750, 900, 1000, 50000  ];
 
 var PieceBig = [ BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.FALSE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE ];
 // MQ  0011111011111
