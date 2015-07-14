@@ -237,30 +237,32 @@ var CastlePerm = [
     15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15
 ];
 
-/*                         	                        
-1111 1111 1111 1111 1111 1111 1111 1111 -> 32 bit hash 
-0000 0000 0000 0000 0000 0000 1111 1111 -> From 0xFF
-0000 0000 0000 0000 1111 1111 0000 0000 -> To >> 8, 0xFF
-0000 0000 0001 1111 0000 0000 0000 0000 -> Captured >> 16, 0x1F
-0000 0011 1110 0000 0000 0000 0000 0000 -> Promoted Piece >> 21, 0x1F
-0000 0100 0000 0000 0000 0000 0000 0000 -> Castle 0x4000000
-0000 1000 0000 0000 0000 0000 0000 0000 -> Rendezvous 0x8000000
-0001 0000 0000 0000 0000 0000 0000 0000 -> EP 0x100000
-0010 0000 0000 0000 0000 0000 0000 0000 -> Pawn Start 0x200000
-0100 0000 0000 0000 0000 0000 0000 0000 -> Unused
-1000 0000 0000 0000 0000 0000 0000 0000 -> Unused
+/*                                                  
+                                                    
+0000 0000 0000 0000 0000 1111 1111 -> From 0xFF
+0000 0000 0000 1111 1111 0000 0000 -> To >> 8, 0xFF
+0000 0000 1111 0000 0000 0000 0000 -> Captured >> 16, 0xF
+0000 0001 0000 0000 0000 0000 0000 -> EP 0x100000
+0000 0010 0000 0000 0000 0000 0000 -> Pawn Start 0x200000
+0011 1100 0000 0000 0000 0000 0000 -> Promoted Piece >> 22, 0xF
+0100 0000 0000 0000 0000 0000 0000 -> Castle 0x4000000
+1000 0000 0000 0000 0000 0000 0000 -> Rendezvous 0x8000000
 */
+
 
 function FROMSQ(m) { return (m & 0xFF); }
 function TOSQ(m)  { return (((m)>>8) & 0xFF); }
-function CAPTURED(m)  { return (((m)>>16) & 0x1F); }
-function PROMOTED(m)  { return (((m)>>21) & 0x1F); }
-var MFLAGCAP = 0x1F0000     // Captured 
-var MFLAGPROM = 0x3E00000   // Promoted
-var MFLAGCA = 0x4000000     // Castle
-var MFLAGRZ = 0x8000000     // Rendezvous
-var MFLAGEP = 0x10000000    // En passant
-var MFLAGPS = 0x20000000    // Pawn Start
+function CAPTURED(m)  { return (((m)>>16) & 0xF); }
+function PROMOTED(m)  { return (((m)>>22) & 0xF); }
+
+var MFLAGEP = 0x100000
+var MFLAGPS = 0x200000
+var MFLAGCA = 0x4000000
+var MFLAGRZ = 0x8000000
+
+var MFLAGCAP = 0x1F0000
+var MFLAGPROM = 0x3C00000
+
 var NOMOVE = 0
 
 
