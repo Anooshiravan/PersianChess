@@ -97,6 +97,7 @@ function ClearForSearch() {
     srch_start = $.now();
     srch_stop = BOOL.FALSE;
     srch_best = NOMOVE;
+    GeneratedInsaneMoves = 0; 
 }
 
 
@@ -314,7 +315,7 @@ function SearchPosition() {
     console.log(output);
     ClearForSearch();
 
-    bestMove = BookMove();
+    if (insane_move_debug != true) bestMove = BookMove();
 
     if (bestMove != NOMOVE) {
         srch_best = bestMove;
@@ -409,5 +410,11 @@ function SearchPosition() {
     MAXDEPTH = OLD_MAXDEPTH;
     srch_time = old_srch_time;
     srch_thinking = BOOL.FALSE;
+
+
+    if (insane_move_debug == true && GeneratedInsaneMoves != 0) 
+        {
+            console.log("%c " + GeneratedInsaneMoves + " number of insane moves generated.", "color: red; font-style: italic");
+        }
     output += "\r\n- " + line;
 }

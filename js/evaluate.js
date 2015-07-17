@@ -59,6 +59,20 @@ var KnightTable = [
 0	,	0	,	0	,	0	,	0	,	0	,	0	,	0	,	0	,	0	,	0		
 ];
 
+var WizardChampionTable = [
+-10 ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   , -10   , 
+0   ,   0   ,   10  ,   -10 ,   0   ,   0   ,   0   ,   -10 ,   10  ,   0   ,   0   ,
+0   ,   15  ,   0   ,   0   ,   10  ,   10  ,   10  ,   0   ,   0   ,   15  ,   0   ,
+0   ,   0   ,   0   ,   10  ,   15  ,   15  ,   15  ,   10  ,   0   ,   0   ,   0   ,
+0   ,   0   ,   10  ,   15  ,   20  ,   20  ,   20  ,   15  ,   10  ,   0   ,   0   ,
+0   ,   0   ,   10  ,   15  ,   20  ,   20  ,   20  ,   15  ,   10  ,   0   ,   0   ,
+0   ,   0   ,   10  ,   15  ,   20  ,   20  ,   20  ,   15  ,   10  ,   0   ,   0   ,
+0   ,   0   ,   0   ,   10  ,   15  ,   15  ,   15  ,   10  ,   0   ,   0   ,   0   ,
+0   ,   0   ,   0   ,   0   ,   10  ,   10  ,   10  ,   0   ,   0   ,   0   ,   0   ,
+0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   , 
+0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   
+];
+
 var BishopTable = [
 0	,	0	,	0	,	0	,	0	,	0	,	0	,	0	,	0	,	0	,	0	, 
 0	,	0	,	0	,	-10	,	0	,	0	,	0	,	-10	,	0	,	0	,	0	,
@@ -246,6 +260,30 @@ function EvalPosition() {
     for (pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
         sq = brd_pList[PCEINDEX(pce, pceNum)];
         score -= KnightTable[MIRROR121(SQ121(sq))];
+    }
+
+    pce = PIECES.wW;
+    for (pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
+        sq = brd_pList[PCEINDEX(pce, pceNum)];
+        score += WizardChampionTable[SQ121(sq)];
+    }
+
+    pce = PIECES.bW;
+    for (pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
+        sq = brd_pList[PCEINDEX(pce, pceNum)];
+        score -= WizardChampionTable[MIRROR121(SQ121(sq))];
+    }
+
+    pce = PIECES.wC;
+    for (pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
+        sq = brd_pList[PCEINDEX(pce, pceNum)];
+        score += WizardChampionTable[SQ121(sq)];
+    }
+
+    pce = PIECES.bC;
+    for (pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
+        sq = brd_pList[PCEINDEX(pce, pceNum)];
+        score -= WizardChampionTable[MIRROR121(SQ121(sq))];
     }
 
     pce = PIECES.wB;

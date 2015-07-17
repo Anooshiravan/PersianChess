@@ -199,6 +199,93 @@ body {
     background-size: 100%;
 }
 
+/* Debug */
+
+.white-debug-1e1d7 {
+    background-color: #FFFFFF;
+}
+.black-debug-3c85d {
+    background-color: #FFFFFF;
+}
+.off-debug-53d36 {
+    background-color: #FFFFFF;
+}
+.wait-debug-53d37 {
+    background-color: #FFFFFF;
+}
+.persian-debug-53d37 {
+    background-color: #FFFFFF;
+    background-image:url('../img/persian.png');
+    background-size: 100%;
+}
+.ase-debug-53d37 {
+    background-color: #FFFFFF;
+    background-image:url('../img/ase.png');
+    background-size: 100%;
+}
+.rightdia-debug-53d38 {
+    background-color: #FFFFFF;
+    background-image:url('../img/right.png');
+    background-size: 100%;
+}
+.leftdia-debug-53d39 {
+    background-color: #FFFFFF;
+    background-image:url('../img/left.png');
+    background-size: 100%;
+}
+
+/* orbital */
+
+.white-orbital-1e1d7 {
+    background-color: #EFEFEF;
+    color: #7085B6;
+}
+.black-orbital-3c85d {
+    /*
+    background-image: url('squares/dark_blue.png');
+    background-size: 100%;
+    */
+    background-color: #888888;
+    color: #DFDFDF;
+}
+.off-orbital-53d36 {
+    background-color: #1F281F;
+    color: #CCCFD1;
+}
+.wait-orbital-53d37 {
+    background-color: #888888;
+    background-image:url('../img/wait.png');
+    background-size: 100%;
+    -webkit-box-shadow: inset 0 0 10px 5px #333F33;
+    -moz-box-shadow: inset 0 0 10px 5px #333F33;
+    box-shadow: inset 0 0 10px 5px #333F33;
+}
+.persian-orbital-53d37 {
+    background-color: #888888;
+    color: #CCCFD1;
+    background-image:url('../img/persian.png');
+    background-size: 100%;
+}
+.ase-orbital-53d37 {
+    background-color: #888888;
+    color: #CCCFD1;
+    background-image:url('../img/ase.png');
+    background-size: 100%;
+}
+.rightdia-orbital-53d38 {
+    background-color: #888888;
+    color: #CCCFD1;
+    background-image:url('../img/right.png');
+    background-size: 100%;
+}
+.leftdia-orbital-53d39 {
+    background-color: #888888;
+    color: #CCCFD1;
+    background-image:url('../img/left.png');
+    background-size: 100%;
+}
+
+
 /* highlighted square */
 
 .highlight0-32855 {

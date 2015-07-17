@@ -106,19 +106,34 @@ function MakeMove(move) {
             default: break;
         }
     }	
+    // Rendezvous
     else if ( (move & MFLAGRZ) != 0) {
         switch(to) {
             case SQUARES.H2:
                 ClearPiece(SQUARES.G2);
                 AddPiece(SQUARES.G2, PIECES.wB);
                 ClearPiece(SQUARES.H2);
-                AddPiece(SQUARES.H2, PIECES.wS);
+                if (variant == "Orbital")
+                {
+                    AddPiece(SQUARES.H2, PIECES.wC);
+                }
+                else
+                {
+                    AddPiece(SQUARES.H2, PIECES.wS);
+                }
 			break;
             case SQUARES.H10:
                 ClearPiece(SQUARES.G10);
                 AddPiece(SQUARES.G10, PIECES.bB);
                 ClearPiece(SQUARES.H10);
-                AddPiece(SQUARES.H10, PIECES.bS);
+                if (variant == "Orbital")
+                {
+                    AddPiece(SQUARES.H10, PIECES.bC);
+                }
+                else
+                {
+                    AddPiece(SQUARES.H10, PIECES.bS);
+                }
 			break;
             default: break;
         }
@@ -218,17 +233,34 @@ function TakeMove() {
             default: break;
         }
     }
+    
+    // Rendezvous
     else if ( (move & MFLAGRZ) != 0) {
         switch(to) {
             case SQUARES.H2:
                 ClearPiece(SQUARES.G2);
-                AddPiece(SQUARES.G2, PIECES.wS);
+                if (variant == "Orbital")
+                {
+                    AddPiece(SQUARES.G2, PIECES.wC);
+                }
+                else
+                {
+                    AddPiece(SQUARES.G2, PIECES.wS);
+                }
+                
                 ClearPiece(SQUARES.H2);
                 AddPiece(SQUARES.H2, PIECES.wB);
                 break;
             case SQUARES.H10:
                 ClearPiece(SQUARES.G10);
-                AddPiece(SQUARES.G10, PIECES.bS);
+                if (variant == "Orbital")
+                {
+                    AddPiece(SQUARES.G10, PIECES.bC);
+                }
+                else
+                {
+                    AddPiece(SQUARES.G10, PIECES.bS);
+                }
                 ClearPiece(SQUARES.H10);
                 AddPiece(SQUARES.H10, PIECES.bB);
 			break;

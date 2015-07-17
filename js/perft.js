@@ -23,7 +23,7 @@ function Perft(depth) {
 	MakeNullMove();
 	if(brd_posKey !=  GeneratePosKey())  {
 		console.log(printGameLine());
-		PrintBoard();
+		if (debug) PrintBoard();
 		srch_stop = BOOL.TRUE;
 		console.log('Hash Error After Make');
 	}   
@@ -31,7 +31,7 @@ function Perft(depth) {
 	TakeNullMove();
 	if(brd_posKey !=  GeneratePosKey())  {
 		console.log(printGameLine());
-		PrintBoard();
+		if (debug) PrintBoard();
 		srch_stop = BOOL.TRUE;
 		console.log('Hash Error After Take');
 	}   
@@ -60,7 +60,7 @@ function Perft(depth) {
 
 function PerftTest(depth) {    
 
-	PrintBoard();
+	if (debug) PrintBoard();
 	console.log("Starting Test To Depth:" + depth);	
 	perft_leafNodes = 0;
 	GenerateMoves();

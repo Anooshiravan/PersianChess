@@ -27,9 +27,9 @@ var brd_ply;
 var brd_hisPly;
 var brd_castlePerm;
 var brd_posKey;
-var brd_pceNum = new Array(17);
+var brd_pceNum = new Array(21);
 var brd_material = new Array(2);
-var brd_pList = new Array(18 * 11);
+var brd_pList = new Array(22 * 11);
 
 var brd_history = [];
 var brd_history_notes = new Array(255);
@@ -40,7 +40,7 @@ var brd_moveListStart = new Array(MAXDEPTH);
 
 var brd_PvTable = [PVENTRIES];
 var brd_PvArray = new Array(MAXDEPTH);
-var brd_searchHistory = new Array(18 * BRD_SQ_NUM);
+var brd_searchHistory = new Array(22 * BRD_SQ_NUM);
 var brd_searchKillers = new Array(3 * MAXDEPTH);
 
 // board functions
@@ -97,7 +97,7 @@ function BoardToFen() {
 
 function CheckBoard() {
 
-    var t_pceNum = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    var t_pceNum = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     var t_material = [0, 0];
 
     var sq121, t_piece, t_pce_num, sq195, colour, pcount;
@@ -259,7 +259,7 @@ function ResetBoard() {
         brd_pieces[SQ195(index)] = PIECES.EMPTY;
     }
 
-    for (index = 0; index < 18 * 11; ++index) {
+    for (index = 0; index < 22 * 11; ++index) {
         brd_pList[index] = PIECES.EMPTY;
     }
 
@@ -267,7 +267,7 @@ function ResetBoard() {
         brd_material[index] = 0;
     }
 
-    for (index = 0; index < 17; ++index) {
+    for (index = 0; index < 21; ++index) {
         brd_pceNum[index] = 0;
     }
 
@@ -307,6 +307,12 @@ function ParseFen(fen) {
         case 'n':
             piece = PIECES.bN;
             break;
+        case 'w':
+            piece = PIECES.bW;
+            break;
+        case 'c':
+            piece = PIECES.bC;
+            break;
         case 'b':
             piece = PIECES.bB;
             break;
@@ -330,6 +336,12 @@ function ParseFen(fen) {
             break;
         case 'N':
             piece = PIECES.wN;
+            break;
+        case 'W':
+            piece = PIECES.wW;
+            break;
+        case 'C':
+            piece = PIECES.wC;
             break;
         case 'B':
             piece = PIECES.wB;
@@ -412,7 +424,6 @@ function ParseFen(fen) {
     brd_posKey = GeneratePosKey();
     UpdateListsMaterial();
 }
-
 function SqAttacked(sq, side) {
     var pce;
     var t_sq;
@@ -431,12 +442,16 @@ function SqAttacked(sq, side) {
         }
     }
 
+    // Knight, Princess and Fortress (non slide moves)
+
     for (index = 0; index < 8; ++index) {
         pce = brd_pieces[sq + KnDir[index]];
         if (pce != SQUARES.OFFBOARD && PieceKnightPrincessFortress[pce] == BOOL.TRUE && PieceCol[pce] == side) {
             return BOOL.TRUE;
         }
     }
+
+    // Rook, Fortress and Queen (slide moves)
 
     for (index = 0; index < 4; ++index) {
         dir = RkDir[index];
@@ -454,6 +469,8 @@ function SqAttacked(sq, side) {
         }
     }
 
+    // Bishop, Princess and Queen (slide moves)
+
     for (index = 0; index < 4; ++index) {
         dir = BiDir[index];
         t_sq = sq + dir;
@@ -469,6 +486,24 @@ function SqAttacked(sq, side) {
             pce = brd_pieces[t_sq];
         }
     }
+
+    // Wizard and Champion
+
+    for (index = 0; index < 12; ++index) {
+        pce = brd_pieces[sq + WzDir[index]];
+        if (pce != SQUARES.OFFBOARD && PieceWizard[pce] == BOOL.TRUE && PieceCol[pce] == side) {
+            return BOOL.TRUE;
+        }
+    }
+
+    for (index = 0; index < 12; ++index) {
+        pce = brd_pieces[sq + ChDir[index]];
+        if (pce != SQUARES.OFFBOARD && PieceChampion[pce] == BOOL.TRUE && PieceCol[pce] == side) {
+            return BOOL.TRUE;
+        }
+    }
+
+    // King
 
     for (index = 0; index < 8; ++index) {
         pce = brd_pieces[sq + KiDir[index]];

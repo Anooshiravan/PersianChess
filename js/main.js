@@ -57,7 +57,7 @@ function EvalInit() {
 function InitHashKeys() {
     var index = 0;
 	
-	for(index = 0; index < 17 * 195; ++index) {				
+	for(index = 0; index < 21 * 195; ++index) {				
 		PieceKeys[index] = RAND_32();
 	}
 	

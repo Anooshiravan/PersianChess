@@ -26,25 +26,16 @@ var cfg = {
     position: 'start'
 };
 var board = new ChessBoard(document.getElementById("board"), cfg);
-board.theme("green");
+if (board_debug) board.theme("debug"); else board.theme("green");
 var yourMove;
 var output = "";
 
 
 function NewGame() {
     clearTimeout(EngineDemoTimer);
-    if (variant == "Citadel")
-        {
-            START_FEN = (START_FEN_CITADEL);
-            ParseFen(START_FEN_CITADEL);
-        }
-    else
-    {
-        START_FEN = (START_FEN_NON_CITADEL);
-        ParseFen(START_FEN_NON_CITADEL);
-    }
-    
-    PrintBoard();
+    ResetBoard();
+    ParseFen(START_FEN);
+    if (debug) PrintBoard();
     GameController.PlayerSide = brd_side;
     GameController.GameSaved = BOOL.FALSE;
     if (document.getElementById("movelist") != null)
@@ -53,7 +44,7 @@ function NewGame() {
     }
 }
 
-function ResetGUI() {
+function ResetGame() {
     variant = document.getElementById("VariantChoice").value;
     variantname = ""
     switch(variant) {
@@ -66,33 +57,38 @@ function ResetGUI() {
         case "Citadel":
             variantname = "Celtic Citadel"
             break;
+        case "Orbital":
+            variantname = "Orbital Omega"
+            break;
         default:
             break;
         }
     var reset = confirm("Do you want to start a new game in \"" + variantname + "\" variant?");
     if (reset == true) {
-        board.redraw();
         switch(variant) {
         case "Persian":
+            START_FEN = "f111111111f/1rnbqksbnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKSBNR1/F111111111F w KQkq - 0 1";
             board.theme("green");
             break;
         case "ASE":
+            START_FEN = "f111111111f/1rnbqksbnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKSBNR1/F111111111F w KQkq - 0 1";
             board.theme ("brown");
             break;
         case "Citadel":
-            
+            START_FEN = "f111111111f/1rnbqkbsnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKBSNR1/F111111111F w KQkq - 0 1";
             board.theme ("blue");
+            break;
+        case "Orbital":
+            START_FEN = "w111111111w/1rnbqkcbnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKCBNR1/W111111111W w KQkq - 0 1";
+            board.theme ("orbital");
             break;
         default:
             break;
         }
         clearTimeout(EngineDemoTimer);
+        board.redraw();
         NewGame();
-        board.position('start', true);
-        if (variant == "Citadel")
-        {
-            board.position(START_FEN_CITADEL);
-        }
+        board.position(START_FEN, true)
     }
 }
 
@@ -213,9 +209,11 @@ var EngineDemoTimer;
 
 var engineplay = 0;
 function EngineDemo() {
+    var engineplaynum = 10;
     StartSearch();
     pgn = '';
-    if (engineplay < 9) 
+    if (insane_move_debug) engineplaynum = 255;
+    if (engineplay < engineplaynum) 
        { EngineDemoTimer = setTimeout(arguments.callee, 1000);
           engineplay++;
        }
@@ -285,7 +283,7 @@ function SetFen() {
     if (fen != null) {
         console.log(fen);
         ParseFen(fen);
-        PrintBoard();
+        if (debug) PrintBoard();
         var boardFen = BoardToFen().replace(/ .+$/, '');
         board.position(boardFen);
         GameController.PlayerSide = brd_side;
@@ -298,16 +296,27 @@ function SetFen() {
 var theme = 'green';
 
 function ChangeTheme() {
-    if (theme == 'brown') {
-        theme = 'blue';
-        document.getElementById("theme-button").src = "img/footer/green.png";
-    } else if (theme == 'blue'){
-        theme = 'green';
-        document.getElementById("theme-button").src = "img/footer/brown.png";
-    } else if (theme == 'green'){
-        theme = 'brown';
-        document.getElementById("theme-button").src = "img/footer/blue.png";
-    }
+    
+    switch(theme) {
+        case "green":
+            theme = 'brown';
+            document.getElementById("theme-button").src = "img/footer/blue.png";
+            break;
+        case "brown":
+            theme = 'blue';
+            document.getElementById("theme-button").src = "img/footer/orbital.png";
+            break;
+        case "blue":
+            theme = 'orbital';
+            document.getElementById("theme-button").src = "img/footer/green.png";
+            break;
+        case "orbital":
+            theme = 'green';
+            document.getElementById("theme-button").src = "img/footer/brown.png";
+            break;
+        default:
+            break;
+        }
     board.theme(theme);
 }
 
@@ -331,7 +340,7 @@ function StartSearch() {
     srch_time = parseInt(tt) * 1000;
     SearchPosition();
     MakeMove(srch_best);
-    // PrintBoard();
+    if (debug) PrintBoard();
     MoveGUIPiece();
     board.wait(false);
     CheckAndSet();

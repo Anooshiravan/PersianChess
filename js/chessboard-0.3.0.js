@@ -358,7 +358,7 @@
 
     function validPieceCode(code) {
         if (typeof code !== 'string') return false;
-        return (code.search(/^[bw][IKQFSRNBP]$/) !== -1);
+        return (code.search(/^[bw][IKQFSRWCNBP]$/) !== -1);
     }
 
     /* SQ85 FEN structure
@@ -396,7 +396,7 @@
         for (var i = 0; i < 11; i++) {
             if (chunks[i] === '' ||
                 chunks[i].length > 11 ||
-                chunks[i].search(/[^ikqfsrbnpIKQFSRNBP1-9]/) !== -1) {
+                chunks[i].search(/[^ikqfsrbcwnpIKQFSRNWCBP1-9]/) !== -1) {
                 return false;
             }
         }
@@ -798,6 +798,11 @@
                 (typeof cfg.pieceTheme !== 'string' &&
                     typeof cfg.pieceTheme !== 'function')) {
                 cfg.pieceTheme = 'img/chesspieces/wikipedia/{piece}.png';
+            }
+
+            if (board_debug)
+            {
+                cfg.pieceTheme = 'img/chesspieces/debug/{piece}.png';
             }
 
             // animation speeds
@@ -1725,7 +1730,8 @@ widget.highlight = function() {
         };
 
         widget.theme = function (color) {
-            if (color == 'brown') {
+        switch(color) {
+            case "brown":
                 CSS['white'] = 'white-1e1d7';
                 CSS['black'] = 'black-3c85d';
                 CSS['rightdia'] = 'rightdia-53d38';
@@ -1734,8 +1740,8 @@ widget.highlight = function() {
                 CSS['ase'] = 'ase-53d37';
                 CSS['off'] = 'off-53d36';
                 CSS['wait'] = 'wait-53d37';
-            } 
-            if (color == 'blue') {
+            break;
+            case "blue":
                 CSS['white'] = 'white-blue-1e1d7';
                 CSS['black'] = 'black-blue-3c85d';
                 CSS['rightdia'] = 'rightdia-blue-53d38';
@@ -1744,8 +1750,8 @@ widget.highlight = function() {
                 CSS['ase'] = 'ase-blue-53d37';
                 CSS['off'] = 'off-blue-53d36';
                 CSS['wait'] = 'wait-blue-53d37'; 
-            }
-            if (color == 'green') {
+            break;
+            case "green":
                 CSS['white'] = 'white-green-1e1d7';
                 CSS['black'] = 'black-green-3c85d';
                 CSS['rightdia'] = 'rightdia-green-53d38';
@@ -1754,6 +1760,30 @@ widget.highlight = function() {
                 CSS['ase'] = 'ase-green-53d37';
                 CSS['off'] = 'off-green-53d36';
                 CSS['wait'] = 'wait-green-53d37'; 
+            break;
+            case "orbital":
+                CSS['white'] = 'white-orbital-1e1d7';
+                CSS['black'] = 'black-orbital-3c85d';
+                CSS['rightdia'] = 'rightdia-orbital-53d38';
+                CSS['leftdia'] = 'leftdia-orbital-53d39';
+                CSS['persian'] = 'persian-orbital-53d37';
+                CSS['ase'] = 'ase-orbital-53d37';
+                CSS['off'] = 'off-orbital-53d36';
+                CSS['wait'] = 'wait-orbital-53d37'; 
+            break;
+            case "debug":
+                CSS['white'] = 'white-debug-1e1d7';
+                CSS['black'] = 'black-debug-3c85d';
+                CSS['rightdia'] = 'rightdia-debug-53d38';
+                CSS['leftdia'] = 'leftdia-debug-53d39';
+                CSS['persian'] = 'persian-debug-53d37';
+                CSS['ase'] = 'ase-debug-53d37';
+                CSS['off'] = 'off-debug-53d36';
+                CSS['wait'] = 'wait-debug-53d37'; 
+            break;
+        
+            default:
+            break;
             }
             drawBoard();
         }
@@ -1862,9 +1892,12 @@ widget.highlight = function() {
 
 
         widget.highlight = function (from, to) {
-            removeSquareHighlights();
-            $('#' + SQUARE_ELS_IDS[from]).addClass(CSS.highlight2)
-            $('#' + SQUARE_ELS_IDS[to]).addClass(CSS.highlight2)
+            if (!board_debug)
+            {
+                removeSquareHighlights();
+                $('#' + SQUARE_ELS_IDS[from]).addClass(CSS.highlight2)
+                $('#' + SQUARE_ELS_IDS[to]).addClass(CSS.highlight2)
+            }
         };
         
         widget.highlight_mate = function (square) {

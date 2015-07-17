@@ -16,8 +16,10 @@
  requires written permission from the author.
 ----------------------------------------------------------------
 */
-
-var variant = "Persian"
+var debug = false;
+var board_debug = false;
+var insane_move_debug = false;
+var variant = "Persian"; 
 
 var BRD_SQ_NUM = 195;
 
@@ -29,38 +31,6 @@ var INFINITE = 30000;
 var MATE = 29000;
 
 var START_FEN = "f111111111f/1rnbqksbnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKSBNR1/F111111111F w KQkq - 0 1";
-
-var START_FEN_NON_CITADEL = "f111111111f/1rnbqksbnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKSBNR1/F111111111F w KQkq - 0 1";
-
-var START_FEN_CITADEL = "f111111111f/1rnbqkbsnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKBSNR1/F111111111F w KQkq - 0 1";
-
-// Check white Persian
-//var START_FEN = "11111111111/11111k11111/11111111111/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKSBNR1/F111111111F w KQkq - 0 1";
-
-// Check black Persian
-//var START_FEN = "f1111111111/1rn1qk1b111/1ppp11npp11/111111p1111/11b11111fr1/1111ps11111/11111p111p1/11111111111/111K1111111/11111111111/S111111111S w q - 9 24";
-
-// Board empty
-// var START_FEN = "11111111111/11111111111/11111111111/11111111111/11111111111/11111111111/11111111111/11111111111/11111111111/11111111111/11111111111 w KQkq - 0 1";
-
-// Princess-side Castling
-// var START_FEN = "f111111111f/1rnbqk111r1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQK111R1/F111111111F w KQkq - 0 1";
-
-// Queen-side Castling
-// var START_FEN = "f111111111f/1r111ksbnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1R111KSBNR1/F111111111F w KQkq - 0 1";
-
-// Princess moves
-// var START_FEN = "p111111111p/1p1111111p1/11p11111p11/111pp1pp111/111pp1pp111/11111S11111/111pp1pp111/111pp1pp111/11p11111p11/1p1111111p1/p111111111p w KQkq - 0 1";
-
-// Fortress moves
-// var START_FEN = "11111111111/11111p11111/11111p11111/1111ppp1111/111p1p1p111/1ppppFpppp1/111p1p1p111/1111ppp1111/11111p11111/11111p11111/11111111111 w KQkq - 0 1";
-
-
-// var START_FEN = "f111111111f/1rnbqkbsnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKBSNR1/F111111111F w KQkq - 0 1";
-
-
-// check circular repetition
-// var START_FEN = "11111111111/11111k1r111/11p11111p11/1pS111111p1/1111111p111/111111p111/111r11P1F11/11Q1111NPP1/1111111P1K/1q111111111/11111111111 b KQkq - 0 0";
 
 // TRAINING POSITIONS:
 
@@ -100,68 +70,99 @@ var RanksBrd = new Array(BRD_SQ_NUM);
 var Sq195ToSq121 = new Array(BRD_SQ_NUM);
 var Sq121ToSq195 = new Array(121);
 
-var PceChar = ".PNBRSFQKpnbrsfqk";
+var PceChar = ".PNWCBRSFQKpnwcbrsfqk";
 var SideChar = "wb-";
 var RankChar = "123456789";
 var FileChar = "abcdefghijk";
 
-var PIECES =  { EMPTY : 0, wP : 1, wN : 2, wB : 3, wR : 4, wS : 5, wF : 6, wQ : 7, wK : 8, bP : 9, bN : 10, bB : 11, bR : 12, bS : 13, bF : 14, bQ : 15, bK : 16 };
-var PIECE_NAMES = ['EMPTY', 'wP', 'wN', 'wB', 'wR', 'wS', 'wF', 'wQ', 'wK', 'bP', 'bN', 'bB', 'bR', 'bS', 'bF', 'bQ', 'bK'];
-var PieceVal= [ 0, 100, 325, 325, 550, 750, 900, 1000, 50000, 100, 325, 325, 550, 750, 900, 1000, 50000  ];
+var PIECES =  { 
+    EMPTY : 0, 
 
-var PieceBig = [ BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.FALSE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE ];
-// MQ  0011111011111
-// MMQ 00111111101111111
-var PieceMaj = [ BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE ];
-// MQ  0000111000111
-// MMQ 00001111100011111
-var PieceMin = [ BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.TRUE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.TRUE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE ];
-// MQ 0011000011000
-// MMQ 00110000001100000
-var PieceCol = [ COLOURS.BOTH, COLOURS.WHITE, COLOURS.WHITE, COLOURS.WHITE, COLOURS.WHITE, COLOURS.WHITE, COLOURS.WHITE, COLOURS.WHITE, COLOURS.WHITE,
-	COLOURS.BLACK, COLOURS.BLACK, COLOURS.BLACK, COLOURS.BLACK, COLOURS.BLACK, COLOURS.BLACK, COLOURS.BLACK, COLOURS.BLACK ];
-	
-var PiecePawn = [ BOOL.FALSE, BOOL.TRUE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE ];	
-// MQ  0100000100000
-// MMQ 01000000010000000
-var PieceKnight = [ BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE ];
-// MQ  0010000010000
-// MMQ 00100000001000000
-var PieceKing = [ BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.TRUE ];
-// MQ  0000001000001
-// MMQ 00000000100000001
-var PieceRookFortressQueen = [ BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.FALSE, BOOL.TRUE, BOOL.TRUE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.FALSE, BOOL.TRUE, BOOL.TRUE, BOOL.FALSE ];
-// MQ  0000110000110
-// MMQ 00001011000010110
-var PieceBishopPrincessQueen = [ BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.FALSE, BOOL.TRUE, BOOL.FALSE, BOOL.TRUE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.FALSE, BOOL.TRUE, BOOL.FALSE, BOOL.TRUE, BOOL.FALSE ];
-// MQ  0001010001010
-// MMQ 00010101000101010
-var PieceKnightPrincessFortress = [ BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.TRUE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.TRUE, BOOL.FALSE, BOOL.FALSE ];
-// MMQ 00100110001001100
-var PieceSlides = [ BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.FALSE ];
-// MQ  0001110001110
-// MMQ 00011111000111110
+    wP : 1, 
+    wN : 2, 
+    wW : 3, 
+    wC : 4, 
+    wB : 5, 
+    wR : 6, 
+    wS : 7, 
+    wF : 8, 
+    wQ : 9, 
+    wK : 10, 
 
-var KnDir = [ -11, -25,	-27, -15, 11, 25, 27, 15 ];
-var RkDir = [ -1, -13,	1, 13 ];
+    bP : 11, 
+    bN : 12, 
+    bW : 13, 
+    bC : 14, 
+    bB : 15, 
+    bR : 16, 
+    bS : 17, 
+    bF : 18, 
+    bQ : 19, 
+    bK : 20 
+};
+
+var PIECE_NAMES = ['EMPTY', 'wP', 'wN', 'wW', 'wC', 'wB', 'wR', 'wS', 'wF', 'wQ', 'wK', 'bP', 'bN', 'bW', 'bC', 'bB', 'bR', 'bS', 'bF', 'bQ', 'bK'];
+var PieceVal= [ 0, 100, 325, 375, 400, 400, 550, 800, 900, 1000, 50000, 100, 325, 375, 400, 400, 550, 800, 900, 1000, 50000  ];
+
+var PieceCol = [ COLOURS.BOTH, COLOURS.WHITE, COLOURS.WHITE, COLOURS.WHITE, COLOURS.WHITE, COLOURS.WHITE, COLOURS.WHITE, COLOURS.WHITE, COLOURS.WHITE, COLOURS.WHITE, COLOURS.WHITE, COLOURS.BLACK, COLOURS.BLACK, COLOURS.BLACK, COLOURS.BLACK, COLOURS.BLACK, COLOURS.BLACK, COLOURS.BLACK, COLOURS.BLACK, COLOURS.BLACK, COLOURS.BLACK ];
+
+// 0 0111111111 0111111111
+var PieceBig =      [ 0, 0,1,1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,1,1,1 ];
+
+// 0 0000011111 0000011111
+var PieceMaj =      [ 0, 0,0,0,0,0,1,1,1,1,1, 0,0,0,0,0,1,1,1,1,1 ];
+
+// 0 0111100000 0111100000
+var PieceMin =      [ 0, 0,1,1,1,1,0,0,0,0,0, 0,1,1,1,1,0,0,0,0,0 ];
+
+// 0 1000000000 1000000000
+var PiecePawn =     [ 0, 1,0,0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0,0,0 ];    
+
+// 0 0100000000 0100000000
+var PieceKnight =   [ 0, 0,1,0,0,0,0,0,0,0,0, 0,1,0,0,0,0,0,0,0,0 ];
+
+// 0 0010000000 0010000000
+var PieceWizard =   [ 0, 0,0,1,0,0,0,0,0,0,0, 0,0,1,0,0,0,0,0,0,0 ];
+
+// 0 0001000000 0001000000
+var PieceChampion = [ 0, 0,0,0,1,0,0,0,0,0,0, 0,0,0,1,0,0,0,0,0,0 ];
+
+// 0 0000000001 0000000001
+var PieceKing =     [ 0, 0,0,0,0,0,0,0,0,0,1, 0,0,0,0,0,0,0,0,0,1 ];
+
+// 0 0000010110 0000010110
+var PieceRookFortressQueen = [ 0, 0,0,0,0,0,1,0,1,1,0, 0,0,0,0,0,1,0,1,1,0 ];
+
+// 0 0000101010 0000101010
+var PieceBishopPrincessQueen = [ 0, 0,0,0,0,1,0,1,0,1,0, 0,0,0,0,1,0,1,0,1,0 ];
+
+// 0 0100001100 0100001100
+var PieceKnightPrincessFortress = [ 0, 0,1,0,0,0,0,1,1,0,0, 0,1,0,0,0,0,1,1,0,0 ];
+
+// 0 0000111110 0000111110
+var PieceSlides = [ 0, 0,0,0,0,1,1,1,1,1,0, 0,0,0,0,1,1,1,1,1,0 ];
+
+var KnDir = [ -11, -25, -27, -15, 11, 25, 27, 15 ];
+var RkDir = [ -1, -13,  1, 13 ];
 var BiDir = [ -12, -14, 12, 14 ];
-var KiDir = [ -1, -13,	1, 13, -12, -14, 14, 12 ];
+var KiDir = [ -1, -13,  1, 13, -12, -14, 14, 12 ];
+var WzDir = [-27, -25, -15, -14, -12, -11, 11, 12, 14, 15, 25, 27];
+var ChDir = [-28, -26, -24, -13, -2, -1, 1, 2, 13, 24, 26, 28];
 
-var DirNumNonSlide = [ 0, 0, 8, 4, 4, 8, 8, 8, 8, 0, 8, 4, 4, 8, 8, 8, 8 ];
-var PceDirNonSlide = [0, 0, KnDir, BiDir, RkDir, KnDir, KnDir, KiDir, KiDir, 0, KnDir, BiDir, RkDir, KnDir, KnDir, KiDir, KiDir ];
+var DirNumNonSlide = [ 0, 0, 8, 12, 12, 4, 4, 8, 8, 8, 8, 0, 8, 12, 12, 4, 4, 8, 8, 8, 8 ];
+var PceDirNonSlide = [0, 0, KnDir, WzDir, ChDir, BiDir, RkDir, KnDir, KnDir, KiDir, KiDir, 0, KnDir, WzDir, ChDir, BiDir, RkDir, KnDir, KnDir, KiDir, KiDir ];
 
-var DirNumSlide = [ 0, 0, 8, 4, 4, 4, 4, 8, 8, 0, 8, 4, 4, 4, 4, 8, 8 ];
-var PceDirSlide = [0, 0, KnDir, BiDir, RkDir, BiDir, RkDir, KiDir, KiDir, 0, KnDir, BiDir, RkDir, BiDir, RkDir, KiDir, KiDir ];
+var DirNumSlide = [ 0, 0, 8, 12, 12, 4, 4, 4, 4, 8, 8, 0, 8, 12, 12, 4, 4, 4, 4, 8, 8 ];
+var PceDirSlide = [0, 0, 0, WzDir, ChDir, BiDir, RkDir, BiDir, RkDir, KiDir, KiDir, 0, 0, WzDir, ChDir, BiDir, RkDir, BiDir, RkDir, KiDir, KiDir ];
 
 var LoopSlidePce = [ PIECES.wB, PIECES.wR, PIECES.wS, PIECES.wF, PIECES.wQ, 0, PIECES.bB, PIECES.bR, PIECES.bS, PIECES.bF, PIECES.bQ, 0 ];
-var LoopNonSlidePce = [ PIECES.wN, PIECES.wS, PIECES.wF, PIECES.wK, 0, PIECES.bN, PIECES.bS, PIECES.bF, PIECES.bK, 0 ];
+var LoopNonSlidePce = [ PIECES.wN, PIECES.wW, PIECES.wC, PIECES.wS, PIECES.wF, PIECES.wK, 0, PIECES.bN, PIECES.bW, PIECES.bC, PIECES.bS, PIECES.bF, PIECES.bK, 0 ];
 var LoopSlideIndex = [ 0, 6 ];
-var LoopNonSlideIndex = [ 0, 5 ];
-
+var LoopNonSlideIndex = [ 0, 7 ];
 
 var Kings = [PIECES.wK, PIECES.bK];
 
-var PieceKeys = new Array(18 * 195);
+var PieceKeys = new Array(22 * 195);
 var SideKey;
 var CastleKeys = new Array(16);
 
@@ -238,30 +239,30 @@ var CastlePerm = [
 ];
 
 /*                                                  
-                                                    
-0000 0000 0000 0000 0000 1111 1111 -> From 0xFF
-0000 0000 0000 1111 1111 0000 0000 -> To >> 8, 0xFF
-0000 0000 1111 0000 0000 0000 0000 -> Captured >> 16, 0xF
-0000 0001 0000 0000 0000 0000 0000 -> EP 0x100000
-0000 0010 0000 0000 0000 0000 0000 -> Pawn Start 0x200000
-0011 1100 0000 0000 0000 0000 0000 -> Promoted Piece >> 22, 0xF
-0100 0000 0000 0000 0000 0000 0000 -> Castle 0x4000000
-1000 0000 0000 0000 0000 0000 0000 -> Rendezvous 0x8000000
+1111 1111 1111 1111 1111 1111 1111 1111 -> 32 bit hash                                                   
+0000 0000 0000 0000 0000 0000 1111 1111 -> From 0xFF
+0000 0000 0000 0000 1111 1111 0000 0000 -> To >> 8, 0xFF
+0000 0000 0001 1111 0000 0000 0000 0000 -> Captured >> 16, 0x1F
+0000 0000 0010 0000 0000 0000 0000 0000 -> EP 0x200000
+0000 0000 0100 0000 0000 0000 0000 0000 -> Pawn Start 0x400000
+0000 1111 1000 0000 0000 0000 0000 0000 -> Promoted Piece >> 23, 0x1F
+0001 0000 0000 0000 0000 0000 0000 0000 -> Castle 0x10000000
+0010 0000 0000 0000 0000 0000 0000 0000 -> Rendezvous 0x20000000
+0100 0000 0000 0000 0000 0000 0000 0000 -> Unused
+1000 0000 0000 0000 0000 0000 0000 0000 -> Unused
 */
-
 
 function FROMSQ(m) { return (m & 0xFF); }
 function TOSQ(m)  { return (((m)>>8) & 0xFF); }
-function CAPTURED(m)  { return (((m)>>16) & 0xF); }
-function PROMOTED(m)  { return (((m)>>22) & 0xF); }
+function CAPTURED(m)  { return (((m)>>16) & 0x1F); }
+function PROMOTED(m)  { return (((m)>>23) & 0x1F); }
 
-var MFLAGEP = 0x100000
-var MFLAGPS = 0x200000
-var MFLAGCA = 0x4000000
-var MFLAGRZ = 0x8000000
-
-var MFLAGCAP = 0x1F0000
-var MFLAGPROM = 0x3C00000
+var MFLAGEP = 0x200000      // En passant
+var MFLAGPS = 0x400000      // Pawn Start
+var MFLAGCA = 0x10000000    // Castle 
+var MFLAGRZ = 0x20000000    // Rendezvous
+var MFLAGCAP = 0x1F0000     // Captured
+var MFLAGPROM = 0xF800000   // Promoted
 
 var NOMOVE = 0
 
@@ -305,6 +306,12 @@ function RAND_32() {
 function SQASE(sq)
 {
     if (sq == 97 && variant == "ASE") return BOOL.TRUE;
+    return BOOL.FALSE;
+}
+
+function SQPERS(sq)
+{
+    if (sq == 97 && variant == "Persian") return BOOL.TRUE;
     return BOOL.FALSE;
 }
 
