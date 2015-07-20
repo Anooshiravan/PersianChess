@@ -2,8 +2,8 @@
     <widget xmlns   = "http://www.w3.org/ns/widgets"
         xmlns:gap   = "http://phonegap.com/ns/1.0"
         id          = "com.persianchess.www"
-        versionCode = "116" 
-        version     = "1.1.6" >
+        versionCode = "117" 
+        version     = "1.1.7" >
 
     <!-- versionCode is optional and Android only -->
 
@@ -27,5 +27,9 @@
     </author>
 
     <gap:platform name="android" />
+    <uses-feature android:name="android.hardware.telephony" android:required="false" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.front" android:required="false" />
+    <preference name="android-minSdkVersion" value="11" />
     <preference name="permissions" value="none"/>
 </widget>
