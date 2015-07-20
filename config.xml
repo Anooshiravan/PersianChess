@@ -28,11 +28,6 @@
 
     <gap:platform name="android" />
     
-    <gap:config-file platform="android" parent="/manifest" mode="add">
-        <uses-feature android:name="android.hardware.telephony" android:required="false" />
-        <uses-feature android:name="android.hardware.camera" android:required="false" />
-        <uses-feature android:name="android.hardware.camera.front" android:required="false" />
-    </gap:config-file>
-    
+    <preference name="android-minSdkVersion" value="11" />
     <preference name="permissions" value="none"/>
 </widget>
