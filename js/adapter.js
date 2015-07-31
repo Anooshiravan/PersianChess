@@ -29,6 +29,7 @@ var board = new ChessBoard(document.getElementById("board"), cfg);
 if (board_debug) board.theme("debug"); else board.theme("green");
 var yourMove;
 var output = "";
+var tt = 3;
 
 
 function NewGame() {
@@ -209,7 +210,7 @@ var EngineDemoTimer;
 
 var engineplay = 0;
 function EngineDemo() {
-    var engineplaynum = 10;
+    var engineplaynum = 9;
     StartSearch();
     pgn = '';
     if (insane_move_debug) engineplaynum = 255;
@@ -223,7 +224,7 @@ function EngineDemo() {
 
 function StartDemo() {
     
-    var demo = confirm("Starting Engine Demo.\nPersian Chess Engine will play 10 moves or until you click on the stop button.");
+    var demo = confirm("Starting Engine Demo.\nPersian Chess Engine will play 10 Ply (5 moves), or until you click on the stop button.");
     if (demo == true) {
         engineplay = 0;
         EngineDemo();
@@ -332,10 +333,20 @@ function PreSearch() {
     }
 }
 
+function ManualThinkTime()
+{
+    if ($('#ThinkTimeChoice').val() == "manual")
+    {
+        var n=window.prompt("Please enter the number of seconds for engine to think:");
+        tt = n;
+    }
+}
+
+
 function StartSearch() {
     srch_depth = MAXDEPTH;
     var t = $.now();
-    var tt = $('#ThinkTimeChoice').val();
+    if ($('#ThinkTimeChoice').val() != "manual") tt = $('#ThinkTimeChoice').val();
     // console.log("time:" + t + " TimeChoice:" + tt);
     srch_time = parseInt(tt) * 1000;
     SearchPosition();

@@ -62,7 +62,7 @@
 
 <div id="console" class="console">
 
-<select id="ThinkTimeChoice">
+<select id="ThinkTimeChoice" onchange="ManualThinkTime(this.value);">
   <option value="2">2 Sec</option>
   <option selected="selected" value="3">3 Sec</option>
   <option value="5">5 Sec</option>
@@ -74,6 +74,7 @@
   <option value="30">30 Sec</option>
   <option value="45">45 Sec</option>
   <option value="60">60 Sec</option>
+  <option value="manual">Enter manually</option>
 </select>&nbsp;
 
 <select id="VariantChoice" onchange="ResetGame()">
