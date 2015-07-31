@@ -35,6 +35,12 @@
         <uses-feature android:name="android.hardware.camera.front" android:required="false" />
     </gap:config-file>
 
+    <access origin="*" />
+
+    <feature name="InAppBrowser">
+        <param name="android-package" value="org.apache.cordova.InAppBrowser"/>
+    </feature>
+
     <preference name="android-minSdkVersion" value="11" />
     <preference name="permissions" value="none"/>
 </widget>
