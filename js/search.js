@@ -304,6 +304,7 @@ function SearchPosition() {
     var old_srch_time = srch_time;
 
     // Don't think more than 1 second in the first 10 ply
+    /*
     if (brd_hisPly < 10) {
         MAXDEPTH = 16;
         srch_time = 1000;
@@ -311,6 +312,8 @@ function SearchPosition() {
         MAXDEPTH = 32;
         srch_time = old_srch_time;
     }
+    */
+    
     output = 'ENGINE MaxDepth:' + MAXDEPTH + ' MaxTime:' + srch_time + 'ms';
     console.log(output);
     ClearForSearch();

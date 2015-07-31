@@ -338,7 +338,14 @@ function ManualThinkTime()
     if ($('#ThinkTimeChoice').val() == "manual")
     {
         var n=window.prompt("Please enter the number of seconds for engine to think:");
-        tt = n;
+        if (!isNaN(n) && parseInt(n) > 0)
+        {
+            tt = n;
+        }
+        else
+        {
+            alert ("Please enter a numerical value bigger than 0.")
+        }
     }
 }
 
@@ -347,6 +354,7 @@ function StartSearch() {
     srch_depth = MAXDEPTH;
     var t = $.now();
     if ($('#ThinkTimeChoice').val() != "manual") tt = $('#ThinkTimeChoice').val();
+    alert (tt);
     // console.log("time:" + t + " TimeChoice:" + tt);
     srch_time = parseInt(tt) * 1000;
     SearchPosition();
@@ -419,7 +427,7 @@ function AlertEndGame() {
 
 
 function Help() {
-    var go2web = confirm("Version 1.1.8\r\nPersian Chess is invented and programmed by:\r\nAnooshiravan Ahmadi\r\nDo you want to go to www.PersianChess.com for the detailed game rules?");
+    var go2web = confirm("Version 1.1.9\r\nPersian Chess is invented and programmed by:\r\nAnooshiravan Ahmadi\r\nDo you want to go to www.PersianChess.com for the detailed game rules?");
     if (go2web == true) {
         window.open("http://www.persianchess.com/game-rules", "_system", "location=no");
     }
