@@ -35,7 +35,9 @@
         <uses-feature android:name="android.hardware.camera.front" android:required="false" />
     </gap:config-file>
 
-    <access origin="*" />
+    <access origin="*" browserOnly="true"/>
+    <gap:plugin name="org.apache.cordova.inappbrowser" />
+    <gap:plugin name="org.apache.cordova.geolocation" />
 
     <feature name="InAppBrowser">
         <param name="android-package" value="org.apache.cordova.InAppBrowser"/>
