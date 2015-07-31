@@ -354,7 +354,6 @@ function StartSearch() {
     srch_depth = MAXDEPTH;
     var t = $.now();
     if ($('#ThinkTimeChoice').val() != "manual") tt = $('#ThinkTimeChoice').val();
-    alert (tt);
     // console.log("time:" + t + " TimeChoice:" + tt);
     srch_time = parseInt(tt) * 1000;
     SearchPosition();
