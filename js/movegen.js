@@ -16,7 +16,6 @@
  requires written permission from the author.
 ----------------------------------------------------------------
 */
-var GeneratedMoves = 0;
 var GeneratedInsaneMoves = 0;
 var GeneratedInsaneMovesIndex = 0;
 var GeneratedInsaneMovesShow = 100; // Show the first 10 insane moves for debugging
@@ -98,7 +97,12 @@ function MOVE(from, to, captured, promoted, flag) {
         }
     }
 
-    // No debug, just return the move
+    // NO Center SQ for Egyptian Eye
+    if (to == 97 && variant == "ASE") return NOMOVE;
+
+    // NO Center SQ for Persian Princess (except for Pawns and Princess)
+    if (to == 97 && variant == "Persian" && brd_pieces[from] != PIECES.wS && brd_pieces[from] != PIECES.bS && brd_pieces[from] != PIECES.wP && brd_pieces[from] != PIECES.bP) return NOMOVE;
+
     return (from | (to << 8) | (captured << 16) | (promoted << 23) | flag);
 }
 
@@ -231,38 +235,30 @@ function GenerateMoves() {
     var sq;
     var tsq;
     var index;
-    GeneratedMoves = 0;
-
     if (brd_side == COLOURS.WHITE) {
         pceType = PIECES.wP;
         for (pceNum = 0; pceNum < brd_pceNum[pceType]; ++pceNum) {
             sq = brd_pList[PCEINDEX(pceType, pceNum)];
             if (brd_pieces[sq + 13] == PIECES.EMPTY && SQASE(sq + 13) == BOOL.FALSE) {
                 AddWhitePawnQuietMove(sq, sq + 13);
-                GeneratedMoves++;
                 if (RanksBrd[sq] == RANKS.RANK_3 && brd_pieces[sq + 26] == PIECES.EMPTY) {
                     AddQuietMove(MOVE(sq, (sq + 26), PIECES.EMPTY, PIECES.EMPTY, MFLAGPS));
-                    GeneratedMoves++;
                 }
             }
 
             if (SQOFFBOARD(sq + 12) == BOOL.FALSE && SQASE(sq + 12) == BOOL.FALSE && PieceCol[brd_pieces[sq + 12]] == COLOURS.BLACK) {
                 AddWhitePawnCaptureMove(sq, sq + 12, brd_pieces[sq + 12]);
-                GeneratedMoves++;
             }
             if (SQOFFBOARD(sq + 14) == BOOL.FALSE && SQASE(sq + 14) == BOOL.FALSE && PieceCol[brd_pieces[sq + 14]] == COLOURS.BLACK) {
                 AddWhitePawnCaptureMove(sq, sq + 14, brd_pieces[sq + 14]);
-                GeneratedMoves++;
             }
 
             if (brd_enPas != SQUARES.NO_SQ) {
                 if (sq + 12 == brd_enPas) {
                     AddEnPassantMove(MOVE(sq, sq + 12, PIECES.EMPTY, PIECES.EMPTY, MFLAGEP));
-                    GeneratedMoves++
                 }
                 if (sq + 14 == brd_enPas) {
                     AddEnPassantMove(MOVE(sq, sq + 14, PIECES.EMPTY, PIECES.EMPTY, MFLAGEP));
-                    GeneratedMoves++;
                 }
             }
         }
@@ -270,7 +266,6 @@ function GenerateMoves() {
             if (brd_pieces[SQUARES.G2] == PIECES.EMPTY && brd_pieces[SQUARES.H2] == PIECES.EMPTY && brd_pieces[SQUARES.I2] == PIECES.EMPTY) {
                 if (SqAttacked(SQUARES.F2, COLOURS.BLACK) == BOOL.FALSE && SqAttacked(SQUARES.G2, COLOURS.BLACK) == BOOL.FALSE && SqAttacked(SQUARES.H2, COLOURS.BLACK) == BOOL.FALSE && SqAttacked(SQUARES.I2, COLOURS.BLACK) == BOOL.FALSE) {
                     AddQuietMove(MOVE(SQUARES.F2, SQUARES.I2, PIECES.EMPTY, PIECES.EMPTY, MFLAGCA));
-                    GeneratedMoves++;
                 }
             }
         }
@@ -279,15 +274,13 @@ function GenerateMoves() {
             if (brd_pieces[SQUARES.E2] == PIECES.EMPTY && brd_pieces[SQUARES.D2] == PIECES.EMPTY && brd_pieces[SQUARES.C2] == PIECES.EMPTY) {
                 if (SqAttacked(SQUARES.F2, COLOURS.BLACK) == BOOL.FALSE && SqAttacked(SQUARES.E2, COLOURS.BLACK) == BOOL.FALSE && SqAttacked(SQUARES.D2, COLOURS.BLACK) == BOOL.FALSE) {
                     AddQuietMove(MOVE(SQUARES.F2, SQUARES.D2, PIECES.EMPTY, PIECES.EMPTY, MFLAGCA));
-                    GeneratedMoves++;
                 }
             }
         }
 
         // Add Rendezvous
-        if ((brd_pieces[SQUARES.G2] == PIECES.wS || brd_pieces[SQUARES.G2] == PIECES.wC) && brd_pieces[SQUARES.H2] == PIECES.wB) {
+        if (brd_pieces[SQUARES.G2] == PIECES.wS && brd_pieces[SQUARES.H2] == PIECES.wB) {
             AddQuietMove(MOVE(SQUARES.G2, SQUARES.H2, PIECES.EMPTY, PIECES.EMPTY, MFLAGRZ));
-            GeneratedMoves++;
         }
 
 
@@ -300,30 +293,24 @@ function GenerateMoves() {
 
             if (brd_pieces[sq - 13] == PIECES.EMPTY && SQASE(sq - 13) == BOOL.FALSE) {
                 AddBlackPawnQuietMove(sq, sq - 13);
-                GeneratedMoves++;
                 if (RanksBrd[sq] == RANKS.RANK_9 && brd_pieces[sq - 26] == PIECES.EMPTY) {
                     AddQuietMove(MOVE(sq, (sq - 26), PIECES.EMPTY, PIECES.EMPTY, MFLAGPS));
-                    GeneratedMoves++;
                 }
             }
 
             if (SQOFFBOARD(sq - 12) == BOOL.FALSE && SQASE(sq - 12) == BOOL.FALSE && PieceCol[brd_pieces[sq - 12]] == COLOURS.WHITE) {
                 AddBlackPawnCaptureMove(sq, sq - 12, brd_pieces[sq - 12]);
-                GeneratedMoves++;
             }
 
             if (SQOFFBOARD(sq - 14) == BOOL.FALSE && SQASE(sq - 14) == BOOL.FALSE && PieceCol[brd_pieces[sq - 14]] == COLOURS.WHITE) {
                 AddBlackPawnCaptureMove(sq, sq - 14, brd_pieces[sq - 14]);
-                GeneratedMoves++;
             }
             if (brd_enPas != SQUARES.NO_SQ) {
                 if (sq - 12 == brd_enPas) {
                     AddEnPassantMove(MOVE(sq, sq - 12, PIECES.EMPTY, PIECES.EMPTY, MFLAGEP));
-                    GeneratedMoves++;
                 }
                 if (sq - 14 == brd_enPas) {
                     AddEnPassantMove(MOVE(sq, sq - 14, PIECES.EMPTY, PIECES.EMPTY, MFLAGEP));
-                    GeneratedMoves++;
                 }
             }
         }
@@ -331,7 +318,6 @@ function GenerateMoves() {
             if (brd_pieces[SQUARES.G10] == PIECES.EMPTY && brd_pieces[SQUARES.H10] == PIECES.EMPTY && brd_pieces[SQUARES.I10] == PIECES.EMPTY) {
                 if (SqAttacked(SQUARES.F10, COLOURS.WHITE) == BOOL.FALSE && SqAttacked(SQUARES.G10, COLOURS.WHITE) == BOOL.FALSE && SqAttacked(SQUARES.H10, COLOURS.WHITE) == BOOL.FALSE && SqAttacked(SQUARES.I10, COLOURS.WHITE) == BOOL.FALSE) {
                     AddQuietMove(MOVE(SQUARES.F10, SQUARES.I10, PIECES.EMPTY, PIECES.EMPTY, MFLAGCA));
-                    GeneratedMoves++;
                 }
             }
         }
@@ -340,15 +326,13 @@ function GenerateMoves() {
             if (brd_pieces[SQUARES.E10] == PIECES.EMPTY && brd_pieces[SQUARES.D10] == PIECES.EMPTY && brd_pieces[SQUARES.C10] == PIECES.EMPTY) {
                 if (SqAttacked(SQUARES.F10, COLOURS.WHITE) == BOOL.FALSE && SqAttacked(SQUARES.E10, COLOURS.WHITE) == BOOL.FALSE && SqAttacked(SQUARES.D10, COLOURS.WHITE) == BOOL.FALSE) {
                     AddQuietMove(MOVE(SQUARES.F10, SQUARES.D10, PIECES.EMPTY, PIECES.EMPTY, MFLAGCA));
-                    GeneratedMoves++;
                 }
             }
         }
 
         // Add Rendezvous
-        if ((brd_pieces[SQUARES.G10] == PIECES.bS || brd_pieces[SQUARES.G10] == PIECES.bC) && brd_pieces[SQUARES.H10] == PIECES.bB) {
+        if (brd_pieces[SQUARES.G10] == PIECES.bS && brd_pieces[SQUARES.H10] == PIECES.bB) {
             AddQuietMove(MOVE(SQUARES.G10, SQUARES.H10, PIECES.EMPTY, PIECES.EMPTY, MFLAGRZ));
-            GeneratedMoves++;
         }
 
         pceType = PIECES.bN; // HACK to set for loop other pieces
@@ -369,23 +353,12 @@ function GenerateMoves() {
                 while (SQOFFBOARD(t_sq) == BOOL.FALSE) {
 
                     if (brd_pieces[t_sq] != PIECES.EMPTY && SQASE(t_sq) == BOOL.FALSE) {
-                        if (SQPERS(t_sq) == BOOL.FALSE || brd_pieces[sq] == PIECES.wS || brd_pieces[sq] == PIECES.bS)
-                        {
-                            if (PieceCol[brd_pieces[t_sq]] == brd_side ^ 1) {
-                                AddCaptureMove(MOVE(sq, t_sq, brd_pieces[t_sq], PIECES.EMPTY, 0));
-                                GeneratedMoves++;
-                            }
-                            break;
+                        if (PieceCol[brd_pieces[t_sq]] == brd_side ^ 1) {
+                            AddCaptureMove(MOVE(sq, t_sq, brd_pieces[t_sq], PIECES.EMPTY, 0));
                         }
+                        break;
                     }
-                    if (SQASE(t_sq) == BOOL.FALSE) 
-                        {
-                        if (SQPERS(t_sq) == BOOL.FALSE || brd_pieces[t_sq] == PIECES.wS || brd_pieces[t_sq] == PIECES.bS)
-                            {
-                                AddQuietMove(MOVE(sq, t_sq, PIECES.EMPTY, PIECES.EMPTY, 0));
-                                GeneratedMoves++;
-                            }
-                        }
+                    if (SQASE(t_sq) == BOOL.FALSE) AddQuietMove(MOVE(sq, t_sq, PIECES.EMPTY, PIECES.EMPTY, 0));
                     t_sq += dir;
                 }
             }
@@ -410,38 +383,17 @@ function GenerateMoves() {
                 }
 
                 if (brd_pieces[t_sq] != PIECES.EMPTY && SQASE(t_sq) == BOOL.FALSE) {
-                    if (SQPERS(t_sq) == BOOL.FALSE || brd_pieces[sq] == PIECES.wS || brd_pieces[sq] == PIECES.bS)
-                        {
-                        if (PieceCol[brd_pieces[t_sq]] == brd_side ^ 1) {
-                            AddCaptureMove(MOVE(sq, t_sq, brd_pieces[t_sq], PIECES.EMPTY, 0));
-                            GeneratedMoves++;
-                        }
+                    if (PieceCol[brd_pieces[t_sq]] == brd_side ^ 1) {
+                        AddCaptureMove(MOVE(sq, t_sq, brd_pieces[t_sq], PIECES.EMPTY, 0));
+                    }
                     continue;
-                    }
                 }
-                if (SQASE(t_sq) == BOOL.FALSE) 
-                    {
-                        if (SQPERS(t_sq) == BOOL.FALSE || brd_pieces[t_sq] == PIECES.wS || brd_pieces[t_sq] == PIECES.bS)
-                        {                            
-                            AddQuietMove(MOVE(sq, t_sq, PIECES.EMPTY, PIECES.EMPTY, 0));
-                            GeneratedMoves++;
-                        }
-                    }
+                if (SQASE(t_sq) == BOOL.FALSE) AddQuietMove(MOVE(sq, t_sq, PIECES.EMPTY, PIECES.EMPTY, 0));
             }
         }
         pce = LoopNonSlidePce[pceIndex++];
     }
-    if (debug) 
-    {
-        if (GeneratedMoves > 0)
-        {
-            // console.log(GeneratedMoves + " moves generated.");
-        }
-        else 
-        {
-            console.log("%c Zero number of moves generated.", "color: red; font-style: italic");
-        }
-    }
+
 }
 
 function GenerateCaptures() {
@@ -517,13 +469,10 @@ function GenerateCaptures() {
                 while (SQOFFBOARD(t_sq) == BOOL.FALSE) {
 
                     if (brd_pieces[t_sq] != PIECES.EMPTY && SQASE(t_sq) == BOOL.FALSE) {
-                        if (SQPERS(t_sq) == BOOL.FALSE || brd_pieces[sq] == PIECES.wS || brd_pieces[sq] == PIECES.bS)
-                        {
-                            if (PieceCol[brd_pieces[t_sq]] == brd_side ^ 1) {
-                                AddCaptureMove(MOVE(sq, t_sq, brd_pieces[t_sq], PIECES.EMPTY, 0));
-                            }
-                            break;
+                        if (PieceCol[brd_pieces[t_sq]] == brd_side ^ 1) {
+                            AddCaptureMove(MOVE(sq, t_sq, brd_pieces[t_sq], PIECES.EMPTY, 0));
                         }
+                        break;
                     }
                     t_sq += dir;
                 }
@@ -549,13 +498,10 @@ function GenerateCaptures() {
                 }
 
                 if (brd_pieces[t_sq] != PIECES.EMPTY && SQASE(t_sq) == BOOL.FALSE) {
-                    if (SQPERS(t_sq) == BOOL.FALSE || brd_pieces[sq] == PIECES.wS || brd_pieces[sq] == PIECES.bS)
-                    {
-                        if (PieceCol[brd_pieces[t_sq]] == brd_side ^ 1) {
-                            AddCaptureMove(MOVE(sq, t_sq, brd_pieces[t_sq], PIECES.EMPTY, 0));
-                        }
-                        continue;
+                    if (PieceCol[brd_pieces[t_sq]] == brd_side ^ 1) {
+                        AddCaptureMove(MOVE(sq, t_sq, brd_pieces[t_sq], PIECES.EMPTY, 0));
                     }
+                    continue;
                 }
             }
         }
