@@ -35,7 +35,7 @@
         <uses-feature android:name="android.hardware.camera.front" android:required="false" />
     </gap:config-file>
 
-    <access origin="*" />
+    <access origin="http://www.persianchess.com/game-rules" />
 
     <feature name="InAppBrowser">
         <param name="android-package" value="org.apache.cordova.InAppBrowser"/>
