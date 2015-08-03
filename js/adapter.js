@@ -11,7 +11,7 @@
  Copyright 2014 Anooshiravan Ahmadi - MCE @ Schuberg Philis
  Released under the GPL license
  Based on the open source projects mentioned at:
- http://www.PersianChess.com/Copyright
+ http://www.PersianChess.com/About
  Redistribution of this game design, rules and the engine 
  requires written permission from the author.
 ----------------------------------------------------------------
@@ -96,23 +96,24 @@ function ResetGame() {
 function AltFEN()
 {
     alt_fen_number = document.getElementById("AltFen").value;
-    var alt_fen_reset = confirm("Do you want to set the position to Training Position #" + alt_fen_number + " ? These are so-called \"handicap\" positions with different level of advantage for White.");
-    var tp_fen_name = "TP_FEN_" + alt_fen_number;
-    var TP_FEN = window[tp_fen_name];
-    if (alt_fen_reset == true) {
+    if (alt_fen_number == "0")
+    {
         board.removehighlights();
-        if (alt_fen_number == "0")
-        {
-            ResetGUI();
-        }
-        else
-        {
+        ResetGame();
+    }
+    else
+    {
+        variant = document.getElementById("VariantChoice").value;
+        var alt_fen_reset = confirm("Do you want to set the position to Training Position #" + alt_fen_number + " ? These are so-called \"handicap\" positions with different level of advantage for White.");
+        if (alt_fen_reset == true) {
+            var tp_fen_name = "TP_FEN_" + alt_fen_number + "_" + variant;
+            var TP_FEN = window[tp_fen_name];
+            board.removehighlights();
             ParseFen(TP_FEN);
             board.position(TP_FEN);
         }
     }
 }
-
 
 function MoveGUIPiece() {
     var fen = BoardToFen().replace(/ .+$/, '');

@@ -11,7 +11,7 @@
  Copyright 2014 Anooshiravan Ahmadi - MCE @ Schuberg Philis
  Released under the GPL license
  Based on the open source projects mentioned at:
- http://www.PersianChess.com/Copyright
+ http://www.PersianChess.com/About
  Redistribution of this game design, rules and the engine 
  requires written permission from the author.
 ----------------------------------------------------------------
