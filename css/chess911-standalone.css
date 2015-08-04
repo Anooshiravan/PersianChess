@@ -251,13 +251,13 @@ body {
     background-size: 100%;
 }
 
-/* orbital */
+/* oriental */
 
-.white-orbital-1e1d7 {
+.white-oriental-1e1d7 {
     background-color: #EFEFEF;
     color: #7085B6;
 }
-.black-orbital-3c85d {
+.black-oriental-3c85d {
     /*
     background-image: url('squares/dark_blue.png');
     background-size: 100%;
@@ -265,11 +265,11 @@ body {
     background-color: #888888;
     color: #DFDFDF;
 }
-.off-orbital-53d36 {
+.off-oriental-53d36 {
     background-color: #1F281F;
     color: #CCCFD1;
 }
-.wait-orbital-53d37 {
+.wait-oriental-53d37 {
     background-color: #888888;
     background-image:url('../img/wait.png');
     background-size: 100%;
@@ -277,25 +277,25 @@ body {
     -moz-box-shadow: inset 0 0 10px 5px #333F33;
     box-shadow: inset 0 0 10px 5px #333F33;
 }
-.persian-orbital-53d37 {
+.persian-oriental-53d37 {
     background-color: #888888;
     color: #CCCFD1;
     background-image:url('../img/persian.png');
     background-size: 100%;
 }
-.ase-orbital-53d37 {
+.ase-oriental-53d37 {
     background-color: #888888;
     color: #CCCFD1;
     background-image:url('../img/ase.png');
     background-size: 100%;
 }
-.rightdia-orbital-53d38 {
+.rightdia-oriental-53d38 {
     background-color: #888888;
     color: #CCCFD1;
     background-image:url('../img/right.png');
     background-size: 100%;
 }
-.leftdia-orbital-53d39 {
+.leftdia-oriental-53d39 {
     background-color: #888888;
     color: #CCCFD1;
     background-image:url('../img/left.png');

@@ -1761,15 +1761,15 @@ widget.highlight = function() {
                 CSS['off'] = 'off-green-53d36';
                 CSS['wait'] = 'wait-green-53d37'; 
             break;
-            case "orbital":
-                CSS['white'] = 'white-orbital-1e1d7';
-                CSS['black'] = 'black-orbital-3c85d';
-                CSS['rightdia'] = 'rightdia-orbital-53d38';
-                CSS['leftdia'] = 'leftdia-orbital-53d39';
-                CSS['persian'] = 'persian-orbital-53d37';
-                CSS['ase'] = 'ase-orbital-53d37';
-                CSS['off'] = 'off-orbital-53d36';
-                CSS['wait'] = 'wait-orbital-53d37'; 
+            case "oriental":
+                CSS['white'] = 'white-oriental-1e1d7';
+                CSS['black'] = 'black-oriental-3c85d';
+                CSS['rightdia'] = 'rightdia-oriental-53d38';
+                CSS['leftdia'] = 'leftdia-oriental-53d39';
+                CSS['persian'] = 'persian-oriental-53d37';
+                CSS['ase'] = 'ase-oriental-53d37';
+                CSS['off'] = 'off-oriental-53d36';
+                CSS['wait'] = 'wait-oriental-53d37'; 
             break;
             case "debug":
                 CSS['white'] = 'white-debug-1e1d7';

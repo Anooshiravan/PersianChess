@@ -58,8 +58,8 @@ function ResetGame() {
         case "Citadel":
             variantname = "Celtic Citadel"
             break;
-        case "Orbital":
-            variantname = "Orbital Omega"
+        case "Oriental":
+            variantname = "Oriental Omega"
             break;
         default:
             break;
@@ -79,9 +79,9 @@ function ResetGame() {
             START_FEN = "f111111111f/1rnbqkbsnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKBSNR1/F111111111F w KQkq - 0 1";
             board.theme ("blue");
             break;
-        case "Orbital":
+        case "Oriental":
             START_FEN = "w111111111w/1rnbqkcbnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKCBNR1/W111111111W w KQkq - 0 1";
-            board.theme ("orbital");
+            board.theme ("oriental");
             break;
         default:
             break;
@@ -306,13 +306,13 @@ function ChangeTheme() {
             break;
         case "brown":
             theme = 'blue';
-            document.getElementById("theme-button").src = "img/footer/orbital.png";
+            document.getElementById("theme-button").src = "img/footer/oriental.png";
             break;
         case "blue":
-            theme = 'orbital';
+            theme = 'oriental';
             document.getElementById("theme-button").src = "img/footer/green.png";
             break;
-        case "orbital":
+        case "oriental":
             theme = 'green';
             document.getElementById("theme-button").src = "img/footer/brown.png";
             break;

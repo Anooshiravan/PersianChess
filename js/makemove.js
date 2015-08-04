@@ -113,7 +113,7 @@ function MakeMove(move) {
                 ClearPiece(SQUARES.G2);
                 AddPiece(SQUARES.G2, PIECES.wB);
                 ClearPiece(SQUARES.H2);
-                if (variant == "Orbital")
+                if (variant == "Oriental")
                 {
                     AddPiece(SQUARES.H2, PIECES.wC);
                 }
@@ -126,7 +126,7 @@ function MakeMove(move) {
                 ClearPiece(SQUARES.G10);
                 AddPiece(SQUARES.G10, PIECES.bB);
                 ClearPiece(SQUARES.H10);
-                if (variant == "Orbital")
+                if (variant == "Oriental")
                 {
                     AddPiece(SQUARES.H10, PIECES.bC);
                 }
@@ -239,7 +239,7 @@ function TakeMove() {
         switch(to) {
             case SQUARES.H2:
                 ClearPiece(SQUARES.G2);
-                if (variant == "Orbital")
+                if (variant == "Oriental")
                 {
                     AddPiece(SQUARES.G2, PIECES.wC);
                 }
@@ -253,7 +253,7 @@ function TakeMove() {
                 break;
             case SQUARES.H10:
                 ClearPiece(SQUARES.G10);
-                if (variant == "Orbital")
+                if (variant == "Oriental")
                 {
                     AddPiece(SQUARES.G10, PIECES.bC);
                 }
