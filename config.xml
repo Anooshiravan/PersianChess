@@ -3,8 +3,8 @@
         xmlns:gap   = "http://phonegap.com/ns/1.0"
         xmlns:android = "http://schemas.android.com/apk/res/android"
         id          = "com.persianchess.www"
-        versionCode = "121" 
-        version     = "1.2.1" >
+        versionCode = "122" 
+        version     = "1.2.2" >
 
     <!-- versionCode is optional and Android only -->
 
