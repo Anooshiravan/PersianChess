@@ -402,7 +402,7 @@ function SearchPosition() {
 
         if (PIECE_NAMES[brd_pieces[TOSQ(srch_best)]] != "EMPTY")
         {
-            lla.play(capture);
+            if ((srch_best & MFLAGRZ) == 0) lla.play(capture);
             addNoteToMoveList("[Captures " + PIECE_NAMES[brd_pieces[TOSQ(srch_best)]] + "]");
         }
         if ((srch_best & MFLAGRZ) != 0)
