@@ -35,9 +35,8 @@ var output = "";
 var tt = 3;
 
 // Audio definitions
-var welcome = 'audio/welcome.mp3';
-var check = 'audio/check.mp3'
-var checkmate = 'audio/checkmate.mp3'
+var move = 'audio/move.mp3';
+var check = 'audio/end.mp3'
 var lla;
 
 function LoadAudio()
@@ -57,7 +56,7 @@ function LoadAudio()
     }
     else
     {
-        alert ("Error loading audio plugin.")
+        // alert ("Error loading audio plugin.")
     }
 }
 
@@ -149,6 +148,7 @@ function MoveGUIPiece() {
     var fen = BoardToFen().replace(/ .+$/, '');
     board.position(fen);
     board.highlight(PrSq(FROMSQ(srch_best)), PrSq(TOSQ(srch_best)));
+    lla.play(move);
     updateMoveList();
 }
 
@@ -433,6 +433,7 @@ function updateMoveList()
 }
 
 function AlertEndGame() {
+    lla.play(end);
     var msg;
     if (brd_history_notes.indexOf('[BLACK WINS: Checkmate!]') > -1) {
         msg = "Checkmate! Black wins.";
@@ -458,7 +459,6 @@ function AlertEndGame() {
 
 
 function Help() {
-    lla.play( welcome );
     var go2web = confirm("Version 1.2.2\r\nPersian Chess is invented and programmed by:\r\nAnooshiravan Ahmadi\r\nDo you want to go to www.PersianChess.com for the detailed game rules?");
     if (go2web == true) {
         window.open("http://www.persianchess.com/game-rules", "_system", "location=no");
