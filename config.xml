@@ -38,6 +38,7 @@
     <access origin="*" browserOnly="true"/>
     <gap:plugin name="org.apache.cordova.inappbrowser" />
     <gap:plugin name="org.apache.cordova.geolocation" />
+    <gap:plugin name="com.rjfun.cordova.plugin.lowlatencyaudio" version="1.0" />
 
     <feature name="InAppBrowser">
         <param name="android-package" value="org.apache.cordova.InAppBrowser"/>
