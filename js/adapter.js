@@ -31,10 +31,6 @@ var yourMove;
 var output = "";
 var tt = 3;
 
-// Sounds
-var PGLowLatencyAudio = window.plugins.LowLatencyAudio;
-PGLowLatencyAudio.preloadFX('welcome', '/sound/welcome.mp3');
-
 
 function NewGame() {
     clearTimeout(EngineDemoTimer);
@@ -429,9 +425,50 @@ function AlertEndGame() {
     timeout = setTimeout(function(){ alert(msg); }, 1000);
 }
 
+var welcome = 'audio/welcome.mp3';
+var check = 'audio/check.mp3'
 
 function Help() {
-    PGLowLatencyAudio.play('welcome');
+    
+
+    if( window.plugins && window.plugins.LowLatencyAudio ) {
+    var lla = window.plugins.LowLatencyAudio;
+
+    // preload audio resource
+    lla.preloadAudio( welcome, welcome, 1, function(msg){
+    }, function(msg){
+        console.log( 'error: ' + msg );
+    });
+
+    lla.preloadFX( check, check, function(msg){
+    }, function(msg){
+        console.log( 'error: ' + msg );
+    });
+
+    // now start playing
+    lla.play( welcome );
+    lla.loop( welcome );
+
+    // stop after 1 min 
+    window.setTimeout( function(){
+        //lla.stop( click_sound );
+        lla.stop( welcome );
+
+        lla.unload( welcome );
+        lla.unload( check );
+    }, 1000 * 60 );
+}
+
+else
+{
+    alert ("plugin not loaded.")
+}
+
+
+
+
+
+
     var go2web = confirm("Version 1.2.2\r\nPersian Chess is invented and programmed by:\r\nAnooshiravan Ahmadi\r\nDo you want to go to www.PersianChess.com for the detailed game rules?");
     if (go2web == true) {
         window.open("http://www.persianchess.com/game-rules", "_system", "location=no");
