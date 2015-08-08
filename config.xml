@@ -3,8 +3,8 @@
         xmlns:gap   = "http://phonegap.com/ns/1.0"
         xmlns:android = "http://schemas.android.com/apk/res/android"
         id          = "com.persianchess.www"
-        versionCode = "122" 
-        version     = "1.2.2" >
+        versionCode = "123" 
+        version     = "1.2.3" >
 
     <!-- versionCode is optional and Android only -->
 
@@ -38,7 +38,7 @@
     <access origin="*" browserOnly="true"/>
     <gap:plugin name="org.apache.cordova.inappbrowser" />
     <gap:plugin name="org.apache.cordova.geolocation" />
-    <gap:plugin name="com.rjfun.cordova.plugin.lowlatencyaudio" />
+    <gap:plugin name="com.rjfun.cordova.plugin.lowlatencyaudio" version="1.0" />
 
     <feature name="InAppBrowser">
         <param name="android-package" value="org.apache.cordova.InAppBrowser"/>
