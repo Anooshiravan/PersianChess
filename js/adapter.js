@@ -39,7 +39,6 @@ var welcome = 'audio/welcome.mp3';
 var check = 'audio/check.mp3'
 var checkmate = 'audio/checkmate.mp3'
 var lla;
-LoadAudio();
 
 function LoadAudio()
 {
@@ -55,7 +54,6 @@ function LoadAudio()
         }, function(msg){
             console.log( 'error: ' + msg );
         });
-        alert ("Audio plugin loaded.")
     }
     else
     {
@@ -63,7 +61,7 @@ function LoadAudio()
     }
 }
 
-
+// Game funtions
 function NewGame() {
     clearTimeout(EngineDemoTimer);
     ResetBoard();
@@ -460,7 +458,6 @@ function AlertEndGame() {
 
 
 function Help() {
-    LoadAudio();
     lla.play( welcome );
     var go2web = confirm("Version 1.2.2\r\nPersian Chess is invented and programmed by:\r\nAnooshiravan Ahmadi\r\nDo you want to go to www.PersianChess.com for the detailed game rules?");
     if (go2web == true) {
