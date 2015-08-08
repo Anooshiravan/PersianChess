@@ -167,7 +167,7 @@ function MoveGUIPiece() {
 function CheckAndSet() {
     if (SqAttacked(brd_pList[PCEINDEX(Kings[brd_side], 0)], brd_side ^ 1) == BOOL.TRUE) {
         board.highlight_check(PrSq(brd_pList[PCEINDEX(Kings[brd_side], 0)]));
-        lla.play(Check);
+        lla.play(check);
         // addNoteToMoveList("[Check!]");
     }
      

@@ -159,6 +159,7 @@ function MakeMove(move) {
 	if(captured != PIECES.EMPTY) {
         ClearPiece(to);
         brd_fiftyMove = 0;
+        lla.play(capture);
     }
 	
 	brd_hisPly++;
