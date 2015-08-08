@@ -37,6 +37,9 @@ var tt = 3;
 // Audio definitions
 var move = 'audio/move.mp3';
 var end = 'audio/end.mp3'
+var check = 'audio/check.mp3';
+var capture = 'audio/capture.mp3'
+
 var lla;
 
 function LoadAudio()
@@ -50,6 +53,14 @@ function LoadAudio()
             console.log( 'error: ' + msg );
         });
         lla.preloadFX(end, end, function(msg){
+        }, function(msg){
+            console.log( 'error: ' + msg );
+        });
+        lla.preloadFX(check, check, function(msg){
+        }, function(msg){
+            console.log( 'error: ' + msg );
+        });
+        lla.preloadFX(capture, capture, function(msg){
         }, function(msg){
             console.log( 'error: ' + msg );
         });
@@ -156,6 +167,7 @@ function MoveGUIPiece() {
 function CheckAndSet() {
     if (SqAttacked(brd_pList[PCEINDEX(Kings[brd_side], 0)], brd_side ^ 1) == BOOL.TRUE) {
         board.highlight_check(PrSq(brd_pList[PCEINDEX(Kings[brd_side], 0)]));
+        lla.play(Check);
         // addNoteToMoveList("[Check!]");
     }
      
