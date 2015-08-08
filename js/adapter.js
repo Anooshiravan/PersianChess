@@ -38,6 +38,31 @@ var tt = 3;
 var welcome = 'audio/welcome.mp3';
 var check = 'audio/check.mp3'
 var checkmate = 'audio/checkmate.mp3'
+var lla;
+LoadAudio();
+
+function LoadAudio()
+{
+    if( window.plugins && window.plugins.LowLatencyAudio ) {
+        lla = window.plugins.LowLatencyAudio;
+        
+        // preload audio resource
+        lla.preloadFX(welcome, welcome, 1, function(msg){
+        }, function(msg){
+            console.log( 'error: ' + msg );
+        });
+        lla.preloadFX(check, check, function(msg){
+        }, function(msg){
+            console.log( 'error: ' + msg );
+        });
+        alert ("Audio plugin loaded.")
+    }
+    else
+    {
+        alert ("Error loading audio plugin.")
+    }
+}
+
 
 function NewGame() {
     clearTimeout(EngineDemoTimer);
@@ -435,32 +460,7 @@ function AlertEndGame() {
 
 
 function Help() {
-
-    var lla;
-
-if( window.plugins && window.plugins.LowLatencyAudio ) {
-    lla = window.plugins.LowLatencyAudio;
-
-    // preload audio resource
-    lla.preloadFX(welcome, welcome, 1, function(msg){
-    }, function(msg){
-        console.log( 'error: ' + msg );
-    });
-
-    lla.preloadFX(check, check, function(msg){
-    }, function(msg){
-        console.log( 'error: ' + msg );
-    });
-    alert ("Audio plugin loaded.")
-}
-else
-{
-    alert ("Error loading audio plugin.")
-}
-    
     lla.play( welcome );
-    lla.unload( welcome );
-
     var go2web = confirm("Version 1.2.2\r\nPersian Chess is invented and programmed by:\r\nAnooshiravan Ahmadi\r\nDo you want to go to www.PersianChess.com for the detailed game rules?");
     if (go2web == true) {
         window.open("http://www.persianchess.com/game-rules", "_system", "location=no");
