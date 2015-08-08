@@ -32,7 +32,8 @@ var output = "";
 var tt = 3;
 
 // Sounds
-PGLowLatencyAudio.preloadFX('welcome', 'sound/welcome.mp3');
+var PGLowLatencyAudio = window.plugins.LowLatencyAudio;
+PGLowLatencyAudio.preloadFX('welcome', '/sound/welcome.mp3');
 
 
 function NewGame() {
