@@ -31,6 +31,9 @@ var yourMove;
 var output = "";
 var tt = 3;
 
+// Sounds
+PGLowLatencyAudio.preloadFX('welcome', 'sound/welcome.mp3');
+
 
 function NewGame() {
     clearTimeout(EngineDemoTimer);
@@ -427,6 +430,7 @@ function AlertEndGame() {
 
 
 function Help() {
+    PGLowLatencyAudio.play('welcome');
     var go2web = confirm("Version 1.2.2\r\nPersian Chess is invented and programmed by:\r\nAnooshiravan Ahmadi\r\nDo you want to go to www.PersianChess.com for the detailed game rules?");
     if (go2web == true) {
         window.open("http://www.persianchess.com/game-rules", "_system", "location=no");
