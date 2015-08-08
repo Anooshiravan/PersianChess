@@ -36,7 +36,7 @@ var tt = 3;
 
 // Audio definitions
 var move = 'audio/move.mp3';
-var check = 'audio/end.mp3'
+var end = 'audio/end.mp3'
 var lla;
 
 function LoadAudio()
@@ -45,11 +45,11 @@ function LoadAudio()
         lla = window.plugins.LowLatencyAudio;
         
         // preload audio resource
-        lla.preloadFX(welcome, welcome, 1, function(msg){
+        lla.preloadFX(move, move, 1, function(msg){
         }, function(msg){
             console.log( 'error: ' + msg );
         });
-        lla.preloadFX(check, check, function(msg){
+        lla.preloadFX(end, end, function(msg){
         }, function(msg){
             console.log( 'error: ' + msg );
         });
