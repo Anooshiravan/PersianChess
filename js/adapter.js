@@ -56,7 +56,7 @@ function LoadAudio()
     }
     else
     {
-        // alert ("Error loading audio plugin.")
+        alert ("Error loading audio plugin.")
     }
 }
 
