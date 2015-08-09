@@ -41,11 +41,13 @@ var check = 'audio/check.mp3';
 var capture = 'audio/capture.mp3'
 
 var lla;
+var lla_loaded = false;
 
 function LoadAudio()
 {
     if( window.plugins && window.plugins.LowLatencyAudio ) {
         lla = window.plugins.LowLatencyAudio;
+        lla_loaded = true;
         
         // preload audio resource
         lla.preloadFX(move, move, 1, function(msg){
@@ -67,7 +69,7 @@ function LoadAudio()
     }
     else
     {
-        alert ("Error loading audio plugin.")
+        lla_loaded = false;
     }
 }
 
@@ -159,7 +161,7 @@ function MoveGUIPiece() {
     var fen = BoardToFen().replace(/ .+$/, '');
     board.position(fen);
     board.highlight(PrSq(FROMSQ(srch_best)), PrSq(TOSQ(srch_best)));
-    lla.play(move);
+    if (lla_loaded == true) lla.play(move);
     updateMoveList();
 }
 
@@ -167,7 +169,7 @@ function MoveGUIPiece() {
 function CheckAndSet() {
     if (SqAttacked(brd_pList[PCEINDEX(Kings[brd_side], 0)], brd_side ^ 1) == BOOL.TRUE) {
         board.highlight_check(PrSq(brd_pList[PCEINDEX(Kings[brd_side], 0)]));
-        lla.play(check);
+        if (lla_loaded == true) lla.play(check);
         // addNoteToMoveList("[Check!]");
     }
      
@@ -445,7 +447,7 @@ function updateMoveList()
 }
 
 function AlertEndGame() {
-    lla.play(end);
+    if (lla_loaded == true) lla.play(end);
     var msg;
     if (brd_history_notes.indexOf('[BLACK WINS: Checkmate!]') > -1) {
         msg = "Checkmate! Black wins.";
