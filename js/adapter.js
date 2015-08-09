@@ -531,7 +531,7 @@ function GGSound(result) {
     else if (result == "blackwins") {
         timeout = setTimeout(function(){ PlaySound(blackwins); }, 1000);
     }
-    PlaySound(gg);
+    timeout = setTimeout(function(){ PlaySound(gg); }, 2500);
 }
 
 
