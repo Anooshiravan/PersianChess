@@ -194,6 +194,7 @@ function AltFEN()
         if (alt_fen_reset == true) {
             var tp_fen_name = "TP_FEN_" + alt_fen_number + "_" + variant;
             var TP_FEN = window[tp_fen_name];
+            ResetBoard();
             board.removehighlights();
             ParseFen(TP_FEN);
             board.position(TP_FEN);
