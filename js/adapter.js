@@ -494,39 +494,45 @@ function AlertEndGame() {
     var msg;
     if (brd_history_notes.indexOf('[BLACK WINS: Checkmate!]') > -1) {
         msg = "Checkmate! Black wins.";
-        PlaySound(checkmate);
-        PlaySound(blackwins);
-        PlaySound(gg);
+        GGSound("blackwins");
     }
     else if (brd_history_notes.indexOf('[WHITE WINS: Checkmate!]') > -1) {
         msg = "Checkmate! White wins.";
-        PlaySound(checkmate);
-        PlaySound(whitewins);
-        PlaySound(gg);
+        GGSound("whitewins");
     }
     else if (brd_history_notes.indexOf('[GAME DRAWN: Fifty move rule]') > -1) {
         msg = "Draw: Fifty move rule";
-        PlaySound(draw);
-        PlaySound(gg);
+        GGSound("draw");
     } 
     else if (brd_history_notes.indexOf('[GAME DRAWN: 3-fold repetition]') > -1) {
         msg = "Draw: 3-fold repetition";
-        PlaySound(draw);
-        PlaySound(gg);
+        GGSound("draw");
     } 
     else if (brd_history_notes.indexOf('[GAME DRAWN: Insufficient material]') > -1) {
         msg = "Draw: Insufficient material";
-        PlaySound(draw);
-        PlaySound(gg);
+        GGSound("draw");
     } 
     else if (brd_history_notes.indexOf('[GAME DRAWN: Stalemate]') > -1) {
         msg = "Draw: Stalemate";
-        PlaySound(draw);
-        PlaySound(gg);
+        GGSound("draw");
     } 
     timeout = setTimeout(function(){ alert(msg); }, 1000);
 }
 
+function GGSound(result) {
+    if (result == "draw")
+    {
+        timeout = setTimeout(function(){ PlaySound(draw); }, 1000);
+    }
+    else if (result == "whitewins")
+    {
+        timeout = setTimeout(function(){ PlaySound(whitewins); }, 1000);
+    }
+    else if (result == "blackwins") {
+        timeout = setTimeout(function(){ PlaySound(blackwins); }, 1000);
+    }
+    PlaySound(gg);
+}
 
 
 function Help() {
