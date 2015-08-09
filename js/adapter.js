@@ -516,7 +516,7 @@ function AlertEndGame() {
         msg = "Draw: Stalemate";
         GGSound("draw");
     } 
-    timeout = setTimeout(function(){ PlaySound(gg); alert(msg); }, 2500);
+    timeout = setTimeout(function(){ PlaySound(gg); alert(msg); }, 3000);
 }
 
 function GGSound(result) {
@@ -525,11 +525,11 @@ function GGSound(result) {
     }
     else if (result == "whitewins") {
         timeout = setTimeout(function(){ PlaySound(checkmate); }, 500);
-        timeout = setTimeout(function(){ PlaySound(whitewins); }, 1500);
+        timeout = setTimeout(function(){ PlaySound(whitewins); }, 2000);
     }
     else if (result == "blackwins") {
         timeout = setTimeout(function(){ PlaySound(checkmate); }, 500);
-        timeout = setTimeout(function(){ PlaySound(blackwins); }, 1500);
+        timeout = setTimeout(function(){ PlaySound(blackwins); }, 2000);
     }
 }
 
