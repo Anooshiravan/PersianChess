@@ -34,10 +34,16 @@ var output = "";
 var tt = 3;
 
 // Audio definitions
+var welcome = 'audio/welcome.mp3';
 var move = 'audio/move.mp3';
-var end = 'audio/end.mp3'
+var end = 'audio/end.mp3';
 var check = 'audio/check.mp3';
-var capture = 'audio/capture.mp3'
+var capture = 'audio/capture.mp3';
+var checkmate= 'audio/checkmate.mp3';
+var whitewins = 'audio/whitewins.mp3';
+var blackwins = 'audio/blackwins.mp3';
+var draw = 'audio/draw.mp3';
+var gg = 'audio/gg.mp3';
 
 var lla;
 var lla_loaded = false;
@@ -49,6 +55,10 @@ function LoadAudio()
         lla_loaded = true;
         
         // preload audio resource
+        lla.preloadFX(welcome, welcome, 1, function(msg){
+        }, function(msg){
+            console.log( 'error: ' + msg );
+        });
         lla.preloadFX(move, move, 1, function(msg){
         }, function(msg){
             console.log( 'error: ' + msg );
@@ -65,6 +75,28 @@ function LoadAudio()
         }, function(msg){
             console.log( 'error: ' + msg );
         });
+        lla.preloadFX(checkmate, checkmate, function(msg){
+        }, function(msg){
+            console.log( 'error: ' + msg );
+        });
+        lla.preloadFX(whitewins, whitewins, function(msg){
+        }, function(msg){
+            console.log( 'error: ' + msg );
+        });
+        lla.preloadFX(blackwins, blackwins, function(msg){
+        }, function(msg){
+            console.log( 'error: ' + msg );
+        });
+        lla.preloadFX(draw, draw, function(msg){
+        }, function(msg){
+            console.log( 'error: ' + msg );
+        });
+        lla.preloadFX(gg, gg, function(msg){
+        }, function(msg){
+            console.log( 'error: ' + msg );
+        });
+
+        timeout = setTimeout(function(){ PlaySound(welcome); }, 1000);
     }
     else
     {
@@ -459,25 +491,38 @@ function updateMoveList()
 }
 
 function AlertEndGame() {
-    PlaySound(end);
     var msg;
     if (brd_history_notes.indexOf('[BLACK WINS: Checkmate!]') > -1) {
         msg = "Checkmate! Black wins.";
+        PlaySound(checkmate);
+        PlaySound(blackwins);
+        PlaySound(gg);
     }
     else if (brd_history_notes.indexOf('[WHITE WINS: Checkmate!]') > -1) {
         msg = "Checkmate! White wins.";
+        PlaySound(checkmate);
+        PlaySound(whitewins);
+        PlaySound(gg);
     }
     else if (brd_history_notes.indexOf('[GAME DRAWN: Fifty move rule]') > -1) {
         msg = "Draw: Fifty move rule";
+        PlaySound(draw);
+        PlaySound(gg);
     } 
     else if (brd_history_notes.indexOf('[GAME DRAWN: 3-fold repetition]') > -1) {
         msg = "Draw: 3-fold repetition";
+        PlaySound(draw);
+        PlaySound(gg);
     } 
     else if (brd_history_notes.indexOf('[GAME DRAWN: Insufficient material]') > -1) {
         msg = "Draw: Insufficient material";
+        PlaySound(draw);
+        PlaySound(gg);
     } 
     else if (brd_history_notes.indexOf('[GAME DRAWN: Stalemate]') > -1) {
         msg = "Draw: Stalemate";
+        PlaySound(draw);
+        PlaySound(gg);
     } 
     timeout = setTimeout(function(){ alert(msg); }, 1000);
 }
@@ -485,7 +530,7 @@ function AlertEndGame() {
 
 
 function Help() {
-    var go2web = confirm("Version 1.2.3\r\nPersian Chess is invented and programmed by:\r\nAnooshiravan Ahmadi\r\nDo you want to go to www.PersianChess.com for the detailed game rules?");
+    var go2web = confirm("Version 1.2.4\r\nPersian Chess is invented and programmed by:\r\nAnooshiravan Ahmadi\r\nDo you want to go to www.PersianChess.com for the detailed game rules?");
     if (go2web == true) {
         window.open("http://www.persianchess.com/game-rules", "_system", "location=no");
     }
