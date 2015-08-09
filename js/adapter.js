@@ -19,7 +19,6 @@
 
 
 // Board definitions
-
 var cfg = {
     draggable: true,
     dropOffBoard: 'snapback', // this is the default
@@ -70,7 +69,20 @@ function LoadAudio()
     else
     {
         lla_loaded = false;
+        // TODO: Add html5 sounds for normal browsers
     }
+}
+
+function PlaySound(sound)
+{
+    if (lla_loaded == true) 
+        {
+            lla.play(sound);
+        }
+        else
+        {
+            // TODO: Add html5 sounds for normal browsers
+        }
 }
 
 // Game funtions
@@ -161,7 +173,7 @@ function MoveGUIPiece() {
     var fen = BoardToFen().replace(/ .+$/, '');
     board.position(fen);
     board.highlight(PrSq(FROMSQ(srch_best)), PrSq(TOSQ(srch_best)));
-    if (lla_loaded == true) lla.play(move);
+    PlaySound(move);
     updateMoveList();
 }
 
@@ -169,7 +181,7 @@ function MoveGUIPiece() {
 function CheckAndSet() {
     if (SqAttacked(brd_pList[PCEINDEX(Kings[brd_side], 0)], brd_side ^ 1) == BOOL.TRUE) {
         board.highlight_check(PrSq(brd_pList[PCEINDEX(Kings[brd_side], 0)]));
-        if (lla_loaded == true) lla.play(check);
+        PlaySound(check);
         // addNoteToMoveList("[Check!]");
     }
      
@@ -447,7 +459,7 @@ function updateMoveList()
 }
 
 function AlertEndGame() {
-    if (lla_loaded == true) lla.play(end);
+    PlaySound(end);
     var msg;
     if (brd_history_notes.indexOf('[BLACK WINS: Checkmate!]') > -1) {
         msg = "Checkmate! Black wins.";
