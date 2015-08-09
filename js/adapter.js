@@ -516,20 +516,20 @@ function AlertEndGame() {
         msg = "Draw: Stalemate";
         GGSound("draw");
     } 
-    timeout = setTimeout(function(){ PlaySound(gg); alert(msg); }, 1500);
+    timeout = setTimeout(function(){ PlaySound(gg); alert(msg); }, 2500);
 }
 
 function GGSound(result) {
     if (result == "draw") {
-        timeout = setTimeout(function(){ PlaySound(draw); }, 1000);
+        timeout = setTimeout(function(){ PlaySound(draw); }, 500);
     }
     else if (result == "whitewins") {
         timeout = setTimeout(function(){ PlaySound(checkmate); }, 500);
-        timeout = setTimeout(function(){ PlaySound(whitewins); }, 1000);
+        timeout = setTimeout(function(){ PlaySound(whitewins); }, 1500);
     }
     else if (result == "blackwins") {
         timeout = setTimeout(function(){ PlaySound(checkmate); }, 500);
-        timeout = setTimeout(function(){ PlaySound(blackwins); }, 1000);
+        timeout = setTimeout(function(){ PlaySound(blackwins); }, 1500);
     }
 }
 
