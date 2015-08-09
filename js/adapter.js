@@ -524,9 +524,11 @@ function GGSound(result) {
         timeout = setTimeout(function(){ PlaySound(draw); }, 1000);
     }
     else if (result == "whitewins") {
+        timeout = setTimeout(function(){ PlaySound(checkmate); }, 500);
         timeout = setTimeout(function(){ PlaySound(whitewins); }, 1000);
     }
     else if (result == "blackwins") {
+        timeout = setTimeout(function(){ PlaySound(checkmate); }, 500);
         timeout = setTimeout(function(){ PlaySound(blackwins); }, 1000);
     }
 }
