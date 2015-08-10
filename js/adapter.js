@@ -101,7 +101,6 @@ function LoadAudio()
             console.log( 'error: ' + msg );
         });
 
-        timeout = setTimeout(function(){ PlaySound(welcome); }, 1000);
     }
     else
     {
