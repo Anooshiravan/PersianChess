@@ -35,6 +35,7 @@ var tt = 3;
 
 // Audio definitions
 var welcome = 'audio/welcome.mp3';
+var click = 'audio/click.mp3';
 var move = 'audio/move.mp3';
 var end = 'audio/end.mp3';
 var check = 'audio/check.mp3';
@@ -56,6 +57,10 @@ function LoadAudio()
         
         // preload audio resource
         lla.preloadFX(welcome, welcome, 1, function(msg){
+        }, function(msg){
+            console.log( 'error: ' + msg );
+        });
+        lla.preloadFX(click, click, 1, function(msg){
         }, function(msg){
             console.log( 'error: ' + msg );
         });
@@ -96,7 +101,7 @@ function LoadAudio()
             console.log( 'error: ' + msg );
         });
 
-        timeout = setTimeout(function(){ PlaySound(welcome); }, 1000);
+        timeout = setTimeout(function(){ lla.play(welcome); lla.unload(welcome); }, 1000);
     }
     else
     {
@@ -132,6 +137,7 @@ function NewGame() {
 }
 
 function ResetGame() {
+    PlaySound(click);
     variant = document.getElementById("VariantChoice").value;
     variantname = ""
     switch(variant) {
@@ -292,6 +298,7 @@ function CheckResult() {
 }
 
 function MoveNow() {
+    PlaySound(click);
     GameController.PlayerSide = brd_side ^ 1;
     StartSearch();
 }
@@ -313,7 +320,7 @@ function EngineDemo() {
 }
 
 function StartDemo() {
-    
+    PlaySound(click);
     var demo = confirm("Starting Engine Demo.\nPersian Chess Engine will play 10 Ply (5 moves), or until you click on the stop button.");
     if (demo == true) {
         engineplay = 0;
@@ -322,6 +329,7 @@ function StartDemo() {
 }
 
 function StopDemo() {
+    PlaySound(click);
     alert("Chess 911 Engine Demo has stopped.");
     clearTimeout(EngineDemoTimer);
 }
@@ -329,6 +337,7 @@ function StopDemo() {
 var ChangeSideTimer;
 
 function Flip() {
+    PlaySound(click);
     GameController.BoardFlipped ^= 1;
     board.flip();
     var fen = BoardToFen().replace(/ .+$/, '');
@@ -356,6 +365,7 @@ function ChangeSide() {
 }
 
 function TakeBack() {
+    PlaySound(click);
     console.log('TakeBack request... brd_hisPly:' + brd_hisPly);
     if (brd_hisPly > 0) {
         TakeMove();
@@ -369,6 +379,7 @@ function TakeBack() {
 }
 
 function SetFen() {
+    PlaySound(click);
     var txt;
     var fen = prompt("Please enter FEN for the new position.", BoardToFen());
     if (fen != null) {
@@ -387,7 +398,7 @@ function SetFen() {
 var theme = 'green';
 
 function ChangeTheme() {
-    
+    PlaySound(click);
     switch(theme) {
         case "green":
             theme = 'brown';
@@ -455,6 +466,7 @@ function StartSearch() {
 }
 
 function SendPGN() {
+    PlaySound(click);
     var reset = confirm("Do you want to send this game as PGN format by email?");
     if (reset == true) {
     var emailbody = "";
@@ -536,6 +548,7 @@ function GGSound(result) {
 
 
 function Help() {
+    PlaySound(click);
     var go2web = confirm("Version 1.2.4\r\nPersian Chess is invented and programmed by:\r\nAnooshiravan Ahmadi\r\nDo you want to go to www.PersianChess.com for the detailed game rules?");
     if (go2web == true) {
         window.open("http://www.persianchess.com/game-rules", "_system", "location=no");
