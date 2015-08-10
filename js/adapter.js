@@ -101,7 +101,7 @@ function LoadAudio()
             console.log( 'error: ' + msg );
         });
 
-        timeout = setTimeout(function(){ lla.play(welcome); lla.unload(welcome); }, 1000);
+        timeout = setTimeout(function(){ PlaySound(welcome); }, 1000);
     }
     else
     {
@@ -124,6 +124,7 @@ function PlaySound(sound)
 
 // Game funtions
 function NewGame() {
+    timeout = setTimeout(function(){ PlaySound(welcome); }, 500);
     clearTimeout(EngineDemoTimer);
     ResetBoard();
     ParseFen(START_FEN);
