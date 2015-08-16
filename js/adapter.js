@@ -323,17 +323,22 @@ function EngineDemo() {
 
 function StartDemo() {
     PlaySound(click);
-    var demo = confirm("Starting Engine Demo.\nPersian Chess Engine will play 10 Ply (5 moves), or until you click on the stop button.");
-    if (demo == true) {
-        engineplay = 0;
-        EngineDemo();
-    }
+    var msgdemo = "Do you want to start the engine demo?\nPersian Chess Engine will play 10 Ply (5 moves), or until you click on the stop button. Click <b>Ok</b> to start demo or <b>Cancel</b> to return to the game.";
+    jConfirm(msgdemo, "Engine demo", function(r) {
+            if (r) 
+                {
+                    engineplay = 0;
+                    EngineDemo();
+                }
+    });
 }
 
 function StopDemo() {
     PlaySound(click);
-    alert("Chess 911 Engine Demo has stopped.");
-    clearTimeout(EngineDemoTimer);
+    var msgstopdemo = "Do you want to stop Persian Chess engine demo?";
+    jConfirm(msgstopdemo, "Stop demo", function(r) {
+            if (r) clearTimeout(EngineDemoTimer); 
+    });
 }
 
 var ChangeSideTimer;
@@ -360,10 +365,10 @@ function ChangeSide() {
     {
         colortoplay = 'White';
     }
-    var changeside = confirm("Board is flipped. Do you want to play " + colortoplay + "?");
-    if (changeside == true) {
-        MoveNow();
-    }
+    var flip = "Board is flipped. Do you want to play " + colortoplay + "?";
+    jConfirm(flip, "Flip board", function(r) {
+            if (r) MoveNow();
+    });
 }
 
 function TakeBack() {
@@ -371,29 +376,32 @@ function TakeBack() {
     console.log('TakeBack request... brd_hisPly:' + brd_hisPly);
     if (brd_hisPly > 0) {
         TakeMove();
+        TakeMove();
         brd_ply = 0;
         var fen = BoardToFen().replace(/ .+$/, '');
         board.position(fen);
         updateMoveList();
         board.removehighlights();
     }
-
 }
 
 function SetFen() {
     PlaySound(click);
     var txt;
-    var fen = prompt("Please enter FEN for the new position.", BoardToFen());
-    if (fen != null) {
-        console.log(fen);
-        ParseFen(fen);
-        if (debug) PrintBoard();
-        var boardFen = BoardToFen().replace(/ .+$/, '');
-        board.position(boardFen);
-        GameController.PlayerSide = brd_side;
-        CheckAndSet();
-        EvalPosition();
-    }
+    jPrompt("Please enter FEN for the new position.", BoardToFen(), "Insert new FEN", function(r) {
+    if( r ) 
+        {
+            var fen = r;
+            console.log(fen);
+            ParseFen(fen);
+            if (debug) PrintBoard();
+            var boardFen = BoardToFen().replace(/ .+$/, '');
+            board.position(boardFen);
+            GameController.PlayerSide = brd_side;
+            CheckAndSet();
+            EvalPosition();
+        }
+    });
 }
 
 
@@ -469,18 +477,20 @@ function StartSearch() {
 
 function SendPGN() {
     PlaySound(click);
-    var reset = confirm("Do you want to send this game as PGN format by email?");
-    if (reset == true) {
-    var emailbody = "";
-    if (document.getElementById('movelist').value != '')
-        {
-            emailbody = document.getElementById('movelist').value;
-            emailbody = emailbody.replace(/(?:\r\n|\r|\n)/g, '%0D%0A');
-            window.open("mailto:?subject=Persian Chess game&body=" + emailbody);
+    var msgsendpgn = "Do you want to send this game as PGN format by email?";
+    jConfirm(msgsendpgn, "Send PGN", function(r) {
+        if (r) 
+            {
+                var emailbody = "";
+                if (document.getElementById('movelist').value != '')
+                {
+                    emailbody = document.getElementById('movelist').value;
+                    emailbody = emailbody.replace(/(?:\r\n|\r|\n)/g, '%0D%0A');
+                    window.open("mailto:?subject=Persian Chess game&body=" + emailbody);
+            }
         }
-    }
+    });
 }
-
 
 function addNoteToMoveList(note)
 {
@@ -548,11 +558,10 @@ function GGSound(result) {
     }
 }
 
-
 function Help() {
     PlaySound(click);
-    var go2web = "<b>Version 1.2.7</b>\r\nPersian Chess variant is invented and programmed by:\r\n<b>Anooshiravan Ahmadi</b>\r\n\r\nClick <b>Ok</b> to go to PersianChess.com/game-rules for the detailed game information and rules, or <b>Cancel</b> to go back to the game.";
-     jConfirm(go2web, "Help", function(r) {
+    var go2web = "<b>Persian Chess Engine | Version 1.2.8</b>\r\n\r\nPersian Chess is invented and programmed by:\r\n<b>Anooshiravan Ahmadi</b>\r\n\r\nClick Ok to go to PersianChess.com/game-rules for the detailed game information, or Cancel to return to the game.";
+     jConfirm(go2web, "About", function(r) {
             if (r) window.open("http://www.persianchess.com/game-rules", "_system", "location=no");
     });
 }
