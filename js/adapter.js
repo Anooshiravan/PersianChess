@@ -156,8 +156,9 @@ function ResetGame() {
         default:
             break;
         }
-    var reset = confirm("Do you want to start a new game in \"" + variantname + "\" variant?");
-    if (reset == true) {
+    
+    jConfirm("Do you want to start a new game in <b>\"" + variantname + "\"</b> variant?", "New Game", function(r) {
+        if (r) {
         switch(variant) {
         case "Persian":
             START_FEN = "f111111111f/1rnbqksbnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKSBNR1/F111111111F w KQkq - 0 1";
@@ -182,7 +183,8 @@ function ResetGame() {
         board.redraw();
         NewGame();
         board.position(START_FEN, true)
-    }
+        }
+    });
 }
 
 function AltFEN()
@@ -549,8 +551,8 @@ function GGSound(result) {
 
 function Help() {
     PlaySound(click);
-    var go2web = confirm("Version 1.2.7\r\nPersian Chess is invented and programmed by:\r\nAnooshiravan Ahmadi\r\nDo you want to go to www.PersianChess.com for the detailed game rules?");
-    if (go2web == true) {
-        window.open("http://www.persianchess.com/game-rules", "_system", "location=no");
-    }
+    var go2web = "<b>Version 1.2.7</b>\r\nPersian Chess variant is invented and programmed by:\r\n<b>Anooshiravan Ahmadi</b>\r\n\r\nClick <b>Ok</b> to go to PersianChess.com/game-rules for the detailed game information and rules, or <b>Cancel</b> to go back to the game.";
+     jConfirm(go2web, "Help", function(r) {
+            if (r) window.open("http://www.persianchess.com/game-rules", "_system", "location=no");
+    });
 }
