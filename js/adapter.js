@@ -198,15 +198,17 @@ function AltFEN()
     else
     {
         variant = document.getElementById("VariantChoice").value;
-        var alt_fen_reset = confirm("Do you want to set the position to Training Position #" + alt_fen_number + " ? These are so-called \"handicap\" positions with different level of advantage for White.");
-        if (alt_fen_reset == true) {
-            var tp_fen_name = "TP_FEN_" + alt_fen_number + "_" + variant;
-            var TP_FEN = window[tp_fen_name];
-            ResetBoard();
-            board.removehighlights();
-            ParseFen(TP_FEN);
-            board.position(TP_FEN);
-        }
+        jConfirm("Do you want to set the position to Training Position #" + alt_fen_number + " ?", "Training Position", function(r) {
+        if (r) 
+            {
+                var tp_fen_name = "TP_FEN_" + alt_fen_number + "_" + variant;
+                var TP_FEN = window[tp_fen_name];
+                ResetBoard();
+                board.removehighlights();
+                ParseFen(TP_FEN);
+                board.position(TP_FEN);
+            }
+        });
     }
 }
 
@@ -560,7 +562,7 @@ function GGSound(result) {
 
 function Help() {
     PlaySound(click);
-    var go2web = "<b>Persian Chess Engine | Version 1.2.8</b>\r\n© 2009 - 2015 PersianChess.com\r\n\r\nPersian Chess is invented and programmed by:\r\n<b>Anooshiravan Ahmadi</b>\r\n\r\nClick Ok to go to the website for the detailed game information, or Cancel to return to the game.";
+    var go2web = "<b>Persian Chess Engine | Version 1.2.9</b>\r\n© 2009 - 2015 PersianChess.com\r\n\r\nPersian Chess is invented and programmed by:\r\n<b>Anooshiravan Ahmadi</b>\r\n\r\nClick Ok to go to the website for the detailed game information, or Cancel to return to the game.";
      jConfirm(go2web, "About", function(r) {
             if (r) window.open("http://www.persianchess.com/game-rules", "_system", "location=no");
     });
