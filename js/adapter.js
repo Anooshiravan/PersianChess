@@ -48,6 +48,7 @@ var gg = 'audio/gg.mp3';
 
 var lla;
 var lla_loaded = false;
+var audio5js = new Audio5js;
 
 function LoadAudio()
 {
@@ -105,7 +106,6 @@ function LoadAudio()
     else
     {
         lla_loaded = false;
-        // TODO: Add html5 sounds for normal browsers
     }
 }
 
@@ -117,7 +117,8 @@ function PlaySound(sound)
         }
         else
         {
-            // TODO: Add html5 sounds for normal browsers
+            audio5js.load(sound);
+            audio5js.play();
         }
 }
 
@@ -543,7 +544,10 @@ function AlertEndGame() {
         msg = "Draw: Stalemate";
         GGSound("draw");
     } 
-    timeout = setTimeout(function(){ PlaySound(gg); alert(msg); }, 3000);
+    timeout = setTimeout(function(){ 
+        PlaySound(gg); 
+        jAlert(msg, 'Game Over');
+    }, 3000);
 }
 
 function GGSound(result) {
