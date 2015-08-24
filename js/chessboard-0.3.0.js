@@ -556,6 +556,8 @@
             highlight3: 'highlight3-9c5d2',
             highlight4: 'highlight4-9c5d2',
             wait: 'wait-53d37',
+            showsidewhite: 'showsidewhite-53d37',
+            showsideblack: 'showsideblack-53d37',
             notation: 'notation-322f9',
             numeric: 'numeric-fc462',
             piece: 'piece-417db',
@@ -1920,6 +1922,10 @@ widget.highlight = function() {
                 waitsquare = 'f1';
             }
             
+            $('#' + SQUARE_ELS_IDS[waitsquare]).removeClass(CSS.wait);
+            $('#' + SQUARE_ELS_IDS[waitsquare]).removeClass(CSS.showsidewhite);
+            $('#' + SQUARE_ELS_IDS[waitsquare]).removeClass(CSS.showsideblack);            
+
             if (bool == true)
             {
                 thinking = true;
@@ -1928,7 +1934,16 @@ widget.highlight = function() {
             else
             {
                 thinking = false;
-                $('#' + SQUARE_ELS_IDS[waitsquare]).removeClass(CSS.wait)
+                if (brd_side == COLOURS.WHITE) 
+                {
+                    console.log("show white");
+                    $('#' + SQUARE_ELS_IDS[waitsquare]).addClass(CSS.showsidewhite);
+                }
+                else 
+                {
+                    $('#' + SQUARE_ELS_IDS[waitsquare]).addClass(CSS.showsideblack);
+                    console.log("show black");
+                }
             }
         };
         

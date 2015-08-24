@@ -221,7 +221,6 @@ function MoveGUIPiece() {
     updateMoveList();
 }
 
-
 function CheckAndSet() {
     if (SqAttacked(brd_pList[PCEINDEX(Kings[brd_side], 0)], brd_side ^ 1) == BOOL.TRUE) {
         board.highlight_check(PrSq(brd_pList[PCEINDEX(Kings[brd_side], 0)]));
@@ -348,29 +347,16 @@ var ChangeSideTimer;
 
 function Flip() {
     PlaySound(click);
-    GameController.BoardFlipped ^= 1;
-    board.flip();
-    var fen = BoardToFen().replace(/ .+$/, '');
-    board.position(fen);
-    console.log("Flipped:" + GameController.BoardFlipped);
-    setTimeout(function () {
-        ChangeSide();
-    }, 300);
-}
-
-function ChangeSide() {
-    var colortoplay;
-    if (GameController.BoardFlipped == 1) 
-    {
-        colortoplay = 'Black';
-    }
-    else
-    {
-        colortoplay = 'White';
-    }
-    var flip = "Board is flipped. Do you want to play " + colortoplay + "?";
+    var flip = "Do you want to flip the board?\r\nTo change your side click the \"<u>forward</u>\" or \"<u>take back</u>\" buttons.";
     jConfirm(flip, "Flip board", function(r) {
-            if (r) MoveNow();
+        if (r) 
+        {
+            GameController.BoardFlipped ^= 1;
+            board.flip();
+            var fen = BoardToFen().replace(/ .+$/, '');
+            board.position(fen);
+            console.log("Flipped:" + GameController.BoardFlipped);
+        }
     });
 }
 
@@ -379,12 +365,12 @@ function TakeBack() {
     console.log('TakeBack request... brd_hisPly:' + brd_hisPly);
     if (brd_hisPly > 0) {
         TakeMove();
-        TakeMove();
         brd_ply = 0;
         var fen = BoardToFen().replace(/ .+$/, '');
         board.position(fen);
         updateMoveList();
         board.removehighlights();
+        board.wait(false);
     }
 }
 
@@ -433,6 +419,7 @@ function ChangeTheme() {
             break;
         }
     board.theme(theme);
+    board.wait(false);
 }
 
 
@@ -451,18 +438,21 @@ function ManualThinkTime()
 {
     if ($('#ThinkTimeChoice').val() == "manual")
     {
-        var n=window.prompt("Please enter the number of seconds for engine to think:");
-        if (!isNaN(n) && parseInt(n) > 0)
-        {
-            tt = n;
-        }
-        else
-        {
-            alert ("Please enter a numerical value bigger than 0.")
-        }
+        jPrompt("Please enter the number of seconds for engine to think:", "3", "Engine think time", function(r) {
+            if(r) 
+            {
+                if (!isNaN(r) && parseInt(r) > 0)
+                {
+                    tt = r;
+                }
+                else
+                {
+                    jAlert("Please enter a numerical value bigger than 0.", "Incorrect value")
+                }
+            }        
+        });
     }
 }
-
 
 function StartSearch() {
     srch_depth = MAXDEPTH;
@@ -566,7 +556,7 @@ function GGSound(result) {
 
 function Help() {
     PlaySound(click);
-    var go2web = "<b>Persian Chess Engine | Version 1.2.9</b>\r\n© 2009 - 2015 PersianChess.com\r\n\r\nPersian Chess is invented and programmed by:\r\n<b>Anooshiravan Ahmadi</b>\r\n\r\nClick Ok to go to the website for the detailed game information, or Cancel to return to the game.";
+    var go2web = "<b>Persian Chess Engine | Version 1.3.0</b>\r\n© 2009 - 2015 PersianChess.com\r\n\r\nPersian Chess is invented and programmed by:\r\n<b>Anooshiravan Ahmadi</b>\r\n\r\nClick Ok to go to the website for the detailed game information, or Cancel to return to the game.";
      jConfirm(go2web, "About", function(r) {
             if (r) window.open("http://www.persianchess.com/game-rules", "_system", "location=no");
     });
