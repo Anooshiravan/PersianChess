@@ -58,7 +58,7 @@
     <img src="img/footer/takeback.png" id="takeback-button" title="Take Back" onclick="TakeBack();">
     <img src="img/footer/play.png" id="play-button" title="Move Now" onclick="MoveNow();">
     <img src="img/footer/engine.png" id="engine-button" title="Start/Stop Engine" onclick="EngineOnOff();">
-    <img src="img/footer/audio.png" id="audio-button" title="Audio On/Off" onclick="AudioOnOff();">
+    <img src="img/footer/audio_off.png" id="audio-button" title="Audio On/Off" onclick="AudioOnOff();">
     <img src="img/footer/fen.png" id="fen-button" title="Show/Set FEN" onclick="SetFen();">
     <img src="img/footer/save.png" id="save-button" title="Save PGN" onclick="SendPGN();">
     <img src="img/footer/help.png" id="help-button" title="Help" onclick="Help();">
@@ -101,7 +101,10 @@
 
 
 <textarea name="movelist" id="movelist" disabled="disabled" >
-If you play and like this game, please give it a rating and review on Google Play and help others to find this variant too. A good app rating increase the chance that other users also find this game on Google Play.
+If you like this game, please do not forget to give it a rating and review on Google Play.
+------------------
+> Audio is OFF.
+> Engine is ON.
 </textarea>
 
 </div>
@@ -159,6 +162,7 @@ function screenResize()
 
 
         board.resize();
+        board.wait(false);
       }
       else
       {

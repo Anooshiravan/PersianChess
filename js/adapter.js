@@ -33,7 +33,7 @@ var yourMove;
 var output = "";
 var tt = 3;
 var engine_on = true;
-var audio_on = true;
+var audio_on = false;
 
 // Audio definitions
 var welcome = 'audio/welcome.mp3';
@@ -59,11 +59,13 @@ function AudioOnOff()
     {
         document.getElementById("audio-button").src = "img/footer/audio_off.png";
         audio_on = false;
+        document.getElementById('movelist').value += "\r\n> Audio is OFF.";
     }
     else
     {
         document.getElementById("audio-button").src = "img/footer/audio.png";
         audio_on = true;
+        document.getElementById('movelist').value += "\r\n> Audio is ON.";
     }
 }
 
@@ -151,11 +153,13 @@ function EngineOnOff()
     {
         document.getElementById("engine-button").src = "img/footer/engine_off.png";
         engine_on = false;
+        document.getElementById('movelist').value += "\r\n> Engine is OFF.";
     }
     else
     {
         document.getElementById("engine-button").src = "img/footer/engine.png";
         engine_on = true;
+        document.getElementById('movelist').value += "\r\n> Engine is ON.";
     }
 }
 
@@ -391,6 +395,7 @@ function Flip() {
             board.flip();
             var fen = BoardToFen().replace(/ .+$/, '');
             board.position(fen);
+            board.wait(false);
             console.log("Flipped:" + GameController.BoardFlipped);
         }
     });
