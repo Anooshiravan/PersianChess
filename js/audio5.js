@@ -437,7 +437,7 @@
      * Play audio
      */
     play: function () {
-      this.audio.pplay();
+      if (this.audio != undefined) this.audio.pplay();
     },
     /**
      * Pause audio
@@ -803,11 +803,7 @@
       this.settings = s;
       this.audio = this.getPlayer();
       this.bindAudioEvents();
-      if (this.settings.use_flash) {
-        this.audio.init(s.swf_path);
-      } else {
-        this.audio.init();
-      }
+      this.audio.init();
     },
     /**
      * Gets a new audio player instance based on codec support as defined in settings.codecs array.
@@ -817,11 +813,7 @@
     getPlayer: function () {
       var i, l, player, codec;
       if(this.settings.use_flash){
-        player = new FlashAudioPlayer();
-        this.settings.player = {
-          engine: 'flash',
-          codec: 'mp3'
-        };
+        // do nothing
       } else {
         for (i = 0, l = this.settings.codecs.length; i < l; i++) {
           codec = this.settings.codecs[i];

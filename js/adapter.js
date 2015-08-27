@@ -32,6 +32,8 @@ if (board_debug) board.theme("debug"); else board.theme("green");
 var yourMove;
 var output = "";
 var tt = 3;
+var engine_on = true;
+var audio_on = true;
 
 // Audio definitions
 var welcome = 'audio/welcome.mp3';
@@ -49,6 +51,22 @@ var gg = 'audio/gg.mp3';
 var lla;
 var lla_loaded = false;
 var audio5js = new Audio5js;
+
+function AudioOnOff()
+{
+    PlaySound(click);
+    if (audio_on == true)
+    {
+        document.getElementById("audio-button").src = "img/footer/audio_off.png";
+        audio_on = false;
+    }
+    else
+    {
+        document.getElementById("audio-button").src = "img/footer/audio.png";
+        audio_on = true;
+    }
+}
+
 
 function LoadAudio()
 {
@@ -111,11 +129,13 @@ function LoadAudio()
 
 function PlaySound(sound)
 {
+    if (audio_on == false) return;
+
     if (lla_loaded == true) 
         {
             lla.play(sound);
         }
-        else
+    else
         {
             audio5js.load(sound);
             audio5js.play();
@@ -123,6 +143,22 @@ function PlaySound(sound)
 }
 
 // Game funtions
+
+function EngineOnOff()
+{
+    PlaySound(click);
+    if (engine_on == true)
+    {
+        document.getElementById("engine-button").src = "img/footer/engine_off.png";
+        engine_on = false;
+    }
+    else
+    {
+        document.getElementById("engine-button").src = "img/footer/engine.png";
+        engine_on = true;
+    }
+}
+
 function NewGame() {
     timeout = setTimeout(function(){ PlaySound(welcome); }, 500);
     clearTimeout(EngineDemoTimer);
@@ -556,7 +592,7 @@ function GGSound(result) {
 
 function Help() {
     PlaySound(click);
-    var go2web = "<b>Persian Chess Engine | Version 1.3.0</b>\r\n© 2009 - 2015 PersianChess.com\r\n\r\nPersian Chess is invented and programmed by:\r\n<b>Anooshiravan Ahmadi</b>\r\n\r\nClick Ok to go to the website for the detailed game information, or Cancel to return to the game.";
+    var go2web = "<b>Persian Chess Engine | Version 1.3.1</b>\r\n© 2009 - 2015 PersianChess.com\r\n\r\nPersian Chess is invented and programmed by:\r\n<b>Anooshiravan Ahmadi</b>\r\n\r\nClick Ok to go to the website for the detailed game information, or Cancel to return to the game.";
      jConfirm(go2web, "About", function(r) {
             if (r) window.open("http://www.persianchess.com/game-rules", "_system", "location=no");
     });

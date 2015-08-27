@@ -1634,16 +1634,26 @@
             } else if (action === 'trash') {
                 trashDraggedPiece();
             } else if (action === 'drop' && parsed != NOMOVE) {
-                board.wait(true);
                 dropDraggedPieceOnSquare(location);
                 yourMove = (PrMoveWithPieces(parsed));
                 MakeMove(parsed);
                 MoveGUIPiece(parsed);
                 setTimeout(function() { CheckAndSet(); }, 300);
-                setTimeout(function() { PreSearch(); }, 300); 
                 sourcesq = 0;
                 targetsq = 0;
-            } else {
+                if (engine_on == true)
+                {
+                    board.wait(true);
+                    setTimeout(function() { PreSearch(); }, 300);
+
+                }
+                else
+                {
+                    board.wait(false);
+                }
+            } 
+            else 
+            {
                 snapbackDraggedPiece();
             }
         }
