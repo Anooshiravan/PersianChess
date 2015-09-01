@@ -580,6 +580,12 @@ function AlertEndGame() {
         msg = "Draw: Stalemate";
         GGSound("draw");
     } 
+
+    document.getElementById('movelist').value += "\r\n-----------------------\r\n" + msg + "\r\n-----------------------";
+    $("#movelist").trigger("change");
+    $('#movelist').scrollTop($('#movelist')[0].scrollHeight);
+    brd_history_notes = [];
+
     timeout = setTimeout(function(){ 
         PlaySound(gg); 
         jAlert(msg, 'Game Over');
