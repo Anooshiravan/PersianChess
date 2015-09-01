@@ -344,7 +344,10 @@ function CheckResult() {
 function MoveNow() {
     PlaySound(click);
     GameController.PlayerSide = brd_side ^ 1;
-    StartSearch();
+    board.wait(true);
+    setTimeout(function () {
+            StartSearch();
+    }, 200);
 }
 
 var EngineDemoTimer;
@@ -387,18 +390,20 @@ var ChangeSideTimer;
 
 function Flip() {
     PlaySound(click);
-    var flip = "Do you want to flip the board?\r\nTo change your side click the \"<u>forward</u>\" or \"<u>take back</u>\" buttons.";
-    jConfirm(flip, "Flip board", function(r) {
-        if (r) 
-        {
-            GameController.BoardFlipped ^= 1;
-            board.flip();
-            var fen = BoardToFen().replace(/ .+$/, '');
-            board.position(fen);
-            board.wait(false);
-            console.log("Flipped:" + GameController.BoardFlipped);
-        }
-    });
+    GameController.BoardFlipped ^= 1;
+    board.flip();
+    var fen = BoardToFen().replace(/ .+$/, '');
+    board.position(fen);
+    if (engine_on) {
+        board.wait(true);
+        setTimeout(function () {
+            MoveNow();
+        }, 200);
+    }
+    else
+    {
+        board.wait(false);  
+    }
 }
 
 function TakeBack() {
@@ -418,7 +423,7 @@ function TakeBack() {
 function SetFen() {
     PlaySound(click);
     var txt;
-    jPrompt("Please enter FEN for the new position.", BoardToFen(), "Insert new FEN", function(r) {
+    jPrompt("Please enter position FEN:", BoardToFen(), "Insert new FEN", function(r) {
     if( r ) 
         {
             var fen = r;

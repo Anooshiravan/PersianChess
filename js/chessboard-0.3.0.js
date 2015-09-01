@@ -1751,7 +1751,6 @@ widget.highlight = function() {
                 CSS['persian'] = 'persian-53d37';
                 CSS['ase'] = 'ase-53d37';
                 CSS['off'] = 'off-53d36';
-                CSS['wait'] = 'wait-53d37';
             break;
             case "blue":
                 CSS['white'] = 'white-blue-1e1d7';
@@ -1761,7 +1760,6 @@ widget.highlight = function() {
                 CSS['persian'] = 'persian-blue-53d37';
                 CSS['ase'] = 'ase-blue-53d37';
                 CSS['off'] = 'off-blue-53d36';
-                CSS['wait'] = 'wait-blue-53d37'; 
             break;
             case "green":
                 CSS['white'] = 'white-green-1e1d7';
@@ -1771,7 +1769,6 @@ widget.highlight = function() {
                 CSS['persian'] = 'persian-green-53d37';
                 CSS['ase'] = 'ase-green-53d37';
                 CSS['off'] = 'off-green-53d36';
-                CSS['wait'] = 'wait-green-53d37'; 
             break;
             case "oriental":
                 CSS['white'] = 'white-oriental-1e1d7';
@@ -1781,7 +1778,6 @@ widget.highlight = function() {
                 CSS['persian'] = 'persian-oriental-53d37';
                 CSS['ase'] = 'ase-oriental-53d37';
                 CSS['off'] = 'off-oriental-53d36';
-                CSS['wait'] = 'wait-oriental-53d37'; 
             break;
             case "debug":
                 CSS['white'] = 'white-debug-1e1d7';
@@ -1791,7 +1787,6 @@ widget.highlight = function() {
                 CSS['persian'] = 'persian-debug-53d37';
                 CSS['ase'] = 'ase-debug-53d37';
                 CSS['off'] = 'off-debug-53d36';
-                CSS['wait'] = 'wait-debug-53d37'; 
             break;
         
             default:
