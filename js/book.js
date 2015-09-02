@@ -53,7 +53,7 @@ function BookMove() {
     }
     if (bookMoves.length == 0) return NOMOVE;
     var num = Math.floor(Math.random() * bookMoves.length);
-    console.log("Book move: " + PrMove(bookMoves[num]));
+    // console.log("Book move: " + PrMove(bookMoves[num]));
     // addNoteToMoveList("[Book Move]");
     updateMoveList();
     return bookMoves[num];

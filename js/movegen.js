@@ -19,6 +19,9 @@
 var GeneratedInsaneMoves = 0;
 var GeneratedInsaneMovesIndex = 0;
 var GeneratedInsaneMovesShow = 100; // Show the first 10 insane moves for debugging
+var GenerateCapturesNum = 0;
+var GenerateMovesNum = 0;
+
 
 var VictimScore = [0, 100, 200, 300, 400, 500, 600, 700, 800, 100, 200, 300, 400, 500, 600, 700, 800];
 var MvvLvaScores = new Array(22 * 22);
@@ -393,7 +396,7 @@ function GenerateMoves() {
         }
         pce = LoopNonSlidePce[pceIndex++];
     }
-
+    ++GenerateMovesNum;
 }
 
 function GenerateCaptures() {
@@ -507,4 +510,5 @@ function GenerateCaptures() {
         }
         pce = LoopNonSlidePce[pceIndex++];
     }
+    ++GenerateCapturesNum;
 }

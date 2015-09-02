@@ -27,6 +27,10 @@ var srch_stop;
 var srch_best;
 var srch_thinking;
 
+var Qcalled = 0;
+var ABcalled = 0;
+
+
 function CheckUp() {
     if (($.now() - srch_start) > srch_time) srch_stop = BOOL.TRUE;
 }
@@ -70,7 +74,6 @@ function ClearPvTable() {
     for (index = 0; index < PVENTRIES; index++) {
         brd_PvTable[index].move = NOMOVE;
         brd_PvTable[index].posKey = 0;
-
     }
 }
 
@@ -78,8 +81,8 @@ function ClearForSearch() {
 
     var index = 0;
     var index2 = 0;
-
-    for (index = 0; index < 18 * BRD_SQ_NUM; ++index) {
+    
+    for (index = 0; index < 22 * BRD_SQ_NUM; ++index) {
         brd_searchHistory[index] = 0;
     }
 
@@ -98,6 +101,10 @@ function ClearForSearch() {
     srch_stop = BOOL.FALSE;
     srch_best = NOMOVE;
     GeneratedInsaneMoves = 0; 
+    GenerateCapturesNum = 0;
+    GenerateMovesNum = 0;
+    Qcalled = 0;
+    ABcalled = 0;
 }
 
 
@@ -106,6 +113,7 @@ function Quiescence(alpha, beta) {
     if ((srch_nodes & 2047) == 0) CheckUp();
 
     srch_nodes++;
+    Qcalled++;
 
     if (IsRepetition() || brd_fiftyMove >= 100) {
         return 0;
@@ -178,7 +186,6 @@ function Quiescence(alpha, beta) {
 
 function AlphaBeta(alpha, beta, depth, DoNull) {
 
-
     if (depth <= 0) {
         return Quiescence(alpha, beta);
         // return EvalPosition();
@@ -186,13 +193,14 @@ function AlphaBeta(alpha, beta, depth, DoNull) {
     if ((srch_nodes & 2047) == 0) CheckUp();
 
     srch_nodes++;
+    ABcalled++;
 
     if ((IsRepetition() || brd_fiftyMove >= 100) && brd_ply != 0) {
         return 0;
     }
 
     if (brd_ply > MAXDEPTH - 1) {
-        return EvalPosition();
+                return EvalPosition();
     }
 
     var InCheck = SqAttacked(brd_pList[PCEINDEX(Kings[brd_side], 0)], brd_side ^ 1);
@@ -314,7 +322,7 @@ function SearchPosition() {
     }
     */
     
-    output = 'ENGINE MaxDepth:' + MAXDEPTH + ' MaxTime:' + srch_time + 'ms';
+    output = 'ENGINE MaxTime:' + srch_time + 'ms';
     console.log(output);
     ClearForSearch();
 
@@ -336,13 +344,24 @@ function SearchPosition() {
         pvNum = GetPvLine(currentDepth);
 
         bestMove = brd_PvArray[0];
-        line = ("Depth:" + currentDepth + " best:" + PrMoveWithPieces(bestMove) + " Score:" + bestScore + " nodes:" + srch_nodes);
+        line = ("Depth:" + currentDepth + " Best:" + PrMoveWithPieces(bestMove) + " Score:" + bestScore + " Nodes:" + srch_nodes);
 
         if (currentDepth != 1) {
             line += (" Ordering:" + ((srch_fhf / srch_fh) * 100).toFixed(2) + "%");
         }
+
+        // Print PV line
+        // line += ("\r\n- Pv Line: ");
+        // for (i = 0; i < brd_PvArray.length; i++) { 
+        //     if (brd_PvArray[i] != undefined) line += " " + PrMove(brd_PvArray[i]);
+        // }
         console.log(line);
     }
+
+    // Log total nodes
+    line += ("\r\n- Depth:" + currentDepth + " Calculated Moves: " + srch_nodes);
+    console.log(line);
+
 
     // No move found, start search round 2
     if (bestMove == NOMOVE || bestMove == undefined || SanityCheck(bestMove) == BOOL.FALSE) {
@@ -421,4 +440,16 @@ function SearchPosition() {
             console.log("%c " + GeneratedInsaneMoves + " number of insane moves generated.", "color: red; font-style: italic");
         }
     output += "\r\n- " + line;
+    ShowPerformance();
+}
+
+function ShowPerformance()
+{
+    console.log ("-------- Performance Counters ----------");
+    console.log ("Total nodes: " + srch_nodes);
+    console.log ("Quiescence: " + Qcalled);
+    console.log ("Capture Gen: " + GenerateCapturesNum);
+    console.log ("AlphaBeta: " + ABcalled);
+    console.log ("Move Gen: " + GenerateMovesNum);
+    console.log ("-----------------------------------------");
 }

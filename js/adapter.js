@@ -200,30 +200,11 @@ function ResetGame() {
     
     jConfirm("Do you want to start a new game in <b>\"" + variantname + "\"</b> variant?", "New Game", function(r) {
         if (r) {
-        switch(variant) {
-        case "Persian":
-            START_FEN = "f111111111f/1rnbqksbnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKSBNR1/F111111111F w KQkq - 0 1";
-            board.theme("green");
-            break;
-        case "ASE":
-            START_FEN = "f111111111f/1rnbqksbnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKSBNR1/F111111111F w KQkq - 0 1";
-            board.theme ("brown");
-            break;
-        case "Citadel":
-            START_FEN = "f111111111f/1rnbqkbsnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKBSNR1/F111111111F w KQkq - 0 1";
-            board.theme ("blue");
-            break;
-        case "Oriental":
-            START_FEN = "w111111111w/1rnbqkcbnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKCBNR1/W111111111W w KQkq - 0 1";
-            board.theme ("oriental");
-            break;
-        default:
-            break;
-        }
-        clearTimeout(EngineDemoTimer);
-        board.redraw();
-        NewGame();
-        board.position(START_FEN, true)
+            setVariantDefs(variant);
+            clearTimeout(EngineDemoTimer);
+            board.redraw();
+            NewGame();
+            board.position(START_FEN, true)
         }
     });
 }
@@ -352,38 +333,16 @@ function MoveNow() {
 
 var EngineDemoTimer;
 
-var engineplay = 0;
-function EngineDemo() {
-    var engineplaynum = 9;
+function StartEngineDemo() {
     StartSearch();
     pgn = '';
-    if (insane_move_debug) engineplaynum = 255;
-    if (engineplay < engineplaynum) 
-       { EngineDemoTimer = setTimeout(arguments.callee, 1000);
-          engineplay++;
-       }
+    EngineDemoTimer = setTimeout(arguments.callee, 1000);
     updateMoveList();
     if (GameController.GameOver == BOOL.TRUE) clearTimeout(EngineDemoTimer);
 }
 
-function StartDemo() {
-    PlaySound(click);
-    var msgdemo = "Do you want to start the engine demo?\nPersian Chess Engine will play 10 Ply (5 moves), or until you click on the stop button. Click <b>Ok</b> to start demo or <b>Cancel</b> to return to the game.";
-    jConfirm(msgdemo, "Engine demo", function(r) {
-            if (r) 
-                {
-                    engineplay = 0;
-                    EngineDemo();
-                }
-    });
-}
-
-function StopDemo() {
-    PlaySound(click);
-    var msgstopdemo = "Do you want to stop Persian Chess engine demo?";
-    jConfirm(msgstopdemo, "Stop demo", function(r) {
-            if (r) clearTimeout(EngineDemoTimer); 
-    });
+function StopEngineDemo() {
+    clearTimeout(EngineDemoTimer); 
 }
 
 var ChangeSideTimer;

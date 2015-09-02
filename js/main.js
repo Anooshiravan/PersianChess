@@ -111,6 +111,13 @@ function InitFilesRanksBrd() {
 			sq = FR2SQ(file,rank);
 			FilesBrd[sq] = file;
 			RanksBrd[sq] = rank;
+			
+			// setting frame squares to offboard
+			if ($.inArray(sq, FrameSQ) > -1) 
+				{
+					FilesBrd[sq] = SQUARES.OFFBOARD;
+					RanksBrd[sq] = SQUARES.OFFBOARD;
+				}
 		}
 	}
     // console.log(FilesBrd);

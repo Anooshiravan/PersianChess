@@ -25,15 +25,15 @@ var BRD_SQ_NUM = 195;
 
 var MAXGAMEMOVES = 2048;
 var MAXPOSITIONMOVES = 256;
-var MAXDEPTH = 64;
+var MAXDEPTH = 16;
 
 var INFINITE = 30000;
 var MATE = 29000;
 
 var START_FEN = "f111111111f/1rnbqksbnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKSBNR1/F111111111F w KQkq - 0 1";
 
-// Debugging
-// START_FEN = "11111111111/1111k111111/11111111111/11111111111/111111s1111/11111P11111/11111111111/11111111111/11111111111/1111111K111/Q1111111111 b - - 0 1";
+// debug perf
+// var START_FEN = "f111111111f/1r11qk1s1r1/11pp111pp11/1p1nbb1n1p1/1111ppp1111/11111111111/1111PPP1111/111NBB1N1P1/1PPP111PPF1/1R11QK1S1R1/F1111111111 b KQkq - 1 10";
 
 var FILES =  { FILE_A:0, FILE_B:1, FILE_C:2, FILE_D:3, FILE_E:4, FILE_F:5, FILE_G:6, FILE_H:7, FILE_I:8, FILE_J:9, FILE_K:10, FILE_NONE:11 };
 var RANKS =  { RANK_1:0, RANK_2:1, RANK_3:2, RANK_4:3, RANK_5:4, RANK_6:5, RANK_7:6, RANK_8:7, RANK_9:8, RANK_10:9, RANK_11:10,  RANK_NONE:11 };
@@ -302,7 +302,7 @@ function SQPERS(sq)
 }
 
 function SQOFFBOARD(sq) {
-	if(FilesBrd[sq]==SQUARES.OFFBOARD || $.inArray(sq, FrameSQ) > -1) return BOOL.TRUE;
+	if(FilesBrd[sq]==SQUARES.OFFBOARD) return BOOL.TRUE;
 	return BOOL.FALSE;	
 }
 
@@ -321,6 +321,40 @@ GameController.GameOver = BOOL.FALSE;
 GameController.GameSaved = BOOL.TRUE;
 
 
+
+/// ### Variant Definition ###
+
+function setVariantDefs(variant)
+{
+    switch(variant) {
+        case "Persian":
+            var LoopSlidePce = [ PIECES.wB, PIECES.wR, PIECES.wS, PIECES.wF, PIECES.wQ, 0, PIECES.bB, PIECES.bR, PIECES.bS, PIECES.bF, PIECES.bQ, 0 ];
+            var LoopNonSlidePce = [ PIECES.wN, 0, 0, PIECES.wS, PIECES.wF, PIECES.wK, 0, PIECES.bN, 0, 0, PIECES.bS, PIECES.bF, PIECES.bK, 0 ];
+            START_FEN = "f111111111f/1rnbqksbnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKSBNR1/F111111111F w KQkq - 0 1";
+            board.theme("green");
+            break;
+        case "ASE":
+            var LoopSlidePce = [ PIECES.wB, PIECES.wR, PIECES.wS, PIECES.wF, PIECES.wQ, 0, PIECES.bB, PIECES.bR, PIECES.bS, PIECES.bF, PIECES.bQ, 0 ];
+            var LoopNonSlidePce = [ PIECES.wN, 0, 0, PIECES.wS, PIECES.wF, PIECES.wK, 0, PIECES.bN, 0, 0, PIECES.bS, PIECES.bF, PIECES.bK, 0 ];
+            START_FEN = "f111111111f/1rnbqksbnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKSBNR1/F111111111F w KQkq - 0 1";
+            board.theme ("brown");
+            break;
+        case "Citadel":
+            var LoopSlidePce = [ PIECES.wB, PIECES.wR, PIECES.wS, PIECES.wF, PIECES.wQ, 0, PIECES.bB, PIECES.bR, PIECES.bS, PIECES.bF, PIECES.bQ, 0 ];
+            var LoopNonSlidePce = [ PIECES.wN, 0, 0, PIECES.wS, PIECES.wF, PIECES.wK, 0, PIECES.bN, 0, 0, PIECES.bS, PIECES.bF, PIECES.bK, 0 ];
+            START_FEN = "f111111111f/1rnbqkbsnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKBSNR1/F111111111F w KQkq - 0 1";
+            board.theme ("blue");
+            break;
+        case "Oriental":
+            var LoopSlidePce = [ PIECES.wB, PIECES.wR, 0, 0, PIECES.wQ, 0, PIECES.bB, PIECES.bR, 0, 0, PIECES.bQ, 0 ];
+            var LoopNonSlidePce = [ PIECES.wN, PIECES.wW, PIECES.wC, 0, 0, PIECES.wK, 0, PIECES.bN, PIECES.bW, PIECES.bC, 0, 0, PIECES.bK, 0 ];
+            START_FEN = "w111111111w/1rnbqkcbnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKCBNR1/W111111111W w KQkq - 0 1";
+            board.theme ("oriental");
+            break;
+        default:
+            break;
+    }
+}
 
 
 

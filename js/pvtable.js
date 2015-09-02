@@ -19,8 +19,6 @@
 
 function GetPvLine(depth) {;
 
-	//console.log("GetPvLine");
-	
 	var move = ProbePvTable();
 	var count = 0;
 	

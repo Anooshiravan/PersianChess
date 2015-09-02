@@ -1941,13 +1941,11 @@ widget.highlight = function() {
                 thinking = false;
                 if (brd_side == COLOURS.WHITE) 
                 {
-                    console.log("show white");
                     $('#' + SQUARE_ELS_IDS[waitsquare]).addClass(CSS.showsidewhite);
                 }
                 else 
                 {
                     $('#' + SQUARE_ELS_IDS[waitsquare]).addClass(CSS.showsideblack);
-                    console.log("show black");
                 }
             }
         };
