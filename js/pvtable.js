@@ -21,6 +21,7 @@ function GetPvLine(depth) {;
 
 	var move = ProbePvTable();
 	var count = 0;
+	brd_PvArray = [];
 	
 	while(move != NOMOVE && count < depth) {
 	

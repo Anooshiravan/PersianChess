@@ -16,12 +16,8 @@
  requires written permission from the author.
 ----------------------------------------------------------------
 */
-var GeneratedInsaneMoves = 0;
-var GeneratedInsaneMovesIndex = 0;
-var GeneratedInsaneMovesShow = 100; // Show the first 10 insane moves for debugging
 var GenerateCapturesNum = 0;
 var GenerateMovesNum = 0;
-
 
 var VictimScore = [0, 100, 200, 300, 400, 500, 600, 700, 800, 100, 200, 300, 400, 500, 600, 700, 800];
 var MvvLvaScores = new Array(22 * 22);
@@ -36,75 +32,94 @@ function InitMvvLva() {
     }
 }
 
+// Error moves
+var gen_m = 0;
+var er_0 = 0;
+var er_1 = 0;
+var er_2 = 0;
+var er_3 = 0;
+var er_4 = 0;
+var er_5 = 0;
+var er_6 = 0;
+var er_7 = 0;
+var er_8 = 0;
+var er_9 = 0;
+
+function ShowErrorMoves()
+{
+    if (move_sanity_check)
+    {
+        console.log ("------------- Move debugging ------------");
+        console.log ("MOVE: " + gen_m);
+        if (er_0 > 0) console.log ("Error 0: " + er_0);
+        if (er_1 > 0) console.log ("Error 1: " + er_1);
+        if (er_2 > 0) console.log ("Error 2: " + er_2);
+        if (er_3 > 0) console.log ("Error 3: " + er_3);
+        if (er_4 > 0) console.log ("Error 4: " + er_4);
+        if (er_5 > 0) console.log ("Error 5: " + er_5);
+        if (er_6 > 0) console.log ("Error 6: " + er_6);
+        if (er_7 > 0) console.log ("Error 7: " + er_7);
+        if (er_8 > 0) console.log ("Error 8: " + er_8);
+        if (er_9 > 0) console.log ("Error 9: " + er_9);
+    }
+}
+
+var consolespam = 0;
 
 function MOVE(from, to, captured, promoted, flag) {
     
-    // Debug and sanity check
-    if (insane_move_debug) 
+    gen_m++;
+
+    // Sanity check
+    if (move_sanity_check) 
     {
-        // White is moving black piece from fromsq
-        if (brd_side == COLOURS.WHITE && brd_pieces[from] >= PIECES.bP) {
-            if (GeneratedInsaneMovesIndex < GeneratedInsaneMovesShow) 
-            {
-                console.log("%c White moving black: " + PrSq(from) + "-" + PrSq(to) + "-" + captured + "-" + promoted + "-" + flag , "color: blue; font-style: italic");
-                GeneratedInsaneMovesIndex++;
-            }
-            GeneratedInsaneMoves++;
-        return NOMOVE;
-        }
-    
-        // Black is moving white piece from fromsq
-        if (brd_side == COLOURS.BLACK && brd_pieces[from] < PIECES.bP) {
-            if (GeneratedInsaneMovesIndex < GeneratedInsaneMovesShow) 
-            {
-                console.log("%c Black moving white: " + PrSq(from) + "-" + PrSq(to) + "-" + captured + "-" + promoted + "-" + flag , "color: blue; font-style: italic");
-                GeneratedInsaneMovesIndex++;
-            }
-            GeneratedInsaneMoves++;
-        return NOMOVE;
-        }
-
-        // Moving a nothing from fromsq
-        if (brd_pieces[from] == PIECES.EMPTY) {
-            if (GeneratedInsaneMovesIndex < GeneratedInsaneMovesShow) 
-            {
-                console.log("%c Moving nothing of fromsq: " + PrSq(from) + "-" + PrSq(to) + "-" + captured + "-" + promoted + "-" + flag , "color: blue; font-style: italic");
-                GeneratedInsaneMovesIndex++;
-            }
-            GeneratedInsaneMoves++;
-        return NOMOVE;
-        }
-
-        // NO Center SQ for Egyptian Eye
-        if (to == 97 && variant == "ASE") 
-            {
-            if (GeneratedInsaneMovesIndex < GeneratedInsaneMovesShow) 
-                {
-                console.log("%c Moving to ASE in EE: " + PrSq(from) + "-" + PrSq(to) + "-" + captured + "-" + promoted + "-" + flag , "color: blue; font-style: italic");
-                GeneratedInsaneMovesIndex++;
-            }
-            GeneratedInsaneMoves++;
+        
+        // Error 0: out of bound to and from sq
+        if (from < 0 || from > 254 || to < 0 || to > 254 ) {
+            er_0++;
             return NOMOVE;
         }
-
-        // NO Center SQ for Persian Princess (except for Pawns and Princess)
-        if (to == 97 && variant == "Persian" && brd_pieces[from] != PIECES.wS && brd_pieces[from] != PIECES.bS && brd_pieces[from] != PIECES.wP && brd_pieces[from] != PIECES.bP) 
-            {
-            if (GeneratedInsaneMovesIndex < GeneratedInsaneMovesShow) 
-            {
-                console.log("%c Moving others to center in Persian: " + PrSq(from) + "-" + PrSq(to) + "-" + captured + "-" + promoted + "-" + flag , "color: blue; font-style: italic");
-                GeneratedInsaneMovesIndex++;
-            }
-            GeneratedInsaneMoves++;
+        // Error 1: Moving a nothing from fromsq
+        if (brd_pieces[from] == PIECES.EMPTY) {
+            er_1++;
+            return NOMOVE;
+        }
+        // Error 2: White is moving black piece from fromsq
+        if (brd_side == COLOURS.WHITE && brd_pieces[from] >= PIECES.bP) {
+            er_2++;
+            return NOMOVE;
+        }
+        // Error 3: Black is moving white piece from fromsq
+        if (brd_side == COLOURS.BLACK && brd_pieces[from] < PIECES.bP && flag != MFLAGRZ) {
+            er_3++;
+            return NOMOVE;
+        }
+        // Error 4: White is capturing white piece
+        if (brd_pieces[from] < PIECES.bP && brd_pieces[to] < PIECES.bP && brd_pieces[to] != PIECES.EMPTY && flag != MFLAGRZ) {
+            er_4++;
+            return NOMOVE;
+        }
+        // Error 5: Black is capturing black piece
+        if (brd_pieces[from] >= PIECES.bP && brd_pieces[to] >= PIECES.bP && flag != MFLAGRZ) {
+            er_5++;
+            return NOMOVE;
+        }
+        // Error 6: Move from or to center SQ in Egyptian Eye
+        if ((from == 97 || to == 97) && variant == "ASE") {
+            er_6++;
+            return NOMOVE;
+        }
+        // Error 7: Move from or to center SQ in Persian Princess (except for Pawns and Princess)
+        if ((from == 97 || to == 97) && variant == "Persian" && brd_pieces[from] != PIECES.wS && brd_pieces[from] != PIECES.bS && brd_pieces[from] != PIECES.wP && brd_pieces[from] != PIECES.bP) {
+            er_7++;
+            return NOMOVE;
+        }
+        // Error 8: From or TO squares are OFFBOARD
+        if (from == SQUARES.NO_SQ || from == SQUARES.OFFBOARD || to == SQUARES.NO_SQ || to == SQUARES.OFFBOARD) {
+            er_8++;
             return NOMOVE;
         }
     }
-
-    // NO Center SQ for Egyptian Eye
-    if (to == 97 && variant == "ASE") return NOMOVE;
-
-    // NO Center SQ for Persian Princess (except for Pawns and Princess)
-    if (to == 97 && variant == "Persian" && brd_pieces[from] != PIECES.wS && brd_pieces[from] != PIECES.bS && brd_pieces[from] != PIECES.wP && brd_pieces[from] != PIECES.bP) return NOMOVE;
 
     return (from | (to << 8) | (captured << 16) | (promoted << 23) | flag);
 }
@@ -143,6 +158,8 @@ function isEven(n) {
 
 function MoveExists(move) {
 
+    if (move == NOMOVE) return BOOL.FALSE;
+
     GenerateMoves();
 
     var index;
@@ -162,11 +179,13 @@ function MoveExists(move) {
 }
 
 function AddCaptureMove(move) {
+    if (move == NOMOVE) return;
     brd_moveList[brd_moveListStart[brd_ply + 1]] = move;
     brd_moveScores[brd_moveListStart[brd_ply + 1]++] = MvvLvaScores[CAPTURED(move) * 18 + brd_pieces[FROMSQ(move)]] + 1000000;
 }
 
 function AddQuietMove(move) {
+    if (move == NOMOVE) return;
     brd_moveList[brd_moveListStart[brd_ply + 1]] = move;
 
     if (brd_searchKillers[brd_ply] == move) {
@@ -180,6 +199,7 @@ function AddQuietMove(move) {
 }
 
 function AddEnPassantMove(move) {
+    if (move == NOMOVE) return;
     brd_moveList[brd_moveListStart[brd_ply + 1]] = move;
     brd_moveScores[brd_moveListStart[brd_ply + 1]++] = 105 + 1000000;
 }
@@ -355,13 +375,13 @@ function GenerateMoves() {
 
                 while (SQOFFBOARD(t_sq) == BOOL.FALSE) {
 
-                    if (brd_pieces[t_sq] != PIECES.EMPTY && SQASE(t_sq) == BOOL.FALSE) {
+                    if (brd_pieces[t_sq] != PIECES.EMPTY && SQASE(t_sq) == BOOL.FALSE && SQPERS(sq, t_sq) == BOOL.FALSE) {
                         if (PieceCol[brd_pieces[t_sq]] == brd_side ^ 1) {
                             AddCaptureMove(MOVE(sq, t_sq, brd_pieces[t_sq], PIECES.EMPTY, 0));
                         }
                         break;
                     }
-                    if (SQASE(t_sq) == BOOL.FALSE) AddQuietMove(MOVE(sq, t_sq, PIECES.EMPTY, PIECES.EMPTY, 0));
+                    if (SQASE(t_sq) == BOOL.FALSE && SQPERS(sq, t_sq) == BOOL.FALSE) AddQuietMove(MOVE(sq, t_sq, PIECES.EMPTY, PIECES.EMPTY, 0));
                     t_sq += dir;
                 }
             }
@@ -385,13 +405,13 @@ function GenerateMoves() {
                     continue;
                 }
 
-                if (brd_pieces[t_sq] != PIECES.EMPTY && SQASE(t_sq) == BOOL.FALSE) {
+                if (brd_pieces[t_sq] != PIECES.EMPTY && SQASE(t_sq) == BOOL.FALSE && SQPERS(sq, t_sq) == BOOL.FALSE) {
                     if (PieceCol[brd_pieces[t_sq]] == brd_side ^ 1) {
                         AddCaptureMove(MOVE(sq, t_sq, brd_pieces[t_sq], PIECES.EMPTY, 0));
                     }
                     continue;
                 }
-                if (SQASE(t_sq) == BOOL.FALSE) AddQuietMove(MOVE(sq, t_sq, PIECES.EMPTY, PIECES.EMPTY, 0));
+                if (SQASE(t_sq) == BOOL.FALSE && SQPERS(sq, t_sq) == BOOL.FALSE) AddQuietMove(MOVE(sq, t_sq, PIECES.EMPTY, PIECES.EMPTY, 0));
             }
         }
         pce = LoopNonSlidePce[pceIndex++];
@@ -471,7 +491,7 @@ function GenerateCaptures() {
 
                 while (SQOFFBOARD(t_sq) == BOOL.FALSE) {
 
-                    if (brd_pieces[t_sq] != PIECES.EMPTY && SQASE(t_sq) == BOOL.FALSE) {
+                    if (brd_pieces[t_sq] != PIECES.EMPTY && SQASE(t_sq) == BOOL.FALSE && SQPERS(sq, t_sq) == BOOL.FALSE) {
                         if (PieceCol[brd_pieces[t_sq]] == brd_side ^ 1) {
                             AddCaptureMove(MOVE(sq, t_sq, brd_pieces[t_sq], PIECES.EMPTY, 0));
                         }
@@ -500,7 +520,7 @@ function GenerateCaptures() {
                     continue;
                 }
 
-                if (brd_pieces[t_sq] != PIECES.EMPTY && SQASE(t_sq) == BOOL.FALSE) {
+                if (brd_pieces[t_sq] != PIECES.EMPTY && SQASE(t_sq) == BOOL.FALSE && SQPERS(sq, t_sq) == BOOL.FALSE) {
                     if (PieceCol[brd_pieces[t_sq]] == brd_side ^ 1) {
                         AddCaptureMove(MOVE(sq, t_sq, brd_pieces[t_sq], PIECES.EMPTY, 0));
                     }

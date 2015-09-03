@@ -143,10 +143,12 @@ var KingO = [
 	0	,	0	,	0	,	0	,	0	,	0	,	0	,	0	,	0	,	0	,	0
 ];
 
+
+/*
 function MaterialDraw() {
-    return BOOL.FALSE;
-    
-    if (0 == brd_pceNum[PIECES.wR] && 0 == brd_pceNum[PIECES.bR] && 0 == brd_pceNum[PIECES.wS] && 0 == brd_pceNum[PIECES.bS] && 0 == brd_pceNum[PIECES.wF] && 0 == brd_pceNum[PIECES.bF] && 0 == brd_pceNum[PIECES.wQ] && 0 == brd_pceNum[PIECES.bQ]) {
+
+    if (0 == brd_pceNum[PIECES.wR] && 0 == brd_pceNum[PIECES.bR] && 0 == brd_pceNum[PIECES.wS] && 0 == brd_pceNum[PIECES.bS] && 0 == brd_pceNum[PIECES.wF] && 0 == brd_pceNum[PIECES.bF] && 0 == brd_pceNum[PIECES.wQ] && 0 == brd_pceNum[PIECES.bQ]) 
+    {
 
         if (0 == brd_pceNum[PIECES.bB] && 0 == brd_pceNum[PIECES.wB]) {
             if (brd_pceNum[PIECES.wN] < 3 && brd_pceNum[PIECES.bN] < 3) {
@@ -161,7 +163,9 @@ function MaterialDraw() {
                 return BOOL.TRUE;
             }
         }
-    } else if (0 == brd_pceNum[PIECES.wQ] && 0 == brd_pceNum[PIECES.bQ]) {
+    } 
+    else if (0 == brd_pceNum[PIECES.wQ] && 0 == brd_pceNum[PIECES.bQ]) 
+    {
         if (brd_pceNum[PIECES.wR] == 1 && brd_pceNum[PIECES.bR] == 1) {
             if ((brd_pceNum[PIECES.wN] + brd_pceNum[PIECES.wB]) < 2 && (brd_pceNum[PIECES.bN] + brd_pceNum[PIECES.bB]) < 2) {
                 return BOOL.TRUE;
@@ -178,6 +182,8 @@ function MaterialDraw() {
     }
     return BOOL.FALSE;
 }
+
+*/
 
 var ENDGAME_MAT = 1 * PieceVal[PIECES.wR] + 2 * PieceVal[PIECES.wN] + 2 * PieceVal[PIECES.wP] + PieceVal[PIECES.wK];
 
@@ -214,9 +220,11 @@ function EvalPosition() {
     var score = brd_material[COLOURS.WHITE] - brd_material[COLOURS.BLACK];
     var file;
     var rank;
-    if (0 == brd_pceNum[PIECES.wP] && 0 == brd_pceNum[PIECES.bP] && MaterialDraw() == BOOL.TRUE) {
-        return 0;
-    }
+    
+    // TODO: Fix checking the material draw in evaluation
+    // if (0 == brd_pceNum[PIECES.wP] && 0 == brd_pceNum[PIECES.bP] && MaterialDraw() == BOOL.TRUE) {
+    //    return 0;
+    // }
 
     PawnsInit();
 

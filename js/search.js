@@ -100,17 +100,29 @@ function ClearForSearch() {
     srch_start = $.now();
     srch_stop = BOOL.FALSE;
     srch_best = NOMOVE;
-    GeneratedInsaneMoves = 0; 
+    
+    // Debug and performance
     GenerateCapturesNum = 0;
     GenerateMovesNum = 0;
     Qcalled = 0;
     ABcalled = 0;
+    gen_m = 0;
+    er_0 = 0;
+    er_1 = 0;
+    er_2 = 0;
+    er_3 = 0;
+    er_4 = 0;
+    er_5 = 0;
+    er_6 = 0;
+    er_7 = 0;
+    er_8 = 0;
+    er_9 = 0;
 }
 
 
 function Quiescence(alpha, beta) {
 
-    if ((srch_nodes & 2047) == 0) CheckUp();
+    if ((srch_nodes & 20470) == 0) CheckUp();
 
     srch_nodes++;
     Qcalled++;
@@ -187,10 +199,10 @@ function Quiescence(alpha, beta) {
 function AlphaBeta(alpha, beta, depth, DoNull) {
 
     if (depth <= 0) {
+        if (variant == "Oriental") return EvalPosition();
         return Quiescence(alpha, beta);
-        // return EvalPosition();
     }
-    if ((srch_nodes & 2047) == 0) CheckUp();
+    if ((srch_nodes & 20470) == 0) CheckUp();
 
     srch_nodes++;
     ABcalled++;
@@ -212,7 +224,7 @@ function AlphaBeta(alpha, beta, depth, DoNull) {
     var Score = -INFINITE;
 
     if (DoNull == BOOL.TRUE && BOOL.FALSE == InCheck &&
-        brd_ply != 0 && (brd_material[brd_side] > 50200) && depth >= 4) {
+        brd_ply != 0 && (brd_material[brd_side] > 50200) && depth >= 5) {
 
 
         var ePStore = brd_enPas;
@@ -221,7 +233,7 @@ function AlphaBeta(alpha, beta, depth, DoNull) {
         HASH_SIDE();
         brd_enPas = SQUARES.NO_SQ;
 
-        Score = -AlphaBeta(-beta, -beta + 1, depth - 4, BOOL.FALSE);
+        Score = -AlphaBeta(-beta, -beta + 1, depth - 5, BOOL.FALSE);
 
         brd_side ^= 1;
         HASH_SIDE();
@@ -296,37 +308,25 @@ function AlphaBeta(alpha, beta, depth, DoNull) {
 
     if (alpha != OldAlpha) {
         StorePvMove(BestMove);
+        // console.log ("AA: Pv move stored: " + PrMove(BestMove) + "in depth:" + currentDepth);
     }
 
     return alpha;
 }
 
-function SearchPosition() {
 
+function SearchPosition() {
     var bestMove = NOMOVE;
     var bestScore = -INFINITE;
     var currentDepth = 0;
     var pvNum = 0;
     var line;
-    var OLD_MAXDEPTH = MAXDEPTH;
-    var old_srch_time = srch_time;
-
-    // Don't think more than 1 second in the first 10 ply
-    /*
-    if (brd_hisPly < 10) {
-        MAXDEPTH = 16;
-        srch_time = 1000;
-    } else {
-        MAXDEPTH = 32;
-        srch_time = old_srch_time;
-    }
-    */
-    
-    output = 'ENGINE MaxTime:' + srch_time + 'ms';
+        
+    output = '\r\n---------------------\r\nENGINE MaxTime:' + srch_time + 'ms';
     console.log(output);
     ClearForSearch();
 
-    if (insane_move_debug != true) bestMove = BookMove();
+    bestMove = BookMove();
 
     if (bestMove != NOMOVE) {
         srch_best = bestMove;
@@ -344,80 +344,36 @@ function SearchPosition() {
         pvNum = GetPvLine(currentDepth);
 
         bestMove = brd_PvArray[0];
-        line = ("Depth:" + currentDepth + " Best:" + PrMoveWithPieces(bestMove) + " Score:" + bestScore + " Nodes:" + srch_nodes);
+        line = ("Depth:" + currentDepth + ": " + PrMoveWithPieces(bestMove) + " Score:" + bestScore + " Nodes:" + srch_nodes);
 
         if (currentDepth != 1) {
             line += (" Ordering:" + ((srch_fhf / srch_fh) * 100).toFixed(2) + "%");
         }
 
         // Print PV line
-        // line += ("\r\n- Pv Line: ");
-        // for (i = 0; i < brd_PvArray.length; i++) { 
-        //     if (brd_PvArray[i] != undefined) line += " " + PrMove(brd_PvArray[i]);
-        // }
+        var pvline = ("- Line: ");
+            for (i = 0; i < brd_PvArray.length; i++) { 
+            if (brd_PvArray[i] != undefined) pvline += " " + PrMove(brd_PvArray[i]);
+        }
         console.log(line);
+        console.log (pvline);
     }
 
-    // Log total nodes
-    line += ("\r\n- Depth:" + currentDepth + " Calculated Moves: " + srch_nodes);
-    console.log(line);
-
-
-    // No move found, start search round 2
+    // There is an error, move the best move in depth 1
     if (bestMove == NOMOVE || bestMove == undefined || SanityCheck(bestMove) == BOOL.FALSE) {
-        console.log("------ Search round 2 -----");
-        // Change srch_time and MAXDEPTH
-        MAXDEPTH = 7;
-        srch_time += 1000;
-        bestScore = -INFINITE;
-        currentDepth = 0;
-        pvNum = 0;
         ClearForSearch();
-        for (currentDepth = 1; currentDepth <= srch_depth; ++currentDepth) {
-            bestScore = AlphaBeta(-INFINITE, INFINITE, currentDepth, BOOL.TRUE);
-            if (srch_stop == BOOL.TRUE) break;
-            pvNum = GetPvLine(currentDepth);
-            bestMove = brd_PvArray[0];
-            line = ("Depth:" + currentDepth + " best:" + PrMoveWithPieces(bestMove) + " Score:" + bestScore + " nodes:" + srch_nodes);
-
-            if (currentDepth != 1) {
-                line += (" Ordering:" + ((srch_fhf / srch_fh) * 100).toFixed(2) + "%");
-            }
-            console.log(line);
-        }
-        MAXDEPTH = OLD_MAXDEPTH;
+        bestScore = AlphaBeta(-INFINITE, INFINITE, 1, BOOL.TRUE);
+        pvNum = GetPvLine(1);
+        bestMove = brd_PvArray[0];
+        line = ("Depth:1: " + PrMoveWithPieces(bestMove) + " Score:" + bestScore + " Nodes:" + srch_nodes);
     }
 
-    // No move found, start search round 3
     if (bestMove == NOMOVE || bestMove == undefined || SanityCheck(bestMove) == BOOL.FALSE) {
-        console.log("------ Search round 3 -----");
-        // Change srch_time and MAXDEPTH
-        MAXDEPTH = 3;
-        srch_time += 1000;
-        bestScore = -INFINITE;
-        currentDepth = 0;
-        pvNum = 0;
-        ClearForSearch();
-        for (currentDepth = 1; currentDepth <= srch_depth; ++currentDepth) {
-            bestScore = AlphaBeta(-INFINITE, INFINITE, currentDepth, BOOL.TRUE);
-            if (srch_stop == BOOL.TRUE) break;
-            pvNum = GetPvLine(currentDepth);
-            bestMove = brd_PvArray[0];
-            line = ("Depth:" + currentDepth + " best:" + PrMoveWithPieces(bestMove) + " Score:" + bestScore + " nodes:" + srch_nodes);
-
-            if (currentDepth != 1) {
-                line += (" Ordering:" + ((srch_fhf / srch_fh) * 100).toFixed(2) + "%");
-            }
-            console.log(line);
-        }
-    }
-    if (bestMove == NOMOVE || bestMove == undefined || SanityCheck(bestMove) == BOOL.FALSE) {
+        line = "\r\n\r\n------ ENGINE ERROR -----\r\nEngine is crashed! Game is stopped.";
         console.log("------ ENGINE ERROR -----");
         srch_best = NOMOVE;
     } else {
         srch_best = bestMove;
-        // $("#GameStatus").text(PrMoveWithPieces(srch_best));
-        // addToMoveList(PrMoveWithPieces(bestMove), BoardToFen());
 
         if (PIECE_NAMES[brd_pieces[TOSQ(srch_best)]] != "EMPTY")
         {
@@ -430,16 +386,10 @@ function SearchPosition() {
         }
         updateMoveList();
     }
-    MAXDEPTH = OLD_MAXDEPTH;
-    srch_time = old_srch_time;
     srch_thinking = BOOL.FALSE;
-
-
-    if (insane_move_debug == true && GeneratedInsaneMoves != 0) 
-        {
-            console.log("%c " + GeneratedInsaneMoves + " number of insane moves generated.", "color: red; font-style: italic");
-        }
-    output += "\r\n- " + line;
+    output += "\r\n" + line;
+    
+    ShowErrorMoves();
     ShowPerformance();
 }
 
