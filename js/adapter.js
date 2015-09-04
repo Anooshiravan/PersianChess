@@ -481,7 +481,6 @@ function StartSearch() {
         {
             srch_time = parseInt(tt) * 1000;
         }
-                alert (srch_time);
     SearchPosition();
     MakeMove(srch_best);
     if (debug) PrintBoard();
