@@ -19,6 +19,8 @@
 var debug = false;
 var board_debug = false;
 var move_sanity_check = false;
+var vs_engine = false;
+var engine = '';
 
 var variant = "Persian"; 
 var BRD_SQ_NUM = 195;
@@ -32,12 +34,8 @@ var MATE = 29000;
 
 var START_FEN = "f111111111f/1rnbqksbnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKSBNR1/F111111111F w KQkq - 0 1";
 
-// debug perf
+// FEN for Performance test
 // var START_FEN = "f111111111f/1r11qk1s1r1/11pp111pp11/1p1nbb1n1p1/1111ppp1111/11111111111/1111PPP1111/111NBB1N1P1/1PPP111PPF1/1R11QK1S1R1/F1111111111 b KQkq - 1 10";
-
-// debug material draw
-// var START_FEN = "11111111111/11111k11111/11111111111/11111111111/11111111111/11111111111/11111111111/11111111111/11111111111/11111K11111/11111111111 w - - 0 1";
-
 
 var FILES =  { FILE_A:0, FILE_B:1, FILE_C:2, FILE_D:3, FILE_E:4, FILE_F:5, FILE_G:6, FILE_H:7, FILE_I:8, FILE_J:9, FILE_K:10, FILE_NONE:11 };
 var RANKS =  { RANK_1:0, RANK_2:1, RANK_3:2, RANK_4:3, RANK_5:4, RANK_6:5, RANK_7:6, RANK_8:7, RANK_9:8, RANK_10:9, RANK_11:10,  RANK_NONE:11 };
@@ -359,6 +357,45 @@ function setVariantDefs(variant)
             break;
     }
 }
+
+/// ### ENGINE competition ###
+// vs_engine = true;
+// var engine = 'engine1'; // or engine2
+// Start FEN for engine2, first move is done
+// var START_FEN = "f111111111f/1rnbqksbnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111P11111/11111111111/1PPPP1PPPP1/1RNBQKSBNR1/F111111111F b KQkq - 0 1";
+
+
+/*
+index.html for iFrames parent window
+
+<html>
+<head>
+<title>Play 2 Engines</title>
+<script>
+window.onmessage = function(e){
+    var engine = e.data.split('-')[0];
+    var move = e.data.split('-')[1] + '-' + e.data.split('-')[2];
+    if (engine == 'engine1') 
+        {
+            timeout = setTimeout(function(){ 
+                engine2.contentWindow.postMessage(move, '*');
+            }, 300);
+        }
+    else if (engine == 'engine2') 
+        {
+            timeout = setTimeout(function(){ 
+                engine1.contentWindow.postMessage(move, '*');
+            }, 300);
+        }
+};
+</script>
+</head>
+<body>
+<div class="box"><iframe id="engine1" src="PersianChess/index.html" frameborder="0" scrolling="no" width="100%" height="512" align="left"> </iframe> </div>
+<div class="box"><iframe id="engine2"src="PersianChess.Old/index.html" frameborder="0" scrolling="no" width="100%" height="512" align="right"> </body> </div>
+</body>
+</html>
+*/
 
 
 

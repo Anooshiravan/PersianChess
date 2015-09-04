@@ -199,7 +199,7 @@ function Quiescence(alpha, beta) {
 function AlphaBeta(alpha, beta, depth, DoNull) {
 
     if (depth <= 0) {
-        if (variant == "Oriental") return EvalPosition();
+        // if (variant == "Oriental") return EvalPosition();
         return Quiescence(alpha, beta);
     }
     if ((srch_nodes & 20470) == 0) CheckUp();
@@ -224,7 +224,7 @@ function AlphaBeta(alpha, beta, depth, DoNull) {
     var Score = -INFINITE;
 
     if (DoNull == BOOL.TRUE && BOOL.FALSE == InCheck &&
-        brd_ply != 0 && (brd_material[brd_side] > 50200) && depth >= 5) {
+        brd_ply != 0 && (brd_material[brd_side] > 50200) && depth >= 4) {
 
 
         var ePStore = brd_enPas;
@@ -233,7 +233,7 @@ function AlphaBeta(alpha, beta, depth, DoNull) {
         HASH_SIDE();
         brd_enPas = SQUARES.NO_SQ;
 
-        Score = -AlphaBeta(-beta, -beta + 1, depth - 5, BOOL.FALSE);
+        Score = -AlphaBeta(-beta, -beta + 1, depth - 4, BOOL.FALSE);
 
         brd_side ^= 1;
         HASH_SIDE();
@@ -332,6 +332,7 @@ function SearchPosition() {
         srch_best = bestMove;
         srch_thinking = BOOL.FALSE;
         output += "\r\n - Book move."
+        if (vs_engine == true) window.top.postMessage(engine + "-" + PrMove(bestMove), '*');
         return;
     }
 
@@ -387,6 +388,7 @@ function SearchPosition() {
         updateMoveList();
     }
     srch_thinking = BOOL.FALSE;
+    if (vs_engine == true) window.top.postMessage(engine + "-" + PrMove(bestMove), '*');
     output += "\r\n" + line;
     
     ShowErrorMoves();

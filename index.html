@@ -117,6 +117,13 @@ If you like this game, please do not forget to give it a rating and review on Go
 
 <script>           
 
+// Play vs engines in iFrame
+window.onmessage = function(e){
+    if (e.data != '') {
+        playForeignEngineMove(e.data);
+    }
+};
+
 // Capture back button
 document.addEventListener("deviceready", onDeviceReady, false);
 function onDeviceReady(){

@@ -578,6 +578,25 @@ function GGSound(result) {
     }
 }
 
+function playForeignEngineMove(pgn_move)
+{
+    if (vs_engine == true) 
+    {
+        var move_ft = pgn_move.split('-');
+        var from = move_ft[0];
+        var to = move_ft[1];
+        parsed = ParseMove(CBSQ2SQ(from), CBSQ2SQ(to));
+        if (parsed != NOMOVE)
+        {
+            MakeMove(parsed);
+            MoveGUIPiece(parsed);
+            timeout = setTimeout(function(){ 
+                MoveNow();
+            }, 300);
+        }
+    }
+}
+
 function Help() {
     PlaySound(click);
     var go2web = "<b>Persian Chess Engine | Version 1.3.4</b>\r\n© 2009 - 2015 PersianChess.com\r\n\r\nPersian Chess is invented and programmed by:\r\n<b>Anooshiravan Ahmadi</b>\r\n\r\nClick Ok to go to the website for the detailed game information, or Cancel to return to the game.";
