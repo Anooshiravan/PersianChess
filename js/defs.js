@@ -359,11 +359,24 @@ function setVariantDefs(variant)
 }
 
 /// ### ENGINE competition ###
-// vs_engine = true;
-// var engine = 'engine1'; // or engine2
-// Start FEN for engine2, first move is done
-// var START_FEN = "f111111111f/1rnbqksbnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111P11111/11111111111/1PPPP1PPPP1/1RNBQKSBNR1/F111111111F b KQkq - 0 1";
 
+function inIframe () {
+    try {
+        return window.self !== window.top;
+    } catch (e) {
+        return true;
+    }
+}
+function startVsEngine()
+{
+    if (inIframe() == true)
+    {
+        vs_engine = true;
+    }
+}
+startVsEngine();
+
+// engine = 'engine1'; // or engine2
 
 /*
 index.html for iFrames parent window
@@ -373,6 +386,18 @@ index.html for iFrames parent window
 <title>Play 2 Engines</title>
 <script>
 window.onmessage = function(e){
+    if (e.data == "request") 
+    {
+        engine1.contentWindow.postMessage("request", '*');
+        return;
+    }
+    if (e.data.split('-')[0] == "fen")
+    {
+        var fen = e.data.split('-')[1];
+        engine2.contentWindow.postMessage("fen-"+fen, '*');
+        return;
+    }
+    
     var engine = e.data.split('-')[0];
     var move = e.data.split('-')[1] + '-' + e.data.split('-')[2];
     if (engine == 'engine1') 
@@ -392,9 +417,10 @@ window.onmessage = function(e){
 </head>
 <body>
 <div class="box"><iframe id="engine1" src="PersianChess/index.html" frameborder="0" scrolling="no" width="100%" height="512" align="left"> </iframe> </div>
-<div class="box"><iframe id="engine2"src="PersianChess.Old/index.html" frameborder="0" scrolling="no" width="100%" height="512" align="right"> </body> </div>
+<div class="box"><iframe id="engine2"src="PersianChess.1.3.4/index.html" frameborder="0" scrolling="no" width="100%" height="512" align="right"> </body> </div>
 </body>
 </html>
+
 */
 
 

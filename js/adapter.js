@@ -590,6 +590,25 @@ function playForeignEngineMove(pgn_move)
 {
     if (vs_engine == true) 
     {
+        if (pgn_move == "request")
+        {
+            window.top.postMessage("fen-" + BoardToFen(), '*');
+            engine = "engine1";
+            return;
+        }
+
+        if (pgn_move.startsWith('fen'))
+        {
+            fen = pgn_move.split('-')[1];
+            ParseFen(fen);
+            board.position(fen);
+            timeout = setTimeout(function(){ 
+                MoveNow();
+            }, 300);
+            engine = "engine2";
+            return;
+        }
+
         var move_ft = pgn_move.split('-');
         var from = move_ft[0];
         var to = move_ft[1];
@@ -602,6 +621,22 @@ function playForeignEngineMove(pgn_move)
                 MoveNow();
             }, 300);
         }
+        else
+        {
+            window.top.postMessage("request", '*');
+        }
+    }
+}
+
+function postMove(move)
+{
+    if (engine == '') 
+    {
+        window.top.postMessage("engine1-" + PrMove(move), '*');
+    }
+    else
+    {
+        window.top.postMessage(engine + "-" + PrMove(move), '*');   
     }
 }
 

@@ -332,7 +332,7 @@ function SearchPosition() {
         srch_best = bestMove;
         srch_thinking = BOOL.FALSE;
         output += "\r\n - Book move."
-        if (vs_engine == true) window.top.postMessage(engine + "-" + PrMove(bestMove), '*');
+        if (vs_engine == true) postMove(bestMove);
         return;
     }
 
@@ -388,7 +388,7 @@ function SearchPosition() {
         updateMoveList();
     }
     srch_thinking = BOOL.FALSE;
-    if (vs_engine == true) window.top.postMessage(engine + "-" + PrMove(bestMove), '*');
+    if (vs_engine == true) postMove(bestMove);
     output += "\r\n" + line;
     
     ShowErrorMoves();
