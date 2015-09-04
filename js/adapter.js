@@ -49,19 +49,21 @@ var gg = 'audio/gg.mp3';
 
 var lla;
 var lla_loaded = false;
-var audio5js = new Audio5js;
+var audio5js = null;
 
 function AudioOnOff()
 {
     PlaySound(click);
     if (audio_on == true)
     {
+        audio5js = null;
         document.getElementById("audio-button").src = "img/footer/audio_off.png";
         audio_on = false;
         document.getElementById('movelist').value += "\r\n> Audio is OFF.";
     }
     else
     {
+        audio5js = new Audio5js;
         document.getElementById("audio-button").src = "img/footer/audio.png";
         audio_on = true;
         document.getElementById('movelist').value += "\r\n> Audio is ON.";
@@ -120,7 +122,6 @@ function LoadAudio()
         }, function(msg){
             console.log( 'error: ' + msg );
         });
-
     }
     else
     {
@@ -138,8 +139,11 @@ function PlaySound(sound)
         }
     else
         {
-            audio5js.load(sound);
-            audio5js.play();
+            if (audio5js != null)
+            {
+                audio5js.load(sound);
+                audio5js.play();
+            }
         }
 }
 
