@@ -410,15 +410,26 @@ window.onmessage = function(e){
                 engine1.contentWindow.postMessage(move, '*');
             }, 300);
         }
-};
+}
 </script>
 </head>
 <body>
-<div class="box"><iframe id="engine1" src="PersianChess/index.html" frameborder="0" scrolling="no" width="100%" height="512" align="left"> </iframe> </div>
-<div class="box"><iframe id="engine2"src="PersianChess.Old/index.html" frameborder="0" scrolling="no" width="100%" height="512" align="right"> </body> </div>
+    <div>
+        <iframe id="engine1" src="PersianChess/index.html" frameborder="0" scrolling="no" width="100%" align="left"></iframe>
+    </div>
+    <div>
+        <iframe id="engine2" src="PersianChess.1.3.4/index.html" frameborder="0" scrolling="no" width="100%" align="left"></iframe>
+    </div>
+    <script>
+        function setHeight(){
+            var h = (window.innerHeight/2) - 4 ;
+            document.getElementById("engine1").style.height = h + 'px';
+            document.getElementById("engine2").style.height = h + 'px';
+        }
+        setHeight();
+    </script>
 </body>
 </html>
-
 
 */
 

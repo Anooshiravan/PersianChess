@@ -122,11 +122,12 @@ function ClearForSearch() {
 
 function Quiescence(alpha, beta) {
 
+    Qcalled++;
+
     if ((srch_nodes & 20470) == 0) CheckUp();
 
     srch_nodes++;
-    Qcalled++;
-
+    
     if (IsRepetition() || brd_fiftyMove >= 100) {
         return 0;
     }
@@ -198,15 +199,16 @@ function Quiescence(alpha, beta) {
 
 function AlphaBeta(alpha, beta, depth, DoNull) {
 
+    ABcalled++;
+
     if (depth <= 0) {
-        // if (variant == "Oriental") return EvalPosition();
         return Quiescence(alpha, beta);
     }
+
     if ((srch_nodes & 20470) == 0) CheckUp();
 
     srch_nodes++;
-    ABcalled++;
-
+    
     if ((IsRepetition() || brd_fiftyMove >= 100) && brd_ply != 0) {
         return 0;
     }
@@ -322,7 +324,10 @@ function SearchPosition() {
     var pvNum = 0;
     var line;
         
-    output = '\r\n---------------------\r\nENGINE MaxTime:' + srch_time + 'ms';
+    output = '---------------------\r\nENGINE MaxTime:' + srch_time + 'ms';
+    console.log ("");
+    console.log ("");
+    if (engine != '') console.log ("*** " + engine.toUpperCase() + " ***");
     console.log(output);
     ClearForSearch();
 
@@ -398,9 +403,10 @@ function SearchPosition() {
 function ShowPerformance()
 {
     console.log ("-------- Performance Counters ----------");
-    console.log ("Total nodes: " + srch_nodes);
-    console.log ("Quiescence: " + Qcalled);
-    console.log ("Capture Gen: " + GenerateCapturesNum);
     console.log ("AlphaBeta: " + ABcalled);
-    console.log ("Move Gen: " + GenerateMovesNum);
+    console.log ("Quiescence: " + Qcalled);
+    console.log ("MoveGen: " + GenerateMovesNum);
+    console.log ("CapGen: " + GenerateCapturesNum);
+    console.log ("Node: " + srch_nodes);
+    console.log ("MOVE: " + gen_m);
 }

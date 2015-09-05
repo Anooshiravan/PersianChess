@@ -86,3 +86,21 @@ function PerftTest(depth) {
 
     return;
 }
+
+function PerformanceTest()
+{
+	t1 = performance.now();
+	for (run = 0; run < 100000; ++run) {
+		GenerateMoves();
+	}
+	t2 = performance.now();
+	ms = t2-t1;
+	console.log("MoveGen is run 100.000 times in: " + ms + " miliseconds.")
+	t1 = performance.now();
+	for (run = 0; run < 100000; ++run) {
+		AlphaBeta(-INFINITE, INFINITE, 1, BOOL.TRUE)
+	}
+	t2 = performance.now();
+	ms = t2-t1;
+	console.log("AlphaBeta is run 100.000 times in: " + ms + " miliseconds.")
+}
