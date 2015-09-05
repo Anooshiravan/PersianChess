@@ -403,5 +403,4 @@ function ShowPerformance()
     console.log ("Capture Gen: " + GenerateCapturesNum);
     console.log ("AlphaBeta: " + ABcalled);
     console.log ("Move Gen: " + GenerateMovesNum);
-    console.log ("-----------------------------------------");
 }

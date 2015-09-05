@@ -376,8 +376,6 @@ function startVsEngine()
 }
 startVsEngine();
 
-// engine = 'engine1'; // or engine2
-
 /*
 index.html for iFrames parent window
 
@@ -417,9 +415,10 @@ window.onmessage = function(e){
 </head>
 <body>
 <div class="box"><iframe id="engine1" src="PersianChess/index.html" frameborder="0" scrolling="no" width="100%" height="512" align="left"> </iframe> </div>
-<div class="box"><iframe id="engine2"src="PersianChess.1.3.4/index.html" frameborder="0" scrolling="no" width="100%" height="512" align="right"> </body> </div>
+<div class="box"><iframe id="engine2"src="PersianChess.Old/index.html" frameborder="0" scrolling="no" width="100%" height="512" align="right"> </body> </div>
 </body>
 </html>
+
 
 */
 

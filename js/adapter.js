@@ -606,6 +606,7 @@ function playForeignEngineMove(pgn_move)
                 MoveNow();
             }, 300);
             engine = "engine2";
+            board.theme("blue");
             return;
         }
 
