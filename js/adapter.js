@@ -684,9 +684,9 @@ function Settings(name, value, action)
     {
     switch(pl) {
         case "Android":
+                alert("here");
+                alert(name);
                 switch(name) {
-                        alert("here");
-                        alert(name);
                         case "fen":
                             fen = localStorage.fen;
                         break;         
