@@ -485,6 +485,8 @@ function StartSearch() {
         {
             srch_time = parseInt(tt) * 1000;
         }
+    if (srch_time == undefined || srch_time <= 0) srch_time = 3000;
+
     SearchPosition();
     MakeMove(srch_best);
     if (debug) PrintBoard();
@@ -718,22 +720,27 @@ function Settings(name, value, action)
         if (fen != null && fen != "" && fen != undefined)
         {
             ParseFen(fen);
-            board.position(fen);
+            timeout = setTimeout(function(){ 
+                board.position(fen);
+            }, 300);
         }
         if (tts != null && tts != "" && tts != undefined)
         {
-            tt = tts;
-            $('#ThinkTimeChoice').val(tts);
+            if (tts != "manual") $('#ThinkTimeChoice').val(tts);
+            else $('#ThinkTimeChoice').val(3);
         }
         if (vars != null && vars != "" && vars != undefined)
         {
-            $('#VariantChoice').val(vars);
-            setVariantDefs(vars);
+            timeout = setTimeout(function(){ 
+                $('#VariantChoice').val(vars);
+                variant = vars;
+                setVariantDefs(vars);
+            }, 100);
         }
     }
     else 
     { 
-        // do nothing in this version
+        // Do nothing in this version
     }
 }
 
