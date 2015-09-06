@@ -684,9 +684,7 @@ function Settings(name, value, action)
     {
     switch(pl) {
         case "Android":
-                alert("here");
-                alert(name);
-                switch(name) {
+                    switch(name) {
                         case "fen":
                             fen = localStorage.fen;
                         break;         
@@ -695,7 +693,6 @@ function Settings(name, value, action)
                         break;
                         case "variant":
                             vars = localStorage.variant;
-                            alert(vars);
                         break;  
                         default:
                         break;
@@ -708,6 +705,7 @@ function Settings(name, value, action)
                         break;         
                         case "tt":
                             tts = $.cookie("tt");
+                        break;
                         case "variant":
                             vars = $.cookie("variant");
                         break;  
@@ -751,7 +749,7 @@ function restoreSettings()
 {
     Settings("fen", "", "restore");
     Settings("tt", "", "restore");
-    Settings("variant", "restore");
+    Settings("variant", "", "restore");
 }
 
 
