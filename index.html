@@ -24,11 +24,12 @@
 <title>Play Persian Chess</title>
 <link rel='stylesheet' href='css/chess911-standalone.css' type='text/css' media='all' />
 <link rel="stylesheet" href="css/jquery.alerts.css" type="text/css" media="all" />
-  <script src="js/json3.min.js"></script>
-  <script src="js/jquery-1.10.1.min.js"></script>
-  <script src="js/jquery.ui.draggable.js" type="text/javascript"></script>
-  <script src="js/jquery.alerts.js" type="text/javascript"></script>
-  <script src="js/audio5.js"></script>
+  <script src="js/jquery/json3.min.js"></script>
+  <script src="js/jquery/jquery-1.10.1.min.js"></script>
+  <script src="js/jquery/jquery.ui.draggable.js" type="text/javascript"></script>
+  <script src="js/jquery/jquery.alerts.js" type="text/javascript"></script>
+  <script src="js/jquery/jquery.cookie.js" type="text/javascript"></script>
+  <script src="js/jquery/audio5.js"></script>
   <script src="phonegap.js"></script>
 </head>
 <body>
@@ -147,6 +148,10 @@ window.onresize = function(event) {
 };
 
 screenResize();
+
+//settings
+$.cookie.raw = true;
+restoreSettings();
 
 function screenResize()
 {

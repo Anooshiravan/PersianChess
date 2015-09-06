@@ -254,6 +254,10 @@ function CheckAndSet() {
      
     if (CheckResult() != BOOL.TRUE) {
         GameController.GameOver = BOOL.FALSE;
+        // Save settings
+        Settings("fen", BoardToFen(), "save");
+        Settings("tt", $('#ThinkTimeChoice').val(), "save");
+        Settings("variant", variant, "save");
     } else {
         GameController.GameOver = BOOL.TRUE;
         GameController.GameSaved = BOOL.TRUE; // save the game here
@@ -638,6 +642,117 @@ function postMove(move)
     else
     {
         window.top.postMessage(engine + "-" + PrMove(move), '*');   
+    }
+}
+
+
+
+function Settings(name, value, action)
+{
+    var pl = Platform();
+    var fen;
+    var tts;
+    var vars;
+    if (action == "save")
+    {
+    switch(pl) {
+        case "Android":
+            switch(name) {
+                        case "fen":
+                            localStorage.fen = value;
+                        break;         
+                        case "tt":
+                            localStorage.tt = value;
+                        break;
+                        case "variant":
+                            localStorage.variant = value;
+                        break;  
+                        default:
+                        break;
+                    }
+            break;
+        case "Browser":
+            $.cookie(name, value, { expires: 7, path: '/' });
+            break;
+        default:
+            break;
+        }
+    }
+    else if (action == "restore")
+    {
+    switch(pl) {
+        case "Android":
+                switch(name) {
+                        case "fen":
+                            fen = localStorage.fen;
+                        break;         
+                        case "tt":
+                            tts = localStorage.tt;
+                        break;
+                        case "variant":
+                            vars = localStorage.variant;
+                        break;  
+                        default:
+                        break;
+                    }
+        break;
+        case "Browser":
+                    switch(name) {
+                        case "fen":
+                            fen = $.cookie("fen");
+                        break;         
+                        case "tt":
+                            tts = $.cookie("tt");
+                        case "variant":
+                            vars = $.cookie("variant");
+                        break;  
+
+                        default:
+                        break;
+                    }
+            break;
+        default:
+        break;
+        }
+        // Restore settings
+        if (fen != null && fen != "" && fen != undefined)
+        {
+            ParseFen(fen);
+            board.position(fen);
+        }
+        if (tts != null && tts != "" && tts != undefined)
+        {
+            tt = tts;
+            $('#ThinkTimeChoice').val(tts);
+        }
+        if (vars != null && vars != "" && vars != undefined)
+        {
+            $('#VariantChoice').val(vars);
+            setVariantDefs(vars);
+        }
+    }
+    else 
+    { 
+        // do nothing in this version
+    }
+}
+
+function restoreSettings()
+{
+    Settings("fen", "", "restore");
+    Settings("tt", "", "restore");
+    Settings("variant", "restore");
+}
+
+
+function Platform()
+{
+    // if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) { // for all cordova user agents
+    if (navigator.userAgent.match(/(Android)/)) {
+      return "Android";
+    } 
+    else {
+      return "Browser";
     }
 }
 
