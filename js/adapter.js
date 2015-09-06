@@ -685,6 +685,8 @@ function Settings(name, value, action)
     switch(pl) {
         case "Android":
                 switch(name) {
+                        alert("here");
+                        alert(name);
                         case "fen":
                             fen = localStorage.fen;
                         break;         
@@ -693,6 +695,7 @@ function Settings(name, value, action)
                         break;
                         case "variant":
                             vars = localStorage.variant;
+                            alert(vars);
                         break;  
                         default:
                         break;
