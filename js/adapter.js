@@ -262,6 +262,14 @@ function CheckAndSet() {
         GameController.GameOver = BOOL.TRUE;
         GameController.GameSaved = BOOL.TRUE; // save the game here
     }
+
+    // Purge brd_hitory
+    for(index = brd_hisPly; index < MAXGAMEMOVES; index++) {
+        brd_history[index].move = NOMOVE;
+        brd_history[index].fiftyMove = 0;
+        brd_history[index].enPas = 0;
+        brd_history[index].castlePerm = 0;
+    }
 }
 
 function CheckResult() {
@@ -336,6 +344,21 @@ function MoveNow() {
     setTimeout(function () {
             StartSearch();
     }, 200);
+}
+
+function Forward()
+{
+    var move = brd_history[brd_hisPly].move;
+    if (move != 0 && move != undefined && ParseMove(FROMSQ(move), TOSQ(move)))
+    {
+        MakeMove(move);
+        MoveGUIPiece();
+        board.removehighlights();
+    }
+    else
+    {
+        if (engine_on == true) MoveNow();
+    }
 }
 
 var EngineDemoTimer;
@@ -766,7 +789,7 @@ function Platform()
 
 function Help() {
     PlaySound(click);
-    var go2web = "<b>Persian Chess Engine | Version 1.3.4</b>\r\n© 2009 - 2015 PersianChess.com\r\n\r\nPersian Chess is invented and programmed by:\r\n<b>Anooshiravan Ahmadi</b>\r\n\r\nClick Ok to go to the website for the detailed game information, or Cancel to return to the game.";
+    var go2web = "<b>Persian Chess Engine | Version 1.3.5</b>\r\n© 2009 - 2015 PersianChess.com\r\n\r\nPersian Chess is invented and programmed by:\r\n<b>Anooshiravan Ahmadi</b>\r\n\r\nClick Ok to go to the website for the detailed game information, or Cancel to return to the game.";
      jConfirm(go2web, "About", function(r) {
             if (r) window.open("http://www.persianchess.com/game-rules", "_system", "location=no");
     });

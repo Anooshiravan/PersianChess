@@ -36,6 +36,8 @@ var START_FEN = "f111111111f/1rnbqksbnr1/1ppppppppp1/11111111111/11111111111/111
 
 // FEN for Performance test
 // var START_FEN = "f111111111f/1r11qk1s1r1/11pp111pp11/1p1nbb1n1p1/1111ppp1111/11111111111/1111PPP1111/111NBB1N1P1/1PPP111PPF1/1R11QK1S1R1/F1111111111 b KQkq - 1 10";
+// var START_FEN = "11111111111/11111k11111/11111111111/11111111111/1111S111111/11111p11111/11111111111/11111111111/11111111111/1111K111111/F111111111f w KQkq - 0 1";
+
 
 var FILES =  { FILE_A:0, FILE_B:1, FILE_C:2, FILE_D:3, FILE_E:4, FILE_F:5, FILE_G:6, FILE_H:7, FILE_I:8, FILE_J:9, FILE_K:10, FILE_NONE:11 };
 var RANKS =  { RANK_1:0, RANK_2:1, RANK_3:2, RANK_4:3, RANK_5:4, RANK_6:5, RANK_7:6, RANK_8:7, RANK_9:8, RANK_10:9, RANK_11:10,  RANK_NONE:11 };
@@ -299,7 +301,14 @@ function SQASE(sq)
 
 function SQPERS(from, to)
 {
-    if (to == 97 && variant == "Persian" && brd_pieces[from] != PIECES.wS && brd_pieces[from]) return BOOL.TRUE;
+    if (
+        to == 97 && 
+        variant == "Persian" && 
+        brd_pieces[from] != PIECES.wS && 
+        brd_pieces[from] != PIECES.wP &&
+        brd_pieces[from] != PIECES.bS &&
+        brd_pieces[from] != PIECES.bP
+        ) return BOOL.TRUE;
     return BOOL.FALSE;
 }
 

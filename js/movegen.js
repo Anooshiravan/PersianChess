@@ -382,6 +382,7 @@ function GenerateMoves() {
                         break;
                     }
                     if (SQASE(t_sq) == BOOL.FALSE && SQPERS(sq, t_sq) == BOOL.FALSE) AddQuietMove(MOVE(sq, t_sq, PIECES.EMPTY, PIECES.EMPTY, 0));
+                    if (SQPERS(sq, t_sq) == BOOL.TRUE && brd_pieces[t_sq] != PIECES.EMPTY) break;
                     t_sq += dir;
                 }
             }
