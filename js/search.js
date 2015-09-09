@@ -27,6 +27,8 @@ var srch_stop;
 var srch_best;
 var srch_thinking;
 
+var engine_recovery = true;
+
 var Qcalled = 0;
 var ABcalled = 0;
 
@@ -316,7 +318,6 @@ function AlphaBeta(alpha, beta, depth, DoNull) {
     return alpha;
 }
 
-
 function SearchPosition() {
     var bestMove = NOMOVE;
     var bestScore = -INFINITE;
@@ -365,20 +366,41 @@ function SearchPosition() {
         console.log (pvline);
     }
 
-    // There is an error, move the best move in depth 1
+    // There is an error. Try fail safe: reset the game, restore fen and search again
     if (bestMove == NOMOVE || bestMove == undefined || SanityCheck(bestMove) == BOOL.FALSE) {
+        if (engine_recovery == true)
+        {
+            console.log ("\r\n\r\n### Engine error: starting fail safe.")
+            engine_recovery = false; // to avoid loop
+            fen = BoardToFen();
+            ResetBoard();
+            ClearForSearch();
+            ParseFen(fen);
+            board.position(fen);
+            SearchPosition();
+        }
+    }
+    
+    // There is still no move > just move something good in depth 1
+    if (bestMove == NOMOVE || bestMove == undefined || SanityCheck(bestMove) == BOOL.FALSE) {
+        console.log ("\r\n\r\n### Engine error and fail safe failed: move a depth 1.")
         ClearForSearch();
         bestScore = AlphaBeta(-INFINITE, INFINITE, 1, BOOL.TRUE);
         pvNum = GetPvLine(1);
         bestMove = brd_PvArray[0];
         line = ("Depth:1: " + PrMoveWithPieces(bestMove) + " Score:" + bestScore + " Nodes:" + srch_nodes);
     }
-
+    
     if (bestMove == NOMOVE || bestMove == undefined || SanityCheck(bestMove) == BOOL.FALSE) {
+        // This is an unrecovarable error, engine is crashed. 
         line = "\r\n\r\n------ ENGINE ERROR -----\r\nEngine is crashed! Game is stopped.";
-        console.log("------ ENGINE ERROR -----");
+        console.log ("\r\n\r\n### Unrecovarable Engine error.")
         srch_best = NOMOVE;
-    } else {
+        return;
+    }
+    else 
+    {
+        // There is no engine error or errors are recovered, continue.
         srch_best = bestMove;
 
         if (PIECE_NAMES[brd_pieces[TOSQ(srch_best)]] != "EMPTY")

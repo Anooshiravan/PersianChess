@@ -243,6 +243,7 @@ function MoveGUIPiece() {
     board.highlight(PrSq(FROMSQ(srch_best)), PrSq(TOSQ(srch_best)));
     PlaySound(move);
     updateMoveList();
+    engine_recovery = true;
 }
 
 function CheckAndSet() {
@@ -645,6 +646,7 @@ function playForeignEngineMove(pgn_move)
         parsed = ParseMove(CBSQ2SQ(from), CBSQ2SQ(to));
         if (parsed != NOMOVE)
         {
+            board.removehighlights();
             MakeMove(parsed);
             MoveGUIPiece(parsed);
             timeout = setTimeout(function(){ 
