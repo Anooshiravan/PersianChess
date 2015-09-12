@@ -1639,8 +1639,6 @@
                 MakeMove(parsed);
                 MoveGUIPiece(parsed);
                 setTimeout(function() { CheckAndSet(); }, 300);
-                sourcesq = 0;
-                targetsq = 0;
                 if (engine_on == true)
                 {
                     board.wait(true);
@@ -1973,42 +1971,6 @@ widget.highlight = function() {
             e.preventDefault();
         }
 
-        var sourcesq = 0;
-        var targetsq = 0;
-        
-        function movebyclick (square){
-            if (sourcesq == 0) sourcesq = square;
-            else targetsq = square;
-                
-            if (sourcesq != 0 && targetsq != 0)
-            {
-                // console.log (sourcesq + "-" + targetsq);
-                var parsed = ParseMove(CBSQ2SQ(sourcesq), CBSQ2SQ(targetsq));
-                if (parsed != NOMOVE) {
-                    board.wait(true);
-                    MakeMove(parsed);
-                    MoveGUIPiece(parsed);
-                    CheckAndSet();
-                    PreSearch();
-                    sourcesq = 0;
-                    targetsq = 0;
-                }
-                else
-                {
-                    sourcesq = 0;
-                    targetsq = 0;
-                }
-            }
-            
-            
-            // board.wait(true);
-       
-                // MakeMove(parsed);
-                // MoveGUIPiece(parsed);
-                // CheckAndSet();
-                // PreSearch();
-        }
-        
         function mousedownSquare(e) {
             // do nothing if we're not draggable
             if (cfg.draggable !== true) return;
