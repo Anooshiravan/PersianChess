@@ -117,17 +117,17 @@ var PrincessTable = [
 
 
 var FortressTable = [
--10	,	0	,	0	,	0	,	0	,	0	,	0	,	0	,	0	,	0	,	-10	, 
-0	,	0	,	10	,	5	,	10	,	10	,	10	,	5	,	10	,	0	,	0	,
-0	,	15	,	0	,	5	,	10	,	10	,	10	,	5	,	0	,	15	,	0	,
-0	,	0	,	0	,	5	,	10	,	10	,	10	,	5	,	0	,	0	,	0	,
-0	,	0	,	5	,	10	,	15	,	20	,	15	,	10	,	5	,	0	,	0	,
-0	,	0	,	5	,	10	,	15	,	20	,	15	,	10	,	5	,	0	,	0	,
-0	,	0	,	5	,	10	,	15	,	20	,	15	,	10	,	5	,	0	,	0	,
-0	,	0	,	0	,	5	,	10	,	10	,	10	,	5	,	0	,	0	,	0	,
-0	,	25	,	25	,	25	,	25	,	25	,	25	,	25	,	25	,	25	,	0	,
-0	,	0	,	0	,	5	,	10	,	10	,	10	,	5	,	0	,	0	,	0	,
-0	,	0	,	0	,	0	,	0	,	0	,	0	,	0	,	0	,	0	,	0	, 
+-10 ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   -10 , 
+0   ,   0   ,   15  ,   5   ,   10  ,   10  ,   10  ,   5   ,   15  ,   0   ,   0   ,
+0   ,   15  ,   0   ,   5   ,   10  ,   10  ,   10  ,   5   ,   0   ,   15  ,   0   ,
+0   ,   0   ,   0   ,   5   ,   10  ,   10  ,   10  ,   5   ,   0   ,   0   ,   0   ,
+0   ,   0   ,   0   ,   5   ,   10  ,   10  ,   10  ,   5   ,   0   ,   0   ,   0   ,
+0   ,   0   ,   0   ,   5   ,   10  ,   10  ,   10  ,   5   ,   0   ,   0   ,   0   ,
+0   ,   0   ,   0   ,   5   ,   10  ,   10  ,   10  ,   5   ,   0   ,   0   ,   0   ,
+0   ,   0   ,   0   ,   5   ,   10  ,   10  ,   10  ,   5   ,   0   ,   0   ,   0   ,
+0   ,   25  ,   25  ,   25  ,   25  ,   25  ,   25  ,   25  ,   25  ,   25  ,   0   ,
+0   ,   0   ,   0   ,   5   ,   10  ,   10  ,   10  ,   5   ,   0   ,   0   ,   0   ,
+0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   , 
 ];
 
 var KingE = [	
@@ -159,7 +159,7 @@ var KingO = [
 ];
 
 
-/*
+
 function MaterialDraw() {
 
     if (0 == brd_pceNum[PIECES.wR] && 0 == brd_pceNum[PIECES.bR] && 0 == brd_pceNum[PIECES.wS] && 0 == brd_pceNum[PIECES.bS] && 0 == brd_pceNum[PIECES.wF] && 0 == brd_pceNum[PIECES.bF] && 0 == brd_pceNum[PIECES.wQ] && 0 == brd_pceNum[PIECES.bQ]) 
@@ -198,8 +198,6 @@ function MaterialDraw() {
     return BOOL.FALSE;
 }
 
-*/
-
 var ENDGAME_MAT = 1 * PieceVal[PIECES.wR] + 2 * PieceVal[PIECES.wN] + 2 * PieceVal[PIECES.wP] + PieceVal[PIECES.wK];
 
 function PawnsInit() {
@@ -237,9 +235,9 @@ function EvalPosition() {
     var rank;
     
     // TODO: Fix checking the material draw in evaluation
-    // if (0 == brd_pceNum[PIECES.wP] && 0 == brd_pceNum[PIECES.bP] && MaterialDraw() == BOOL.TRUE) {
-    //    return 0;
-    // }
+    if (0 == brd_pceNum[PIECES.wP] && 0 == brd_pceNum[PIECES.bP] && MaterialDraw() == BOOL.TRUE) {
+        return 0;
+    }
 
     PawnsInit();
 

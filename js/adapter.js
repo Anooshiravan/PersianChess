@@ -493,7 +493,7 @@ function StartSearch() {
         {
             if ($('#ThinkTimeChoice').val().substring(0, 1) == "d") {
                 srch_depth = parseInt($('#ThinkTimeChoice').val().substring(2, 1));
-                srch_time = 300000;
+                srch_time = 60000;
             }
             else
             {
