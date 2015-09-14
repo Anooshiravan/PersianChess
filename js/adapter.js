@@ -21,7 +21,7 @@
 var cfg = {
     draggable: true,
     dropOffBoard: 'snapback', // this is the default
-    moveSpeed: 300,
+    moveSpeed: 600,
     snapbackSpeed: 250,
     snapSpeed: 100,
     position: 'start'

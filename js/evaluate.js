@@ -100,7 +100,22 @@ var RookTable = [
 0	,	0	,	0	,	5	,	10	,	10	,	10	,	5	,	0	,	0	,	0	,
 0	,	0	,	0	,	0	,	0	,	0	,	0	,	0	,	0	,	0	,	0	, 
 ];
-    
+
+var PrincessTable = [
+0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   , 
+0   ,   0   ,   0   ,   -10 ,   0   ,   0   ,   0   ,   -10 ,   0   ,   0   ,   0   ,
+0   ,   0   ,   0   ,   0   ,   10  ,   10  ,   10  ,   0   ,   0   ,   0   ,   0   ,
+0   ,   0   ,   0   ,   10  ,   15  ,   15  ,   15  ,   10  ,   0   ,   0   ,   0   ,
+0   ,   0   ,   10  ,   15  ,   20  ,   20  ,   20  ,   15  ,   10  ,   0   ,   0   ,
+0   ,   0   ,   10  ,   15  ,   20  ,   20  ,   20  ,   15  ,   10  ,   0   ,   0   ,
+0   ,   0   ,   10  ,   15  ,   20  ,   20  ,   20  ,   15  ,   10  ,   0   ,   0   ,
+0   ,   0   ,   0   ,   10  ,   15  ,   15  ,   15  ,   10  ,   0   ,   0   ,   0   ,
+0   ,   0   ,   0   ,   0   ,   10  ,   10  ,   10  ,   0   ,   0   ,   0   ,   0   ,
+0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   , 
+0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   
+];
+
+
 var FortressTable = [
 -10	,	0	,	0	,	0	,	0	,	0	,	0	,	0	,	0	,	0	,	-10	, 
 0	,	0	,	10	,	5	,	10	,	10	,	10	,	5	,	10	,	0	,	0	,
@@ -332,6 +347,18 @@ function EvalPosition() {
                 score -= RookSemiOpenFile;
             }
         }
+    }
+
+    pce = PIECES.wS;
+    for (pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
+        sq = brd_pList[PCEINDEX(pce, pceNum)];
+        score += PrincessTable[SQ121(sq)];
+    }
+
+    pce = PIECES.bS;
+    for (pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
+        sq = brd_pList[PCEINDEX(pce, pceNum)];
+        score -= PrincessTable[MIRROR121(SQ121(sq))];
     }
 
     pce = PIECES.wF;
