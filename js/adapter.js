@@ -239,11 +239,15 @@ function AltFEN()
 
 function MoveGUIPiece() {
     var fen = BoardToFen().replace(/ .+$/, '');
-    board.position(fen);
-    board.highlight(PrSq(FROMSQ(srch_best)), PrSq(TOSQ(srch_best)));
-    PlaySound(move);
     updateMoveList();
     engine_recovery = true;
+    setTimeout(function () {
+            board.position(fen);
+            board.highlight(PrSq(FROMSQ(srch_best)), PrSq(TOSQ(srch_best)));
+    }, 200);
+    setTimeout(function () {
+            PlaySound(move);
+    }, 100);
 }
 
 function CheckAndSet() {
