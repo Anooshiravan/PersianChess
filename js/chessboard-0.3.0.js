@@ -1642,6 +1642,7 @@
                 if (engine_on == true)
                 {
                     board.wait(true);
+                    board.removehighlights();
                     setTimeout(function() { PreSearch(); }, 300);
 
                 }

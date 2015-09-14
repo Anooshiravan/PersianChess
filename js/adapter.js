@@ -21,7 +21,7 @@
 var cfg = {
     draggable: true,
     dropOffBoard: 'snapback', // this is the default
-    moveSpeed: 600,
+    moveSpeed: 300,
     snapbackSpeed: 250,
     snapSpeed: 100,
     position: 'start'
@@ -243,9 +243,7 @@ function MoveGUIPiece() {
     engine_recovery = true;
     board.position(fen);
     board.highlight(PrSq(FROMSQ(srch_best)), PrSq(TOSQ(srch_best)));
-    setTimeout(function () {
-            PlaySound(move);
-    }, 300);
+    PlaySound(move);
 }
 
 function CheckAndSet() {
@@ -621,6 +619,8 @@ function GGSound(result) {
 
 function playForeignEngineMove(pgn_move)
 {
+    if (GameController.GameOver == BOOL.TRUE) return;
+
     if (vs_engine == true) 
     {
         if (pgn_move == "request")
