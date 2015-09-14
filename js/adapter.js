@@ -241,13 +241,11 @@ function MoveGUIPiece() {
     var fen = BoardToFen().replace(/ .+$/, '');
     updateMoveList();
     engine_recovery = true;
-    setTimeout(function () {
-            board.position(fen);
-            board.highlight(PrSq(FROMSQ(srch_best)), PrSq(TOSQ(srch_best)));
-    }, 200);
+    board.position(fen);
+    board.highlight(PrSq(FROMSQ(srch_best)), PrSq(TOSQ(srch_best)));
     setTimeout(function () {
             PlaySound(move);
-    }, 100);
+    }, 300);
 }
 
 function CheckAndSet() {
