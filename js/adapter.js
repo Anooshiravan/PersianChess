@@ -178,6 +178,7 @@ function NewGame() {
     {
         document.getElementById("movelist").value = "";
     }
+    // saveSettings();
 }
 
 function ResetGame() {
@@ -558,10 +559,7 @@ function updateMoveList()
     $("#movelist").trigger("change");
     $('#movelist').scrollTop($('#movelist')[0].scrollHeight);
 
-    // Save settings
-        Settings("fen", BoardToFen(), "save");
-        Settings("tt", $('#ThinkTimeChoice').val(), "save");
-        Settings("variant", variant, "save");
+    saveSettings();
 }
 
 function AlertEndGame() {
@@ -773,11 +771,22 @@ function Settings(name, value, action)
     }
 }
 
+function saveSettings()
+{
+    var tt;
+    if ($('#ThinkTimeChoice').val() <= 2) tt = 3 
+        else tt = $('#ThinkTimeChoice').val();
+    Settings("tt", tt, "save");
+    Settings("variant", variant, "save");
+    Settings("fen", BoardToFen(), "save");
+}
+
+
 function restoreSettings()
 {
-    Settings("fen", "", "restore");
     Settings("tt", "", "restore");
     Settings("variant", "", "restore");
+    Settings("fen", "", "restore");
 }
 
 
