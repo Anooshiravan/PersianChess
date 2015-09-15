@@ -419,12 +419,15 @@ function SearchPosition() {
     }
     
     if (bestMove == NOMOVE || bestMove == undefined || SanityCheck(bestMove) == BOOL.FALSE) {
-        // This is an unrecovarable error, engine is crashed. 
-        line = "\r\n\r\n------ ENGINE ERROR -----\r\nEngine is stopped. Game is stopped.";
-        console.log ("\r\n\r\n### Unrecovarable Engine error.")
-        srch_best = NOMOVE;
-        output += "\r\n" + line;
-        return;
+        if (GameController.GameOver == BOOL.FLASE)
+        {
+            // This is an unrecovarable error, engine is crashed. 
+            line = "\r\n\r\n------ ENGINE ERROR -----\r\nEngine is stopped. Game is stopped.";
+            console.log ("\r\n\r\n### Unrecovarable Engine error.")
+            srch_best = NOMOVE;
+            output += "\r\n" + line;
+            return;
+        }
     }
     else 
     {
