@@ -365,37 +365,65 @@ function SearchPosition() {
         console.log(line);
         console.log (pvline);
     }
-
-    // There is an error. Try fail safe: reset the game, restore fen and search again
-    if (bestMove == NOMOVE || bestMove == undefined || SanityCheck(bestMove) == BOOL.FALSE) {
-        if (engine_recovery == true)
-        {
-            console.log ("\r\n\r\n### Engine error: starting fail safe.")
-            engine_recovery = false; // to avoid loop
-            fen = BoardToFen();
-            ResetBoard();
-            ClearForSearch();
-            ParseFen(fen);
-            board.position(fen);
-            SearchPosition();
-        }
-    }
     
-    // There is still no move > just move something good in depth 1
+    // There is an error. Try fail safe: reset the game, restore fen and search again in depth 3
+    if (bestMove == NOMOVE || bestMove == undefined || SanityCheck(bestMove) == BOOL.FALSE) {
+        console.log ("\r\n\r\n### Engine error: starting fail safe.");
+        line += ("\r\nFail-safe on depth:3\r\n");
+        // Backup board
+        fen = BoardToFen();
+        var brd_hisPly_bak = brd_hisPly;
+        var brd_history_bak = brd_history;
+        var brd_history_notes_bak = brd_history_notes;
+        // Reset all
+        init_engine();
+        ResetBoard();
+        ClearForSearch();
+        // Restore board
+        ParseFen(fen);
+        board.position(fen);
+        brd_hisPly = brd_hisPly_bak;
+        brd_history = brd_history_bak;
+        brd_history_notes = brd_history_notes_bak;
+        // Search
+        bestScore = AlphaBeta(-INFINITE, INFINITE, 3, BOOL.TRUE);
+        pvNum = GetPvLine(3);
+        bestMove = brd_PvArray[0];
+        line += ("Depth:3: " + PrMoveWithPieces(bestMove) + " Score:" + bestScore + " Nodes:" + srch_nodes);
+    }
+
+    // There is still no move > reset and just move something good in depth 1
     if (bestMove == NOMOVE || bestMove == undefined || SanityCheck(bestMove) == BOOL.FALSE) {
         console.log ("\r\n\r\n### Engine error and fail safe failed: move a depth 1.")
+        line += ("\r\nFail-safe on depth:1\r\n")
+        // Backup board
+        fen = BoardToFen();
+        var brd_hisPly_bak = brd_hisPly;
+        var brd_history_bak = brd_history;
+        var brd_history_notes_bak = brd_history_notes;
+        // Reset all
+        init_engine();
+        ResetBoard();
         ClearForSearch();
+        // Restore board
+        ParseFen(fen);
+        board.position(fen);
+        brd_hisPly = brd_hisPly_bak;
+        brd_history = brd_history_bak;
+        brd_history_notes = brd_history_notes_bak;
+        // Search
         bestScore = AlphaBeta(-INFINITE, INFINITE, 1, BOOL.TRUE);
         pvNum = GetPvLine(1);
         bestMove = brd_PvArray[0];
-        line = ("Depth:1: " + PrMoveWithPieces(bestMove) + " Score:" + bestScore + " Nodes:" + srch_nodes);
+        line += ("Depth:1: " + PrMoveWithPieces(bestMove) + " Score:" + bestScore + " Nodes:" + srch_nodes);
     }
     
     if (bestMove == NOMOVE || bestMove == undefined || SanityCheck(bestMove) == BOOL.FALSE) {
         // This is an unrecovarable error, engine is crashed. 
-        line = "\r\n\r\n------ ENGINE ERROR -----\r\nEngine is crashed! Game is stopped.";
+        line = "\r\n\r\n------ ENGINE ERROR -----\r\nEngine is stopped. Game is stopped.";
         console.log ("\r\n\r\n### Unrecovarable Engine error.")
         srch_best = NOMOVE;
+        output += "\r\n" + line;
         return;
     }
     else 

@@ -240,7 +240,6 @@ function AltFEN()
 function MoveGUIPiece() {
     var fen = BoardToFen().replace(/ .+$/, '');
     updateMoveList();
-    engine_recovery = true;
     board.position(fen);
     board.highlight(PrSq(FROMSQ(srch_best)), PrSq(TOSQ(srch_best)));
     PlaySound(move);
