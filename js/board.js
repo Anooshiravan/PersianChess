@@ -545,3 +545,22 @@ function PrintSqAttacked() {
         console.log(line);
     }
 }
+
+function EvaluateSqAttacked()
+{
+    // This function is not used in the evaluation yet, it is very slow
+    var SqAttackedByWhite = 0;
+    var SqAttackedByBlack = 0;
+    var SqAttackedScore = 0;
+    for (rank = RANKS.RANK_11; rank >= RANKS.RANK_1; rank--) {
+        for (file = FILES.FILE_A; file <= FILES.FILE_K; file++) {
+            sq = FR2SQ(file, rank);
+            if (SqAttacked(sq, COLOURS.WHITE) == BOOL.TRUE) SqAttackedByWhite++;
+            else if (SqAttacked(sq, COLOURS.BLACK) == BOOL.TRUE) SqAttackedByBlack++;
+        }
+    }
+    SqAttackedScore = SqAttackedByWhite - SqAttackedByBlack;
+    return SqAttackedScore;
+    console.log ("white: " + SqAttackedByWhite + " Black: " +  SqAttackedByBlack )
+    console.log ("evaluate: " + SqAttackedScore);
+}

@@ -89,6 +89,14 @@ function PerftTest(depth) {
 
 function PerformanceTest()
 {
+	/*
+	t1 = performance.now();
+	for (run = 0; run < 100000; ++run) {
+		EvaluateSqAttacked();
+	}
+	t2 = performance.now();
+	ms = t2-t1;
+	console.log("Evaluate SqAttacked is run 100.000 times in: " + ms + " miliseconds.")
 	t1 = performance.now();
 	for (run = 0; run < 100000; ++run) {
 		GenerateMoves();
@@ -103,6 +111,7 @@ function PerformanceTest()
 	t2 = performance.now();
 	ms = t2-t1;
 	console.log("AlphaBeta is run 100.000 times in: " + ms + " miliseconds.")
+	*/
 	t1 = performance.now();
 	for (run = 0; run < 100000; ++run) {
 		EvalPosition()

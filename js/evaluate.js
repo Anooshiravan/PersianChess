@@ -106,9 +106,9 @@ var PrincessTable = [
 0   ,   0   ,   0   ,   -10 ,   0   ,   0   ,   0   ,   -10 ,   0   ,   0   ,   0   ,
 0   ,   0   ,   0   ,   0   ,   10  ,   10  ,   10  ,   0   ,   0   ,   0   ,   0   ,
 0   ,   0   ,   0   ,   10  ,   15  ,   15  ,   15  ,   10  ,   0   ,   0   ,   0   ,
-0   ,   0   ,   10  ,   15  ,   30  ,   20  ,   30  ,   15  ,   10  ,   0   ,   0   ,
-0   ,   0   ,   10  ,   15  ,   20  ,   40  ,   20  ,   15  ,   10  ,   0   ,   0   ,
-0   ,   0   ,   10  ,   15  ,   30  ,   20  ,   30  ,   15  ,   10  ,   0   ,   0   ,
+0   ,   0   ,   10  ,   15  ,   35  ,   20  ,   35  ,   15  ,   10  ,   0   ,   0   ,
+0   ,   0   ,   10  ,   15  ,   25  ,   70  ,   25  ,   15  ,   10  ,   0   ,   0   ,
+0   ,   0   ,   10  ,   15  ,   35  ,   20  ,   35  ,   15  ,   10  ,   0   ,   0   ,
 0   ,   0   ,   0   ,   10  ,   15  ,   15  ,   15  ,   10  ,   0   ,   0   ,   0   ,
 0   ,   0   ,   0   ,   0   ,   10  ,   10  ,   10  ,   0   ,   0   ,   0   ,   0   ,
 0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   ,   0   , 
@@ -235,11 +235,14 @@ function EvalPosition() {
     var rank;
     
     // TODO: Fix checking the material draw in evaluation
-    if (0 == brd_pceNum[PIECES.wP] && 0 == brd_pceNum[PIECES.bP] && MaterialDraw() == BOOL.TRUE) {
-        return 0;
-    }
+    // if (0 == brd_pceNum[PIECES.wP] && 0 == brd_pceNum[PIECES.bP] && MaterialDraw() == BOOL.TRUE) {
+    //     return 0;
+    // }
 
     PawnsInit();
+
+    // Mobility and attack score, disabled becasue it seems very slow
+    // score += EvaluateSqAttacked();
 
     pce = PIECES.wP;
     for (pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
@@ -283,30 +286,32 @@ function EvalPosition() {
         score -= KnightTable[MIRROR121(SQ121(sq))];
     }
 
-    pce = PIECES.wW;
-    for (pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
-        sq = brd_pList[PCEINDEX(pce, pceNum)];
-        score += WizardChampionTable[SQ121(sq)];
-    }
+    if (variant == "Oriental")
+        {
+        pce = PIECES.wW;
+        for (pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
+            sq = brd_pList[PCEINDEX(pce, pceNum)];
+            score += WizardChampionTable[SQ121(sq)];
+        }
 
-    pce = PIECES.bW;
-    for (pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
-        sq = brd_pList[PCEINDEX(pce, pceNum)];
-        score -= WizardChampionTable[MIRROR121(SQ121(sq))];
-    }
+        pce = PIECES.bW;
+        for (pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
+            sq = brd_pList[PCEINDEX(pce, pceNum)];
+            score -= WizardChampionTable[MIRROR121(SQ121(sq))];
+        }
 
-    pce = PIECES.wC;
-    for (pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
-        sq = brd_pList[PCEINDEX(pce, pceNum)];
-        score += WizardChampionTable[SQ121(sq)];
-    }
+        pce = PIECES.wC;
+        for (pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
+            sq = brd_pList[PCEINDEX(pce, pceNum)];
+            score += WizardChampionTable[SQ121(sq)];
+        }
 
-    pce = PIECES.bC;
-    for (pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
-        sq = brd_pList[PCEINDEX(pce, pceNum)];
-        score -= WizardChampionTable[MIRROR121(SQ121(sq))];
+        pce = PIECES.bC;
+        for (pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
+            sq = brd_pList[PCEINDEX(pce, pceNum)];
+            score -= WizardChampionTable[MIRROR121(SQ121(sq))];
+        }
     }
-
     pce = PIECES.wB;
     for (pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
         sq = brd_pList[PCEINDEX(pce, pceNum)];
