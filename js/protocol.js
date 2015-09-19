@@ -27,6 +27,13 @@ function ThreeFoldRep() {
 	return r;
 }
 
+function CitadelDraw() {
+    if (brd_pieces[SQUARES.A11] == PIECES.wK || brd_pieces[SQUARES.K11] == PIECES.wK) return BOOL.TRUE;
+    if (brd_pieces[SQUARES.A1] == PIECES.bK || brd_pieces[SQUARES.K1] == PIECES.bK) return BOOL.TRUE;
+    return BOOL.FALSE;
+}
+
+
 function DrawMaterial() {
 
     if (brd_pceNum[PIECES.wP]!=0 || brd_pceNum[PIECES.bP]!=0) return BOOL.FALSE;

@@ -18,6 +18,8 @@
 */
 var GenerateCapturesNum = 0;
 var GenerateMovesNum = 0;
+var WhiteMobility = 0;
+var BlackMobility = 0;
 
 var VictimScore = [0, 100, 200, 300, 400, 500, 600, 700, 800, 100, 200, 300, 400, 500, 600, 700, 800];
 var MvvLvaScores = new Array(22 * 22);
@@ -532,4 +534,139 @@ function GenerateCaptures() {
         pce = LoopNonSlidePce[pceIndex++];
     }
     ++GenerateCapturesNum;
+}
+
+
+
+function Mobility() {
+    brd_moveListStart[brd_ply + 1] = brd_moveListStart[brd_ply];
+    WhiteMobility = 0;
+    BlackMobility = 0;
+    var pceType;
+    var pceNum;
+    var pceIndex;
+    var pce;
+    var sq;
+    var tsq;
+    var index;
+    
+    // White Mobility
+    pceIndex = LoopSlideIndex[COLOURS.WHITE];
+    pce = LoopSlidePce[pceIndex++];
+    while (pce != 0) {
+
+        for (pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
+            sq = brd_pList[PCEINDEX(pce, pceNum)];
+
+            for (index = 0; index < DirNumSlide[pce]; ++index) {
+                dir = PceDirSlide[pce][index];
+                t_sq = sq + dir;
+
+                while (SQOFFBOARD(t_sq) == BOOL.FALSE) {
+                    if (brd_pieces[t_sq] != PIECES.EMPTY && SQASE(t_sq) == BOOL.FALSE && SQPERS(sq, t_sq) == BOOL.FALSE) {
+                        if (PieceCol[brd_pieces[t_sq]] == COLOURS.BLACK) {
+                            WhiteMobility++;
+                            WhiteMobility++;
+                        }
+                        break;
+                    }
+                    if (SQASE(t_sq) == BOOL.FALSE && SQPERS(sq, t_sq) == BOOL.FALSE) WhiteMobility++;
+                    if (SQPERS(sq, t_sq) == BOOL.TRUE && brd_pieces[t_sq] != PIECES.EMPTY) break;
+                    t_sq += dir;
+                }
+            }
+        }
+        pce = LoopSlidePce[pceIndex++];
+    }
+    
+    
+    pceIndex = LoopNonSlideIndex[COLOURS.WHITE];
+    pce = LoopNonSlidePce[pceIndex++];
+
+    while (pce != 0) {
+
+        for (pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
+            sq = brd_pList[PCEINDEX(pce, pceNum)];
+
+            for (index = 0; index < DirNumNonSlide[pce]; ++index) {
+                dir = PceDirNonSlide[pce][index];
+                t_sq = sq + dir;
+
+                if (SQOFFBOARD(t_sq) == BOOL.TRUE) {
+                    continue;
+                }
+
+                if (brd_pieces[t_sq] != PIECES.EMPTY && SQASE(t_sq) == BOOL.FALSE && SQPERS(sq, t_sq) == BOOL.FALSE) {
+                    if (PieceCol[brd_pieces[t_sq]] == brd_side ^ 1) {
+                        WhiteMobility++;
+                        WhiteMobility++;
+                    }
+                    continue;
+                }
+                if (SQASE(t_sq) == BOOL.FALSE && SQPERS(sq, t_sq) == BOOL.FALSE) WhiteMobility++;
+            }
+        }
+        pce = LoopNonSlidePce[pceIndex++];
+    }
+
+    
+    // Black Mobility
+    pceIndex = LoopSlideIndex[COLOURS.BLACK];
+    pce = LoopSlidePce[pceIndex++];
+    while (pce != 0) {
+
+        for (pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
+            sq = brd_pList[PCEINDEX(pce, pceNum)];
+
+            for (index = 0; index < DirNumSlide[pce]; ++index) {
+                dir = PceDirSlide[pce][index];
+                t_sq = sq + dir;
+
+                while (SQOFFBOARD(t_sq) == BOOL.FALSE) {
+
+                    if (brd_pieces[t_sq] != PIECES.EMPTY && SQASE(t_sq) == BOOL.FALSE && SQPERS(sq, t_sq) == BOOL.FALSE) {
+                        if (PieceCol[brd_pieces[t_sq]] == COLOURS.WHITE) {
+                            BlackMobility++;
+                            BlackMobility++;
+                        }
+                        break;
+                    }
+                    if (SQASE(t_sq) == BOOL.FALSE && SQPERS(sq, t_sq) == BOOL.FALSE) BlackMobility++;
+                    if (SQPERS(sq, t_sq) == BOOL.TRUE && brd_pieces[t_sq] != PIECES.EMPTY) break;
+                    t_sq += dir;
+                }
+            }
+        }
+        pce = LoopSlidePce[pceIndex++];
+    }
+    
+    pceIndex = LoopNonSlideIndex[COLOURS.BLACK];
+    pce = LoopNonSlidePce[pceIndex++];
+
+    while (pce != 0) {
+
+        for (pceNum = 0; pceNum < brd_pceNum[pce]; ++pceNum) {
+            sq = brd_pList[PCEINDEX(pce, pceNum)];
+
+            for (index = 0; index < DirNumNonSlide[pce]; ++index) {
+                dir = PceDirNonSlide[pce][index];
+                t_sq = sq + dir;
+
+                if (SQOFFBOARD(t_sq) == BOOL.TRUE) {
+                    continue;
+                }
+
+                if (brd_pieces[t_sq] != PIECES.EMPTY && SQASE(t_sq) == BOOL.FALSE && SQPERS(sq, t_sq) == BOOL.FALSE) {
+                    if (PieceCol[brd_pieces[t_sq]] == COLOURS.WHITE) {
+                        BlackMobility++;
+                        BlackMobility++;
+                    }
+                    continue;
+                }
+                if (SQASE(t_sq) == BOOL.FALSE && SQPERS(sq, t_sq) == BOOL.FALSE) BlackMobility++;
+            }
+        }
+        pce = LoopNonSlidePce[pceIndex++];
+    }
+    return WhiteMobility - BlackMobility;
 }

@@ -451,6 +451,7 @@ function SearchPosition() {
     
     ShowErrorMoves();
     ShowPerformance();
+    console.log (Mobility());
 }
 
 function ShowPerformance()

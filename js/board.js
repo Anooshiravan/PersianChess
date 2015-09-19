@@ -561,6 +561,6 @@ function EvaluateSqAttacked()
     }
     SqAttackedScore = SqAttackedByWhite - SqAttackedByBlack;
     return SqAttackedScore;
-    console.log ("white: " + SqAttackedByWhite + " Black: " +  SqAttackedByBlack )
-    console.log ("evaluate: " + SqAttackedScore);
+    // console.log ("white: " + SqAttackedByWhite + " Black: " +  SqAttackedByBlack )
+    // console.log ("evaluate: " + SqAttackedScore);
 }

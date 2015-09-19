@@ -178,7 +178,6 @@ function NewGame() {
     {
         document.getElementById("movelist").value = "";
     }
-    // saveSettings();
 }
 
 function ResetGame() {
@@ -208,7 +207,8 @@ function ResetGame() {
             clearTimeout(EngineDemoTimer);
             board.redraw();
             NewGame();
-            board.position(START_FEN, true)
+            board.position(START_FEN, true);
+            saveSettings('reset');
         }
     });
 }
@@ -244,6 +244,7 @@ function MoveGUIPiece() {
     board.position(fen);
     board.highlight(PrSq(FROMSQ(srch_best)), PrSq(TOSQ(srch_best)));
     PlaySound(move);
+    saveSettings();
 }
 
 function CheckAndSet() {
@@ -260,7 +261,7 @@ function CheckAndSet() {
         GameController.GameSaved = BOOL.TRUE; // save the game here
     }
 
-    // Purge brd_hitory
+    // Purge surplus brd_hitory
     for(index = brd_hisPly; index < MAXGAMEMOVES; index++) {
         brd_history[index].move = NOMOVE;
         brd_history[index].fiftyMove = 0;
@@ -292,6 +293,14 @@ function CheckResult() {
         return BOOL.TRUE;
 
     }
+    if (CitadelDraw() == BOOL.TRUE) 
+    {
+        addNoteToMoveList("[GAME DRAWN: Citadel rule]");
+        board.wait(false);
+        AlertEndGame();
+        return BOOL.TRUE;
+    }
+
     GenerateMoves();
 
     var MoveNum = 0;
@@ -554,12 +563,9 @@ function updateMoveList()
     }
     
     if (!isEven(index)) nl = "\r\n";
-
     document.getElementById('movelist').value = pgn + nl + output;
     $("#movelist").trigger("change");
     $('#movelist').scrollTop($('#movelist')[0].scrollHeight);
-
-    saveSettings();
 }
 
 function AlertEndGame() {
@@ -582,6 +588,10 @@ function AlertEndGame() {
     } 
     else if (brd_history_notes.indexOf('[GAME DRAWN: Insufficient material]') > -1) {
         msg = "Draw: Insufficient material";
+        GGSound("draw");
+    } 
+    else if (brd_history_notes.indexOf('[GAME DRAWN: Citadel rule]') > -1) {
+        msg = "Draw: Citadel rule";
         GGSound("draw");
     } 
     else if (brd_history_notes.indexOf('[GAME DRAWN: Stalemate]') > -1) {
@@ -771,14 +781,23 @@ function Settings(name, value, action)
     }
 }
 
-function saveSettings()
+function saveSettings(action)
 {
-    var tt;
-    if ($('#ThinkTimeChoice').val() <= 2) tt = 3 
-        else tt = $('#ThinkTimeChoice').val();
-    Settings("tt", tt, "save");
-    Settings("variant", variant, "save");
-    Settings("fen", BoardToFen(), "save");
+    if (action == 'reset')
+    {
+        Settings("tt", "", "save");
+        Settings("variant", "", "save");
+        Settings("fen", "", "save");
+    }
+    else
+    {
+        var tt;
+        if ($('#ThinkTimeChoice').val() <= 2) tt = 3 
+            else tt = $('#ThinkTimeChoice').val();
+        Settings("tt", tt, "save");
+        Settings("variant", variant, "save");
+        Settings("fen", BoardToFen(), "save");
+    }
 }
 
 
