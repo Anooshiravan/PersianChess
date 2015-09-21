@@ -53,7 +53,7 @@ function BoardToFen() {
         for (file = FILES.FILE_A; file <= FILES.FILE_K; file++) {
             sq = FR2SQ(file, rank);
             piece = brd_pieces[sq];
-            if (piece == PIECES.EMPTY) {
+            if (piece == PIECES.EMPTY || piece == SQUARES.OFFBOARD) {
                 fenStr += '1';
             } else {
                 fenStr += PceChar[piece];
@@ -223,7 +223,8 @@ function PrintBoard() {
         for (file = FILES.FILE_A; file <= FILES.FILE_K; file++) {
             sq = FR2SQ(file, rank);
             piece = brd_pieces[sq];
-            line += (" " + PceChar[piece] + " ");
+            if (piece == SQUARES.OFFBOARD) line += (" * ");
+            else line += (" " + PceChar[piece] + " ");
         }
         console.log(line);
     }
@@ -244,7 +245,7 @@ function PrintBoard() {
 
     console.log("castle:" + line);
     console.log("key:" + brd_posKey.toString(16));
-    //PrintPceLists();
+    // PrintPceLists();
 }
 
 function ResetBoard() {
@@ -256,7 +257,8 @@ function ResetBoard() {
     }
 
     for (index = 0; index < 121; ++index) {
-        brd_pieces[SQ195(index)] = PIECES.EMPTY;
+        if ($.inArray(SQ195(index), FrameSQ) > -1) brd_pieces[SQ195(index)] = SQUARES.OFFBOARD;
+        else brd_pieces[SQ195(index)] = PIECES.EMPTY;
     }
 
     for (index = 0; index < 22 * 11; ++index) {
@@ -379,7 +381,7 @@ function ParseFen(fen) {
             sq121 = rank * 11 + file;
             sq195 = SQ195(sq121);
             if (piece != PIECES.EMPTY) {
-                brd_pieces[sq195] = piece;
+                if (brd_pieces[sq195] != SQUARES.OFFBOARD) brd_pieces[sq195] = piece;
             }
             file++;
         }
@@ -428,9 +430,13 @@ function SqAttacked(sq, side) {
     var pce;
     var t_sq;
     var index;
-    var ase_diagonals = [27, 37, 41, 49, 55, 61, 69, 73, 83, 85, 109, 111, 121, 125, 133, 139, 145, 153, 157, 167];
     
-    if ($.inArray(sq, ase_diagonals) > -1 && variant == "ASE") return BOOL.TRUE;
+    if (brd_pieces[sq] == SQUARES.OFFBOARD) return BOOL.FALSE;    
+
+    if (variant == "ASE")
+    {
+        if ($.inArray(sq, ASEDIA) > -1) return BOOL.TRUE;
+    }
     
     if (side == COLOURS.WHITE) {
         if (brd_pieces[sq - 14] == PIECES.wP || brd_pieces[sq - 12] == PIECES.wP) {
@@ -489,20 +495,23 @@ function SqAttacked(sq, side) {
 
     // Wizard and Champion
 
-    for (index = 0; index < 12; ++index) {
-        pce = brd_pieces[sq + WzDir[index]];
-        if (pce != SQUARES.OFFBOARD && PieceWizard[pce] == BOOL.TRUE && PieceCol[pce] == side) {
-            return BOOL.TRUE;
+    if (variant == "Oriental")
+    {
+        for (index = 0; index < 12; ++index) {
+            pce = brd_pieces[sq + WzDir[index]];
+            if (pce != SQUARES.OFFBOARD && PieceWizard[pce] == BOOL.TRUE && PieceCol[pce] == side) {
+                return BOOL.TRUE;
+            }
+        }
+
+        for (index = 0; index < 12; ++index) {
+            pce = brd_pieces[sq + ChDir[index]];
+            if (pce != SQUARES.OFFBOARD && PieceChampion[pce] == BOOL.TRUE && PieceCol[pce] == side) {
+                return BOOL.TRUE;
+            }
         }
     }
-
-    for (index = 0; index < 12; ++index) {
-        pce = brd_pieces[sq + ChDir[index]];
-        if (pce != SQUARES.OFFBOARD && PieceChampion[pce] == BOOL.TRUE && PieceCol[pce] == side) {
-            return BOOL.TRUE;
-        }
-    }
-
+    
     // King
 
     for (index = 0; index < 8; ++index) {
@@ -526,6 +535,7 @@ function PrintSqAttacked() {
         for (file = FILES.FILE_A; file <= FILES.FILE_K; file++) {
             sq = FR2SQ(file, rank);
             if (SqAttacked(sq, COLOURS.BLACK) == BOOL.TRUE) piece = "X";
+            else if (brd_pieces[sq] == SQUARES.OFFBOARD) piece = "*"; 
             else piece = "-";
             line += (" " + piece + " ");
         }
@@ -539,6 +549,7 @@ function PrintSqAttacked() {
         for (file = FILES.FILE_A; file <= FILES.FILE_K; file++) {
             sq = FR2SQ(file, rank);
             if (SqAttacked(sq, COLOURS.WHITE) == BOOL.TRUE) piece = "X";
+            else if (brd_pieces[sq] == SQUARES.OFFBOARD) piece = "*"; 
             else piece = "-";
             line += (" " + piece + " ");
         }

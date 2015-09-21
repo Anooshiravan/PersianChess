@@ -370,6 +370,7 @@ function SearchPosition() {
     if (bestMove == NOMOVE || bestMove == undefined || SanityCheck(bestMove) == BOOL.FALSE) {
         console.log ("\r\n\r\n### Engine error: starting fail safe.");
         line += ("\r\nFail-safe on depth:3\r\n");
+        engine_error_L1++;
         // Backup board
         fen = BoardToFen();
         var brd_hisPly_bak = brd_hisPly;
@@ -396,6 +397,7 @@ function SearchPosition() {
     if (bestMove == NOMOVE || bestMove == undefined || SanityCheck(bestMove) == BOOL.FALSE) {
         console.log ("\r\n\r\n### Engine error and fail safe failed: move a depth 1.")
         line += ("\r\nFail-safe on depth:1\r\n")
+        engine_error_L2++;
         // Backup board
         fen = BoardToFen();
         var brd_hisPly_bak = brd_hisPly;
@@ -451,7 +453,7 @@ function SearchPosition() {
     
     ShowErrorMoves();
     ShowPerformance();
-    console.log (Mobility());
+    // console.log (Mobility());
 }
 
 function ShowPerformance()

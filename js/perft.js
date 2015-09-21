@@ -97,6 +97,7 @@ function PerformanceTest()
 	t2 = performance.now();
 	ms = t2-t1;
 	console.log("Evaluate SqAttacked is run 100.000 times in: " + ms + " miliseconds.")
+	*/
 	t1 = performance.now();
 	for (run = 0; run < 100000; ++run) {
 		GenerateMoves();
@@ -104,6 +105,7 @@ function PerformanceTest()
 	t2 = performance.now();
 	ms = t2-t1;
 	console.log("MoveGen is run 100.000 times in: " + ms + " miliseconds.")
+	/*
 	t1 = performance.now();
 	for (run = 0; run < 100000; ++run) {
 		AlphaBeta(-INFINITE, INFINITE, 1, BOOL.TRUE)
@@ -118,7 +120,7 @@ function PerformanceTest()
 	t2 = performance.now();
 	ms = t2-t1;
 	console.log("Evaluation is run 100.000 times in: " + ms + " miliseconds.")
-	*/
+	
 	t1 = performance.now();
 	for (run = 0; run < 100000; ++run) {
 		Mobility();
@@ -127,4 +129,14 @@ function PerformanceTest()
 	ms = t2-t1;
 	console.log("Mobility is run 100.000 times in: " + ms + " miliseconds.")
 	console.log (Mobility());
+	*/
+	
+	t1 = performance.now();
+	for (run = 0; run < 100000; ++run) {
+		SqAttacked(97, COLOURS.WHITE);
+	}
+	t2 = performance.now();
+	ms = t2-t1;
+	console.log("SqAttacked is run 100.000 times in: " + ms + " miliseconds.")
+	
 }
