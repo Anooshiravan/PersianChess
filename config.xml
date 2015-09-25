@@ -36,14 +36,13 @@
     </gap:config-file>
 
     <access origin="*" browserOnly="true"/>
-    <gap:plugin name="org.apache.cordova.inappbrowser" />
-    <gap:plugin name="com.rjfun.cordova.plugin.lowlatencyaudio"/>
+    <gap:plugin name="org.apache.cordova.inappbrowser" source="npm" />
+    <gap:plugin name="com.rjfun.cordova.plugin.lowlatencyaudio" source="npm" />
 
     <feature name="InAppBrowser">
         <param name="android-package" value="org.apache.cordova.InAppBrowser"/>
     </feature>
 
     <preference name="android-minSdkVersion" value="11" />
-    <preference name="phonegap-version" value="4.1.1" />
     <preference name="permissions" value="none"/>
 </widget>
