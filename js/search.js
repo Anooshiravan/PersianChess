@@ -126,7 +126,7 @@ function Quiescence(alpha, beta) {
 
     Qcalled++;
 
-    if ((srch_nodes & 20470) == 0) CheckUp();
+    if ((srch_nodes & 2047) == 0) CheckUp();
 
     srch_nodes++;
     
@@ -207,7 +207,7 @@ function AlphaBeta(alpha, beta, depth, DoNull) {
         return Quiescence(alpha, beta);
     }
 
-    if ((srch_nodes & 20470) == 0) CheckUp();
+    if ((srch_nodes & 2047) == 0) CheckUp();
 
     srch_nodes++;
     
