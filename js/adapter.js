@@ -402,7 +402,6 @@ function Flip() {
 }
 
 function TakeBack() {
-    srch_stop = BOOL.TRUE;
     PlaySound(click);
     console.log('TakeBack request... brd_hisPly:' + brd_hisPly);
     if (brd_hisPly > 0) {
