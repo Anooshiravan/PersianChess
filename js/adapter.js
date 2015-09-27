@@ -823,7 +823,7 @@ function Platform()
 
 function Help() {
     PlaySound(click);
-    var go2web = "<b>Persian Chess Engine | Version 1.3.7</b>\r\n© 2009 - 2015 PersianChess.com\r\n\r\nPersian Chess is invented and programmed by:\r\n<b>Anooshiravan Ahmadi</b>\r\n\r\nClick Ok to go to the website for the detailed game information, or Cancel to return to the game.";
+    var go2web = "<b>Persian Chess Engine | Version 1.3.8</b>\r\n© 2009 - 2015 PersianChess.com\r\n\r\nPersian Chess is invented and programmed by:\r\n<b>Anooshiravan Ahmadi</b>\r\n\r\nClick Ok to go to the website for the detailed game information, or Cancel to return to the game.";
      jConfirm(go2web, "About", function(r) {
             if (r) window.open("http://www.persianchess.com/game-rules", "_system", "location=no");
     });
