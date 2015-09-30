@@ -22,40 +22,28 @@
 <head>
 <meta charset="UTF-8" />
 <title>Play Persian Chess</title>
-<link rel='stylesheet' href='css/chess911-standalone.css' type='text/css' media='all' />
+<link rel='stylesheet' href='css/persianchess.css' type='text/css' media='all' />
 <link rel="stylesheet" href="css/jquery.alerts.css" type="text/css" media="all" />
-  <script src="js/jquery/json3.min.js"></script>
-  <script src="js/jquery/jquery-1.10.1.min.js"></script>
-  <script src="js/jquery/jquery.ui.draggable.js" type="text/javascript"></script>
-  <script src="js/jquery/jquery.alerts.js" type="text/javascript"></script>
-  <script src="js/jquery/jquery.cookie.js" type="text/javascript"></script>
-  <script src="js/jquery/audio5.js"></script>
+  <script src="js/Libraries/json3.min.js"></script>
+  <script src="js/Libraries/jquery-2.1.4.min.js"></script>
+  <script src="js/Libraries/jquery.ui.draggable.js" type="text/javascript"></script>
+  <script src="js/Libraries/jquery.alerts.js" type="text/javascript"></script>
+  <script src="js/Libraries/jquery.cookie.js" type="text/javascript"></script>
+  <script src="js/Libraries/audio5.js"></script>
   <script src="phonegap.js"></script>
 </head>
 <body>
 
 <div>
 <div id="board">
-        <script src="js/defs.js"></script>
-        <script src="js/io.js"></script>
-        <script src="js/board.js"></script>
-        <script src="js/book.js"></script>
-        <script src="js/movegen.js"></script>
-        <script src="js/makemove.js"></script>
-        <script src="js/perft.js"></script>
-        <script src="js/evaluate.js"></script>
-        <script src="js/pvtable.js"></script>
-        <script src="js/search.js"></script>
-        <script src="js/protocol.js"></script>
-        <script src="js/main.js"></script>
-        <script src="js/chessboard-0.3.0.js"></script>
-        <script src="js/adapter.js"></script>
+        <script src="js/PersianChessBoard.js"></script>
+        <script src="js/PersianChess.js"></script>
 </div>
 
 <div id="side">
-    <img src="img/footer/brown.png" id="theme-button" onclick="ChangeTheme();">
-    <img src="img/footer/new.png" id="new-button" title="New Game" onclick="ResetGame();">
-    <img src="img/footer/flip.png" id="flip-button" title="Flip Board" onclick="Flip();">
+    <img src="img/footer/brown.png" id="theme-button" onclick="SetTheme();">
+    <img src="img/footer/new.png" id="new-button" title="New Game" onclick="StartNewGame();">
+    <img src="img/footer/flip.png" id="flip-button" title="Flip Board" onclick="FlipBoard();">
     <img src="img/footer/takeback.png" id="takeback-button" title="Take Back" onclick="TakeBack();">
     <img src="img/footer/play.png" id="play-button" title="Move Now" onclick="Forward();">
     <img src="img/footer/engine.png" id="engine-button" title="Start/Stop Engine" onclick="EngineOnOff();">
@@ -67,31 +55,33 @@
 
 <div id="console" class="console">
 
-<select id="ThinkTimeChoice" onchange="ManualThinkTime(this.value);">
-  <option selected="selected" value="3">3 Sec</option>
-  <option value="5">5 Sec</option>
-  <option value="10">10 Sec</option>
-  <option value="20">20 Sec</option>
-  <option value="30">30 Sec</option>
-  <option value="45">45 Sec</option>
-  <option value="60">60 Sec</option>
-  <option value="manual">Enter think time</option>
-  <option value="na">---------------</option>
-  <option value="d2">Depth:2</option>
-  <option value="d3">Depth:3</option>
-  <option value="d4">Depth:4</option>
-  <option value="d5">Depth:5</option>
-  <option value="d6">Depth:6</option>
+<select id="ThinkTimeChoice" onchange="SetThinkTime(this.value);">
+  <option selected="selected" value="s|3">3 Sec</option>
+  <option value="s|5">5 Sec</option>
+  <option value="s|10">10 Sec</option>
+  <option value="s|20">20 Sec</option>
+  <option value="s|30">30 Sec</option>
+  <option value="s|45">45 Sec</option>
+  <option value="s|60">60 Sec</option>
+  <option value="m|.">Enter think time</option>
+  <option value="na|.">---------------</option>
+  <option value="d|2">Depth:2</option>
+  <option value="d|3">Depth:3</option>
+  <option value="d|4">Depth:4</option>
+  <option value="d|5">Depth:5</option>
+  <option value="d|6">Depth:6</option>
+  <option value="d|7">Depth:7</option>
+  <option value="d|8">Depth:8</option>
 </select>&nbsp;
 
-<select id="VariantChoice" onchange="ResetGame()">
+<select id="VariantChoice" onchange="SetVariant(this.value)">
   <option value="Persian" selected="selected">Persian Princess</option>
   <option value="Citadel">Celtic Citadel</option>
   <option value="ASE">Egyptian Eye</option>
   <option value="Oriental">Oriental Omega</option>
 </select>
 
-<select id="AltFen" onchange="AltFEN()">
+<select id="AltFen" onchange="SetTrainingPosition(this.value)">
   <option value="0" selected="selected">Def.</option>
   <option value="1">TP-1</option>
   <option value="2">TP-2</option>
@@ -114,7 +104,22 @@ If you like this game, please do not forget to give it a rating and review on Go
 
 </div>
 
-<script>           
+<script>  
+
+// Init Chess Board
+var cfg = {
+    draggable: true,
+    dropOffBoard: 'snapback', // this is the default
+    moveSpeed: 300,
+    snapbackSpeed: 250,
+    snapSpeed: 100,
+    onChange: onBoardPosChange,
+    onDrop: onBoardPieceDrop,
+    position: 'start'
+};
+var board = new ChessBoard(document.getElementById("board"), cfg);  
+board.theme("green");
+
 
 // Play vs engines in iFrame
 window.onmessage = function(e){
@@ -149,7 +154,7 @@ screenResize();
 
 //settings
 $.cookie.raw = true;
-restoreSettings();
+//$$ restoreSettings();
 
 function screenResize()
 {

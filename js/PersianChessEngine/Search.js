@@ -1,21 +1,23 @@
 /*
-  _____              _                _____ _                   
- |  __ \            (_)              / ____| |                  
- | |__) |__ _ __ ___ _  __ _ _ __   | |    | |__   ___  ___ ___ 
- |  ___/ _ \ '__/ __| |/ _` | '_ \  | |    | '_ \ / _ \/ __/ __|
- | |  |  __/ |  \__ \ | (_| | | | | | |____| | | |  __/\__ \__ \
- |_|   \___|_|  |___/_|\__,_|_| |_|  \_____|_| |_|\___||___/___/
+   _____              _                _____ _                   
+  |  __ \            (_)              / ____| |                  
+  | |__) |__ _ __ ___ _  __ _ _ __   | |    | |__   ___  ___ ___ 
+  |  ___/ _ \ '__/ __| |/ _` | '_ \  | |    | '_ \ / _ \/ __/ __|
+  | |  |  __/ |  \__ \ | (_| | | | | | |____| | | |  __/\__ \__ \
+  |_|   \___|_|  |___/_|\__,_|_| |_|  \_____|_| |_|\___||___/___/
                                                                 
-----------------------------------------------------------------
+════════════════════════════════════════════════════════════════════
  Persian Chess (www.PersianChess.com)
- Copyright 2014 Anooshiravan Ahmadi - MCE @ Schuberg Philis
- Released under the GPL license
- Based on the open source projects mentioned at:
+ Copyright 2006 - 2015 
+ Anooshiravan Ahmadi (aahmadi@schubergphilis.com)
  http://www.PersianChess.com/About
- Redistribution of this game design, rules and the engine 
- requires written permission from the author.
-----------------------------------------------------------------
+ Licensed under GNU General Public License 3.0
+ ════════════════════════════════════════════════════════════════════
 */
+
+// ══════════════════════════
+//  Search
+// ══════════════════════════
 
 var srch_nodes;
 var srch_fh;
@@ -34,7 +36,7 @@ var ABcalled = 0;
 
 
 function CheckUp() {
-    if (($.now() - srch_start) > srch_time) srch_stop = BOOL.TRUE;
+    if (((new Date).getTime() - srch_start) > srch_time) srch_stop = BOOL.TRUE;
 }
 
 function PickNextMove(moveNum) {
@@ -99,7 +101,7 @@ function ClearForSearch() {
     srch_nodes = 0;
     srch_fh = 0;
     srch_fhf = 0;
-    srch_start = $.now();
+    srch_start = (new Date).getTime();
     srch_stop = BOOL.FALSE;
     srch_best = NOMOVE;
     
@@ -325,11 +327,6 @@ function SearchPosition() {
     var pvNum = 0;
     var line;
         
-    output = '---------------------\r\nENGINE MaxTime:' + srch_time + 'ms';
-    console.log ("");
-    console.log ("");
-    if (engine != '') console.log ("*** " + engine.toUpperCase() + " ***");
-    console.log(output);
     ClearForSearch();
 
     bestMove = BookMove();
@@ -337,13 +334,12 @@ function SearchPosition() {
     if (bestMove != NOMOVE) {
         srch_best = bestMove;
         srch_thinking = BOOL.FALSE;
-        output += "\r\n - Book move."
-        if (vs_engine == true) postMove(bestMove);
         return;
     }
 
 
     // iterative deepening
+    debuglog ("Starting iterative deepening: srch_depth:" + srch_depth + "srch_time:" + srch_time);
     for (currentDepth = 1; currentDepth <= srch_depth; ++currentDepth) {
 
         bestScore = AlphaBeta(-INFINITE, INFINITE, currentDepth, BOOL.TRUE);
@@ -362,72 +358,14 @@ function SearchPosition() {
             for (i = 0; i < brd_PvArray.length; i++) { 
             if (brd_PvArray[i] != undefined) pvline += " " + PrMove(brd_PvArray[i]);
         }
-        console.log(line);
-        console.log (pvline);
-    }
-    
-    // There is an error. Try fail safe: reset the game, restore fen and search again in depth 3
-    if (bestMove == NOMOVE || bestMove == undefined || SanityCheck(bestMove) == BOOL.FALSE) {
-        console.log ("\r\n\r\n### Engine error: starting fail safe.");
-        line += ("\r\nFail-safe on depth:3\r\n");
-        engine_error_L1++;
-        // Backup board
-        fen = BoardToFen();
-        var brd_hisPly_bak = brd_hisPly;
-        var brd_history_bak = brd_history;
-        var brd_history_notes_bak = brd_history_notes;
-        // Reset all
-        init_engine();
-        ResetBoard();
-        ClearForSearch();
-        // Restore board
-        ParseFen(fen);
-        board.position(fen);
-        brd_hisPly = brd_hisPly_bak;
-        brd_history = brd_history_bak;
-        brd_history_notes = brd_history_notes_bak;
-        // Search
-        bestScore = AlphaBeta(-INFINITE, INFINITE, 3, BOOL.TRUE);
-        pvNum = GetPvLine(3);
-        bestMove = brd_PvArray[0];
-        line += ("Depth:3: " + PrMoveWithPieces(bestMove) + " Score:" + bestScore + " Nodes:" + srch_nodes);
-    }
-
-    // There is still no move > reset and just move something good in depth 1
-    if (bestMove == NOMOVE || bestMove == undefined || SanityCheck(bestMove) == BOOL.FALSE) {
-        console.log ("\r\n\r\n### Engine error and fail safe failed: move a depth 1.")
-        line += ("\r\nFail-safe on depth:1\r\n")
-        engine_error_L2++;
-        // Backup board
-        fen = BoardToFen();
-        var brd_hisPly_bak = brd_hisPly;
-        var brd_history_bak = brd_history;
-        var brd_history_notes_bak = brd_history_notes;
-        // Reset all
-        init_engine();
-        ResetBoard();
-        ClearForSearch();
-        // Restore board
-        ParseFen(fen);
-        board.position(fen);
-        brd_hisPly = brd_hisPly_bak;
-        brd_history = brd_history_bak;
-        brd_history_notes = brd_history_notes_bak;
-        // Search
-        bestScore = AlphaBeta(-INFINITE, INFINITE, 1, BOOL.TRUE);
-        pvNum = GetPvLine(1);
-        bestMove = brd_PvArray[0];
-        line += ("Depth:1: " + PrMoveWithPieces(bestMove) + " Score:" + bestScore + " Nodes:" + srch_nodes);
+        SendMessageToGui("console", line);
+        SendMessageToGui("console", pvline);
     }
     
     if (bestMove == NOMOVE || bestMove == undefined || SanityCheck(bestMove) == BOOL.FALSE) {
         if (GameController.GameOver == BOOL.FLASE)
         {
-            // This is an unrecovarable error, engine is crashed. 
-            line = "\r\n\r\n------ ENGINE ERROR -----\r\nEngine is stopped. Game is stopped.";
-            console.log ("\r\n\r\n### Unrecovarable Engine error.")
-            srch_best = NOMOVE;
-            output += "\r\n" + line;
+            SendMessageToGui("init", "engine_error");
             return;
         }
     }
@@ -438,22 +376,17 @@ function SearchPosition() {
 
         if (PIECE_NAMES[brd_pieces[TOSQ(srch_best)]] != "EMPTY")
         {
-            if ((srch_best & MFLAGRZ) == 0) PlaySound(capture);
-            addNoteToMoveList("[Captures " + PIECE_NAMES[brd_pieces[TOSQ(srch_best)]] + "]");
+            if ((srch_best & MFLAGRZ) == 0) SendMessageToGui("console", "capture");
         }
         if ((srch_best & MFLAGRZ) != 0)
         {
-            addNoteToMoveList("[Rendezvous]");
+            SendMessageToGui("console", "rendezvous");
         }
-        updateMoveList();
     }
     srch_thinking = BOOL.FALSE;
-    if (vs_engine == true) postMove(bestMove);
-    output += "\r\n" + line;
     
     ShowErrorMoves();
     ShowPerformance();
-    // console.log (Mobility());
 }
 
 function ShowPerformance()
@@ -466,3 +399,7 @@ function ShowPerformance()
     console.log ("Node: " + srch_nodes);
     console.log ("MOVE: " + gen_m);
 }
+
+
+// ════════════════════════════════════════════════════
+debuglog ("Search.js is loaded.")

@@ -79,8 +79,10 @@ body {
     color: #b58863;
 }
 .wait-53d37 {
-    background-image:url('../img/wait.png');
-    background-size: 100%;
+    background-image:url('../img/wait.gif');
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center; 
 }
 .showsidewhite-53d37 {
     background-image:url('../img/sidewhite.png');
@@ -367,6 +369,17 @@ body {
 }
 
 #AltFen {
+    background: #121212;
+    color: #ffffff;
+    padding: 1px;
+    font-size: 12px;
+    font-family: "Courier New";
+    border: 1px solid #777;
+    margin-bottom: 10px;
+    max-width: 60px;  
+}
+
+#Settings {
     background: #121212;
     color: #ffffff;
     padding: 1px;

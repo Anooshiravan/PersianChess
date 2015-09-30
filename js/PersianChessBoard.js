@@ -27,6 +27,11 @@
  * Date: 10 Aug 2013
  */
 
+
+var START_FEN = "f111111111f/1rnbqksbnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKSBNR1/F111111111F w KQkq - 0 1";
+var variant = "Persian";
+
+
 // start anonymous scope
 ;
 (function () {
@@ -508,23 +513,12 @@
                     fen += '1';
                 }
             }
-
-            if (i !== 7) {
+            if (i !== 10) {
                 fen += '/';
             }
 
             currentRow--;
         }
-
-        // squeeze the numbers together
-        // haha, I love this solution...
-        fen = fen.replace(/11111111/g, '8');
-        fen = fen.replace(/1111111/g, '7');
-        fen = fen.replace(/111111/g, '6');
-        fen = fen.replace(/11111/g, '5');
-        fen = fen.replace(/1111/g, '4');
-        fen = fen.replace(/111/g, '3');
-        fen = fen.replace(/11/g, '2');
 
         return fen;
     }
@@ -800,11 +794,6 @@
                 (typeof cfg.pieceTheme !== 'string' &&
                     typeof cfg.pieceTheme !== 'function')) {
                 cfg.pieceTheme = 'img/chesspieces/wikipedia/{piece}.png';
-            }
-
-            if (board_debug)
-            {
-                cfg.pieceTheme = 'img/chesspieces/debug/{piece}.png';
             }
 
             // animation speeds
@@ -1582,6 +1571,10 @@
         function stopDraggedPiece(location) {
             // determine what the action should be
             var action = 'drop';
+            if ($.inArray(location, SQ85OFF) > -1 && cfg.dropOffBoard === 'snapback')
+            {
+                action = 'snapback';
+            }
             if (location === 'offboard' && cfg.dropOffBoard === 'snapback') {
                 action = 'snapback';
             }
@@ -1628,28 +1621,12 @@
             }
 
             // do it!
-            var parsed = ParseMove(CBSQ2SQ(DRAGGED_PIECE_SOURCE), CBSQ2SQ(location));
             if (action === 'snapback') {
                 snapbackDraggedPiece();
             } else if (action === 'trash') {
                 trashDraggedPiece();
-            } else if (action === 'drop' && parsed != NOMOVE) {
+            } else if (action === 'drop') {
                 dropDraggedPieceOnSquare(location);
-                yourMove = (PrMoveWithPieces(parsed));
-                MakeMove(parsed);
-                MoveGUIPiece(parsed);
-                setTimeout(function() { CheckAndSet(); }, 300);
-                if (engine_on == true)
-                {
-                    board.wait(true);
-                    board.removehighlights();
-                    setTimeout(function() { PreSearch(); }, 300);
-
-                }
-                else
-                {
-                    board.wait(false);
-                }
             } 
             else 
             {
@@ -1739,6 +1716,10 @@ widget.highlight = function() {
             // return the new position object
             return newPos;
         };
+
+        widget.enabled = function (bool) {
+            cfg.draggable = bool;
+        }
 
         widget.theme = function (color) {
         switch(color) {
@@ -1898,12 +1879,9 @@ widget.highlight = function() {
 
 
         widget.highlight = function (from, to) {
-            if (!board_debug)
-            {
-                removeSquareHighlights();
-                $('#' + SQUARE_ELS_IDS[from]).addClass(CSS.highlight2)
-                $('#' + SQUARE_ELS_IDS[to]).addClass(CSS.highlight2)
-            }
+            removeSquareHighlights();
+            $('#' + SQUARE_ELS_IDS[from]).addClass(CSS.highlight2)
+            $('#' + SQUARE_ELS_IDS[to]).addClass(CSS.highlight2)
         };
         
         widget.highlight_mate = function (square) {
@@ -1938,16 +1916,37 @@ widget.highlight = function() {
             else
             {
                 thinking = false;
-                if (brd_side == COLOURS.WHITE) 
-                {
-                    $('#' + SQUARE_ELS_IDS[waitsquare]).addClass(CSS.showsidewhite);
-                }
-                else 
-                {
-                    $('#' + SQUARE_ELS_IDS[waitsquare]).addClass(CSS.showsideblack);
-                }
+                
             }
         };
+
+
+        widget.logo = function (logo)
+        {
+            var logo_square;
+            if (CURRENT_ORIENTATION == 'white') logo_square = 'f11';
+            else logo_square = 'f1';
+
+            switch(logo) {
+                case "white_to_move":
+                    $('#' + SQUARE_ELS_IDS[logo_square]).removeClass(CSS.wait);
+                    $('#' + SQUARE_ELS_IDS[logo_square]).removeClass(CSS.showsideblack);  
+                    $('#' + SQUARE_ELS_IDS[logo_square]).addClass(CSS.showsidewhite);
+                    break;
+                case "black_to_move":
+                    $('#' + SQUARE_ELS_IDS[logo_square]).removeClass(CSS.wait);
+                    $('#' + SQUARE_ELS_IDS[logo_square]).removeClass(CSS.showsidewhite);  
+                    $('#' + SQUARE_ELS_IDS[logo_square]).addClass(CSS.showsideblack);
+                    break;
+                case "wait":
+                    $('#' + SQUARE_ELS_IDS[logo_square]).removeClass(CSS.showsidewhite);
+                    $('#' + SQUARE_ELS_IDS[logo_square]).removeClass(CSS.showsideblack);  
+                    $('#' + SQUARE_ELS_IDS[logo_square]).addClass(CSS.wait);
+                    break;
+                default:
+                    break
+            }
+        }
         
         // set the starting position
         widget.start = function (useAnimation) {
@@ -2193,7 +2192,6 @@ widget.highlight = function() {
 
             initDom();
             addEvents();
-            StartEngine();
         }
 
         // go time
