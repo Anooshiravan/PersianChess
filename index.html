@@ -120,14 +120,6 @@ var cfg = {
 var board = new ChessBoard(document.getElementById("board"), cfg);  
 board.theme("green");
 
-
-function debuglog (message)
-{
-    if (debug_log == true) console.log ("> GUI: " + message);
-    document.getElementById('movelist').value += message + "\r\n";
-
-}
-
 // Play vs engines in iFrame
 window.onmessage = function(e){
     if (e.data != '') {
