@@ -43,7 +43,10 @@ var debug_log = true;
 
 function debuglog (message)
 {
-    if (debug_log == true) console.log ("> GUI: " + message);
+    if (debug_log == true) {
+        console.log ("> GUI: " + message);
+        AppendToConsole("> GUI: " + message);
+    }
 }
 
 // ══════════════════════════
@@ -463,5 +466,10 @@ function SendGameByMail()
 function About()
 {
     
+}
+
+function AppendToConsole(message)
+{
+    document.getElementById('movelist').value += "\r\n" + message;
 }
 
