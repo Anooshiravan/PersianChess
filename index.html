@@ -69,31 +69,36 @@
                     ProcessGuiMessage(message);
                 }
           }
-          function LoadEngineScripts(absolute_path)
+          function LoadEngineScripts(engine_absolute_path)
           {
-              postMessage("debug::>> ENGINE: Absolute path: " + absolute_path);
               // ══════════════════════════
               //  Load Engine files
               // ══════════════════════════
-              postMessage("debug::>> ENGINE: Loading scripts from: " + absolute_path);
-              importScripts(
-                absolute_path + "PersianChessEngine.js",
-                absolute_path + "Defs.js",
-                absolute_path + "Variants.js",
-                absolute_path + "Competitor.js",
-                absolute_path + "InputOutput.js",
-                absolute_path + "Board.js",
-                absolute_path + "Book.js",
-                absolute_path + "MoveGenerator.js",
-                absolute_path + "MoveHandler.js",
-                absolute_path + "Evaluator.js",
-                absolute_path + "PvTable.js",
-                absolute_path + "Search.js",
-                absolute_path + "Protocol.js",
-                absolute_path + "Init.js"
-              );
-              postMessage("debug::>> ENGINE: Loaded!");
-              postMessage("init::loaded");
+              postMessage("debug::>> ENGINE: Loading scripts from: " + engine_absolute_path);
+              try
+              {
+                importScripts(
+                  engine_absolute_path + "PersianChessEngine.js",
+                  engine_absolute_path + "Defs.js",
+                  engine_absolute_path + "Variants.js",
+                  engine_absolute_path + "Competitor.js",
+                  engine_absolute_path + "InputOutput.js",
+                  engine_absolute_path + "Board.js",
+                  engine_absolute_path + "Book.js",
+                  engine_absolute_path + "MoveGenerator.js",
+                  engine_absolute_path + "MoveHandler.js",
+                  engine_absolute_path + "Evaluator.js",
+                  engine_absolute_path + "PvTable.js",
+                  engine_absolute_path + "Search.js",
+                  engine_absolute_path + "Protocol.js",
+                  engine_absolute_path + "Init.js"
+                );
+                postMessage("debug::>> ENGINE: Loaded!");
+                postMessage("init::loaded");
+              }
+              catch(error) {
+                    postMessage("debug::>> ENGINE: Error loading Engine files: " + error.message);
+              }
           }
         </script>
 
@@ -161,7 +166,7 @@ If you like this game, please do not forget to give it a rating and review on Go
 </textarea>
 
 <script>
-document.getElementById('movelist').value += "\r\n> ABSOLUTE_PATH: " + ABSOLUTE_PATH;
+document.getElementById('movelist').value += "> Path: " + ABSOLUTE_PATH;
 </script>
 
 </div>

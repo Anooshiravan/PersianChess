@@ -131,6 +131,9 @@ function ProcessEngineMessage(message)
     case "console":
         ProcessEngineMessage_Console(msg_body);
         break;
+    case "debug":
+        ProcessEngineMessage_Debug(msg_body);
+        break;
     default:
         debuglog ("Message not recognised: " + message)
         break
@@ -255,6 +258,13 @@ function ProcessEngineMessage_Gameover(message)
 function ProcessEngineMessage_Console(message)
 {
     debuglog ("Print to console: " + message);
+    document.getElementById('movelist').value += "\r\n" + message;
+}
+
+function ProcessEngineMessage_Debug(message)
+{
+    debuglog ("Print Debug Line: " + message);
+    if (debug_log) document.getElementById('movelist').value += "\r\n" + message;
 }
 
 
