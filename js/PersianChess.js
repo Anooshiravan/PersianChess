@@ -143,12 +143,7 @@ function ProcessEngineMessage_Init(message)
     switch(message) {
         case "hi":
             debuglog ("Engine connected.");
-            // Find the absolute path and send it to web worker to load engine files
-                var path = location.href;
-                var absolute_path = '';
-                var index = path.indexOf('index.html');
-                if (index != -1) absolute_path = path.substring(0, index);
-            PersianChessEngine.postMessage("load::" + absolute_path + "js/PersianChessEngine/");
+            PersianChessEngine.postMessage("load::" + ABSOLUTE_PATH + "js/PersianChessEngine/");
             break;
         case "loaded":
             debuglog ("Engine loaded.");

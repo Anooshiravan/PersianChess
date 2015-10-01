@@ -38,6 +38,15 @@
 <div id="board">
         <script src="js/PersianChessBoard.js"></script>
 
+        <script id="find_path">
+            // Find the absolute path and send it to web worker to load engine files
+            var path = location.href;
+            var ABSOLUTE_PATH = '';
+            var index = path.indexOf('index.html');
+            if (index != -1) ABSOLUTE_PATH = path.substring(0, index);
+            console.log ("> Index.html ABSOLUTE_PATH: " + ABSOLUTE_PATH);
+        </script>
+
         <script id="engine" type="javascript/worker">
           var engine_scripts_loaded = false;
           var url; 
@@ -52,7 +61,7 @@
                 }
                 else if (msg_title == "load")
                 {
-                    console.log(">> ENGINE: Absolute path received: " + msg_body)
+                    postMessage("debug::>> ENGINE: Absolute path received: " + msg_body)
                     LoadEngineScripts(msg_body);
                 }
                 else
@@ -62,10 +71,11 @@
           }
           function LoadEngineScripts(absolute_path)
           {
-              console.log (">> ENGINE: Absolute path: " + absolute_path);
+              postMessage("debug::>> ENGINE: Absolute path: " + absolute_path);
               // ══════════════════════════
               //  Load Engine files
               // ══════════════════════════
+              postMessage("debug::>> ENGINE: Loading scripts from: " + absolute_path);
               importScripts(
                 absolute_path + "PersianChessEngine.js",
                 absolute_path + "Defs.js",
@@ -82,7 +92,7 @@
                 absolute_path + "Protocol.js",
                 absolute_path + "Init.js"
               );
-              console.log (">> ENGINE: Loaded!");
+              postMessage("debug::>> ENGINE: Loaded!");
               postMessage("init::loaded");
           }
         </script>
@@ -149,6 +159,10 @@ If you like this game, please do not forget to give it a rating and review on Go
 > Audio is OFF.
 > Engine is ON.
 </textarea>
+
+<script>
+document.getElementById('movelist').value += "\r\n> ABSOLUTE_PATH: " + ABSOLUTE_PATH;
+</script>
 
 </div>
 
