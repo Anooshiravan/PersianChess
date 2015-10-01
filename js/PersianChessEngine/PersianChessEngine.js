@@ -45,7 +45,7 @@ var engine_on = false;
 //  Logging
 // ══════════════════════════
 
-var debug_log = false;
+var debug_log = true;
 
 function debuglog (message)
 {
@@ -53,8 +53,35 @@ function debuglog (message)
 }
 
 // ══════════════════════════
+//  Load Engine files
+// ══════════════════════════
+
+importScripts(
+  "Defs.js",
+  "Variants.js",
+  "Competitor.js",
+  "InputOutput.js",
+  "Board.js",
+  "Book.js",
+  "MoveGenerator.js",
+  "MoveHandler.js",
+  // "Perft.js",
+  "Evaluator.js",
+  "PvTable.js",
+  "Search.js",
+  "Protocol.js",
+  "Init.js"
+
+  
+);
+
+// ══════════════════════════
 //  Messaging
 // ══════════════════════════
+
+self.onmessage = function (e) {
+    ProcessGuiMessage(e.data)
+}
 
 function SendMessageToGui(title, message)
 {
@@ -92,6 +119,9 @@ function ProcessGuiMessage(message)
 function ProcessGuiMessage_Init(message)
 {
     switch(message) {
+    case "hello":
+        SendMessageToGui ("init", "hi");
+        break;    
     case "start_engine":
         StartEngine();
         break; 

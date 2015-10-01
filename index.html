@@ -37,71 +37,6 @@
 <div>
 <div id="board">
         <script src="js/PersianChessBoard.js"></script>
-
-        <script id="find_path">
-            // Find the absolute path and send it to web worker to load engine files
-            var path = location.href;
-            var ABSOLUTE_PATH = '';
-            var index = path.indexOf('index.html');
-            if (index != -1) ABSOLUTE_PATH = path.substring(0, index);
-            console.log ("> Index.html ABSOLUTE_PATH: " + ABSOLUTE_PATH);
-        </script>
-
-        <script id="engine" type="javascript/worker">
-          var engine_scripts_loaded = false;
-          var url; 
-          self.onmessage = function (e) {
-                var message = e.data;
-                var msg_title = message.substr(0, message.indexOf('::'));
-                var msg_body = message.substr(message.indexOf('::') + 2);
-                if (msg_title == "init")
-                {
-                    if (msg_body == "hello") postMessage("init::hi");
-                    else ProcessGuiMessage(message);
-                }
-                else if (msg_title == "load")
-                {
-                    postMessage("debug::>> ENGINE: Absolute path received: " + msg_body)
-                    LoadEngineScripts(msg_body);
-                }
-                else
-                {
-                    ProcessGuiMessage(message);
-                }
-          }
-          function LoadEngineScripts(engine_absolute_path)
-          {
-              // ══════════════════════════
-              //  Load Engine files
-              // ══════════════════════════
-              postMessage("debug::>> ENGINE: Loading scripts from: " + engine_absolute_path);
-              try
-              {
-                importScripts(
-                  engine_absolute_path + "PersianChessEngine.js",
-                  engine_absolute_path + "Defs.js",
-                  engine_absolute_path + "Variants.js",
-                  engine_absolute_path + "Competitor.js",
-                  engine_absolute_path + "InputOutput.js",
-                  engine_absolute_path + "Board.js",
-                  engine_absolute_path + "Book.js",
-                  engine_absolute_path + "MoveGenerator.js",
-                  engine_absolute_path + "MoveHandler.js",
-                  engine_absolute_path + "Evaluator.js",
-                  engine_absolute_path + "PvTable.js",
-                  engine_absolute_path + "Search.js",
-                  engine_absolute_path + "Protocol.js",
-                  engine_absolute_path + "Init.js"
-                );
-                postMessage("debug::>> ENGINE: Loaded!");
-                postMessage("init::loaded");
-              }
-              catch(error) {
-                    postMessage("debug::>> ENGINE: Error loading Engine files: " + error.message);
-              }
-          }
-        </script>
-
         <script src="js/PersianChess.js"></script>
 </div>
 
@@ -164,10 +99,6 @@ If you like this game, please do not forget to give it a rating and review on Go
 > Audio is OFF.
 > Engine is ON.
 </textarea>
-
-<script>
-document.getElementById('movelist').value += "> Path: " + ABSOLUTE_PATH;
-</script>
 
 </div>
 

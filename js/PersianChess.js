@@ -72,8 +72,7 @@ var PersianChessEngine;
             if (PersianChessEngine == null) {
                 PersianChessEngineValid = true;
                 try {
-                    var blob = new Blob([document.querySelector('#engine').textContent]);
-                    PersianChessEngine = new Worker(window.URL.createObjectURL(blob));
+                    PersianChessEngine = new Worker("js/PersianChessEngine/PersianChessEngine.js");
                     PersianChessEngine.onmessage = function (e) {
                         ProcessEngineMessage(e.data)
                     }
@@ -103,7 +102,6 @@ if (typeof String.prototype.startsWith != 'function') {
 
 function ProcessEngineMessage(message)
 {
-    // debuglog ("Message received: " + message)
     var msg_title = message.substr(0, message.indexOf('::'));
     var msg_body = message.substr(message.indexOf('::') + 2);
     switch(msg_title) {
@@ -131,9 +129,6 @@ function ProcessEngineMessage(message)
     case "console":
         ProcessEngineMessage_Console(msg_body);
         break;
-    case "debug":
-        ProcessEngineMessage_Debug(msg_body);
-        break;
     default:
         debuglog ("Message not recognised: " + message)
         break
@@ -146,10 +141,6 @@ function ProcessEngineMessage_Init(message)
     switch(message) {
         case "hi":
             debuglog ("Engine connected.");
-            PersianChessEngine.postMessage("load::" + ABSOLUTE_PATH + "js/PersianChessEngine/");
-            break;
-        case "loaded":
-            debuglog ("Engine loaded.");
             PersianChessEngine.postMessage("init::start_engine");
             break;
         case "engine_started":
@@ -258,13 +249,6 @@ function ProcessEngineMessage_Gameover(message)
 function ProcessEngineMessage_Console(message)
 {
     debuglog ("Print to console: " + message);
-    document.getElementById('movelist').value += "\r\n" + message;
-}
-
-function ProcessEngineMessage_Debug(message)
-{
-    debuglog ("Print Debug Line: " + message);
-    if (debug_log) document.getElementById('movelist').value += "\r\n" + message;
 }
 
 
