@@ -17,8 +17,6 @@
               <icon src="res/android/xhdpi.png" density="xhdpi" />
     </platform>
 
-    <access origin="*" subdomains="true" />
-
     <icon src="img/logo.png" />
 
     <description>
