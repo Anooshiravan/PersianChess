@@ -72,7 +72,8 @@ var PersianChessEngine;
             if (PersianChessEngine == null) {
                 PersianChessEngineValid = true;
                 try {
-                    PersianChessEngine = new Worker("js/PersianChessEngine/PersianChessEngine.js");
+                    var blob = new Blob([document.querySelector('#engine').textContent]);
+                    PersianChessEngine = new Worker(window.URL.createObjectURL(blob));
                     PersianChessEngine.onmessage = function (e) {
                         ProcessEngineMessage(e.data)
                     }
@@ -102,6 +103,7 @@ if (typeof String.prototype.startsWith != 'function') {
 
 function ProcessEngineMessage(message)
 {
+    // debuglog ("Message received: " + message)
     var msg_title = message.substr(0, message.indexOf('::'));
     var msg_body = message.substr(message.indexOf('::') + 2);
     switch(msg_title) {
@@ -141,6 +143,15 @@ function ProcessEngineMessage_Init(message)
     switch(message) {
         case "hi":
             debuglog ("Engine connected.");
+            // Find the absolute path and send it to web worker to load engine files
+                var path = location.href;
+                var absolute_path = '';
+                var index = path.indexOf('index.html');
+                if (index != -1) absolute_path = path.substring(0, index);
+            PersianChessEngine.postMessage("load::" + absolute_path + "js/PersianChessEngine/");
+            break;
+        case "loaded":
+            debuglog ("Engine loaded.");
             PersianChessEngine.postMessage("init::start_engine");
             break;
         case "engine_started":
