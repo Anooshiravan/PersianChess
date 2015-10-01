@@ -49,7 +49,7 @@ var debug_log = false;
 
 function debuglog (message)
 {
-    if (debug_log == true) debuglog ("> Engine: " + message);
+    if (debug_log == true) console.log ("> Engine: " + message);
 }
 
 // ══════════════════════════
