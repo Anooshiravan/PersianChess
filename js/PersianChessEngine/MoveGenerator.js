@@ -55,18 +55,18 @@ function ShowErrorMoves()
 {
     if (move_sanity_check)
     {
-        console.log ("------------- Move debugging ------------");
-        console.log ("MOVE: " + gen_m);
-        if (er_0 > 0) console.log ("Error 0: " + er_0);
-        if (er_1 > 0) console.log ("Error 1: " + er_1);
-        if (er_2 > 0) console.log ("Error 2: " + er_2);
-        if (er_3 > 0) console.log ("Error 3: " + er_3);
-        if (er_4 > 0) console.log ("Error 4: " + er_4);
-        if (er_5 > 0) console.log ("Error 5: " + er_5);
-        if (er_6 > 0) console.log ("Error 6: " + er_6);
-        if (er_7 > 0) console.log ("Error 7: " + er_7);
-        if (er_8 > 0) console.log ("Error 8: " + er_8);
-        if (er_9 > 0) console.log ("Error 9: " + er_9);
+        debuglog ("------------- Move debugging ------------");
+        debuglog ("MOVE: " + gen_m);
+        if (er_0 > 0) debuglog ("Error 0: " + er_0);
+        if (er_1 > 0) debuglog ("Error 1: " + er_1);
+        if (er_2 > 0) debuglog ("Error 2: " + er_2);
+        if (er_3 > 0) debuglog ("Error 3: " + er_3);
+        if (er_4 > 0) debuglog ("Error 4: " + er_4);
+        if (er_5 > 0) debuglog ("Error 5: " + er_5);
+        if (er_6 > 0) debuglog ("Error 6: " + er_6);
+        if (er_7 > 0) debuglog ("Error 7: " + er_7);
+        if (er_8 > 0) debuglog ("Error 8: " + er_8);
+        if (er_9 > 0) debuglog ("Error 9: " + er_9);
     }
 }
 

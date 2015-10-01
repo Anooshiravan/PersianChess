@@ -314,7 +314,6 @@ function AlphaBeta(alpha, beta, depth, DoNull) {
 
     if (alpha != OldAlpha) {
         StorePvMove(BestMove);
-        // console.log ("AA: Pv move stored: " + PrMove(BestMove) + "in depth:" + currentDepth);
     }
 
     return alpha;
@@ -340,6 +339,7 @@ function SearchPosition() {
 
     // iterative deepening
     debuglog ("Starting iterative deepening: srch_depth:" + srch_depth + "srch_time:" + srch_time);
+    SendMessageToGui("debug::Starting iterative deepening: srch_depth:" + srch_depth + "srch_time:" + srch_time);
     for (currentDepth = 1; currentDepth <= srch_depth; ++currentDepth) {
 
         bestScore = AlphaBeta(-INFINITE, INFINITE, currentDepth, BOOL.TRUE);
@@ -391,13 +391,13 @@ function SearchPosition() {
 
 function ShowPerformance()
 {
-    console.log ("-------- Performance Counters ----------");
-    console.log ("AlphaBeta: " + ABcalled);
-    console.log ("Quiescence: " + Qcalled);
-    console.log ("MoveGen: " + GenerateMovesNum);
-    console.log ("CapGen: " + GenerateCapturesNum);
-    console.log ("Node: " + srch_nodes);
-    console.log ("MOVE: " + gen_m);
+    debuglog ("-------- Performance Counters ----------");
+    debuglog ("AlphaBeta: " + ABcalled);
+    debuglog ("Quiescence: " + Qcalled);
+    debuglog ("MoveGen: " + GenerateMovesNum);
+    debuglog ("CapGen: " + GenerateCapturesNum);
+    debuglog ("Node: " + srch_nodes);
+    debuglog ("MOVE: " + gen_m);
 }
 
 

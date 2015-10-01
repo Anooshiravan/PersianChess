@@ -24,18 +24,18 @@ var perft_leafNodes;
 function Perft(depth) { 
 	MakeNullMove();
 	if(brd_posKey !=  GeneratePosKey())  {
-		console.log(printGameLine());
+		debuglog(printGameLine());
 		if (debug) PrintBoard();
 		srch_stop = BOOL.TRUE;
-		console.log('Hash Error After Make');
+		debuglog('Hash Error After Make');
 	}   
 	
 	TakeNullMove();
 	if(brd_posKey !=  GeneratePosKey())  {
-		console.log(printGameLine());
+		debuglog(printGameLine());
 		if (debug) PrintBoard();
 		srch_stop = BOOL.TRUE;
-		console.log('Hash Error After Take');
+		debuglog('Hash Error After Take');
 	}   
 
 	if(depth == 0) {
@@ -63,7 +63,7 @@ function Perft(depth) {
 function PerftTest(depth) {    
 
 	if (debug) PrintBoard();
-	console.log("Starting Test To Depth:" + depth);	
+	debuglog("Starting Test To Depth:" + depth);	
 	perft_leafNodes = 0;
 	GenerateMoves();
 	var index;
@@ -80,10 +80,10 @@ function PerftTest(depth) {
 		Perft(depth-1);
 		TakeMove();
 		var oldnodes = perft_leafNodes - cumnodes;
-        console.log("move:" + moveNum + " " + PrMove(move) + " " + oldnodes);
+        debuglog("move:" + moveNum + " " + PrMove(move) + " " + oldnodes);
 	}
     
-	// console.log("Test Complete : " + perft_leafNodes + " leaf nodes visited");
+	// debuglog("Test Complete : " + perft_leafNodes + " leaf nodes visited");
     //   $("#FenOutput").text("Test Complete : " + perft_leafNodes + " leaf nodes visited");
 
     return;
@@ -98,7 +98,7 @@ function PerformanceTest()
 	}
 	t2 = performance.now();
 	ms = t2-t1;
-	console.log("Evaluate SqAttacked is run 100.000 times in: " + ms + " miliseconds.")
+	debuglog("Evaluate SqAttacked is run 100.000 times in: " + ms + " miliseconds.")
 	*/
 	t1 = performance.now();
 	for (run = 0; run < 100000; ++run) {
@@ -106,7 +106,7 @@ function PerformanceTest()
 	}
 	t2 = performance.now();
 	ms = t2-t1;
-	console.log("MoveGen is run 100.000 times in: " + ms + " miliseconds.")
+	debuglog("MoveGen is run 100.000 times in: " + ms + " miliseconds.")
 	/*
 	t1 = performance.now();
 	for (run = 0; run < 100000; ++run) {
@@ -114,14 +114,14 @@ function PerformanceTest()
 	}
 	t2 = performance.now();
 	ms = t2-t1;
-	console.log("AlphaBeta is run 100.000 times in: " + ms + " miliseconds.")
+	debuglog("AlphaBeta is run 100.000 times in: " + ms + " miliseconds.")
 	t1 = performance.now();
 	for (run = 0; run < 100000; ++run) {
 		EvalPosition()
 	}
 	t2 = performance.now();
 	ms = t2-t1;
-	console.log("Evaluation is run 100.000 times in: " + ms + " miliseconds.")
+	debuglog("Evaluation is run 100.000 times in: " + ms + " miliseconds.")
 	
 	t1 = performance.now();
 	for (run = 0; run < 100000; ++run) {
@@ -129,8 +129,8 @@ function PerformanceTest()
 	}
 	t2 = performance.now();
 	ms = t2-t1;
-	console.log("Mobility is run 100.000 times in: " + ms + " miliseconds.")
-	console.log (Mobility());
+	debuglog("Mobility is run 100.000 times in: " + ms + " miliseconds.")
+	debuglog (Mobility());
 	*/
 	
 	t1 = performance.now();
@@ -139,7 +139,7 @@ function PerformanceTest()
 	}
 	t2 = performance.now();
 	ms = t2-t1;
-	console.log("SqAttacked is run 100.000 times in: " + ms + " miliseconds.")
+	debuglog("SqAttacked is run 100.000 times in: " + ms + " miliseconds.")
 	
 }
 

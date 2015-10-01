@@ -29,12 +29,12 @@ function SqFromAlg(moveAlg) {
 function PrintMoveList() {
 	var index;
 	var move;
-	console.log("MoveList:");
+	debuglog("MoveList:");
 	
 	for(index = brd_moveListStart[brd_ply]; index < brd_moveListStart[brd_ply + 1]; ++index) {
 	
 		move = brd_moveList[index];	
-		console.log("Move:" + (index+1) + " > " + PrMove(move));
+		debuglog("Move:" + (index+1) + " > " + PrMove(move));
 		
 	}
 }
@@ -107,7 +107,7 @@ function ParseMove(from, to) {
 	var found = BOOL.FALSE;
 	for(index = brd_moveListStart[brd_ply]; index < brd_moveListStart[brd_ply + 1]; ++index) {	
 		Move = brd_moveList[index];	
-		// console.log ("###" + PrSq(FROMSQ(Move)) + "-" + PrSq(TOSQ(Move)));
+		// debuglog ("###" + PrSq(FROMSQ(Move)) + "-" + PrSq(TOSQ(Move)));
 		if(FROMSQ(Move)==from && TOSQ(Move)==to) {
 			PromPce = PROMOTED(Move);
 			if(PromPce!=PIECES.EMPTY) {

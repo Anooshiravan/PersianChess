@@ -20,17 +20,17 @@
 // ══════════════════════════
 
 function LineMatch(BookLine, gameline) {
-    //console.log("Matching " + gameline + " with " + BookLine + " len = " + gameline.length);
+    //debuglog("Matching " + gameline + " with " + BookLine + " len = " + gameline.length);
     for (var len = 0; len < gameline.length; ++len) {
-        //console.log("Char Matching " + gameline[len] + " with " + BookLine[len]);
-        if (len >= BookLine.length) { /*console.log('no match');*/
+        //debuglog("Char Matching " + gameline[len] + " with " + BookLine[len]);
+        if (len >= BookLine.length) { /*debuglog('no match');*/
             return BOOL.FALSE;
         }
-        if (gameline[len] != BookLine[len]) { /*console.log('no match'); */
+        if (gameline[len] != BookLine[len]) { /*debuglog('no match'); */
             return BOOL.FALSE;
         }
     }
-    //console.log('Match');
+    //debuglog('Match');
     return BOOL.TRUE;
 }
 

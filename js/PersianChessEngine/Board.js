@@ -107,7 +107,7 @@ function CheckBoard() {
         for (t_pce_num = 0; t_pce_num < brd_pceNum[t_piece]; ++t_pce_num) {
             sq195 = brd_pList[PCEINDEX(t_piece, t_pce_num)];
             if (brd_pieces[sq195] != t_piece) {
-                console.log('Error Pce Lists');
+                debuglog('Error Pce Lists');
                 return BOOL.FALSE;
             }
         }
@@ -123,21 +123,21 @@ function CheckBoard() {
 
     for (t_piece = PIECES.wP; t_piece <= PIECES.bK; ++t_piece) {
         if (t_pceNum[t_piece] != brd_pceNum[t_piece]) {
-            console.log('Error t_pceNum');
+            debuglog('Error t_pceNum');
             return BOOL.FALSE;
         }
     }
 
     if (t_material[COLOURS.WHITE] != brd_material[COLOURS.WHITE] || t_material[COLOURS.BLACK] != brd_material[COLOURS.BLACK]) {
-        console.log('Error t_material');
+        debuglog('Error t_material');
         return BOOL.FALSE;
     }
     if (brd_side != COLOURS.WHITE && brd_side != COLOURS.BLACK) {
-        console.log('Error brd_side');
+        debuglog('Error brd_side');
         return BOOL.FALSE;
     }
     if (GeneratePosKey() != brd_posKey) {
-        console.log('Error brd_posKey');
+        debuglog('Error brd_posKey');
         return BOOL.FALSE;
     }
 
@@ -152,7 +152,7 @@ function printGameLine() {
     for (moveNum = 0; moveNum < brd_hisPly; ++moveNum) {
         gameLine += PrMove(brd_history[moveNum].move) + " ";
     }
-    //console.log('Game Line: ' + gameLine);
+    //debuglog('Game Line: ' + gameLine);
     return gameLine.trim();
 }
 
@@ -161,7 +161,7 @@ function PrintPceLists() {
 
     for (piece = PIECES.wP; piece <= PIECES.bK; ++piece) {
         for (pceNum = 0; pceNum < brd_pceNum[piece]; ++pceNum) {
-            console.log("Piece " + PceChar[piece] + " on " + PrSq(brd_pList[PCEINDEX(piece, pceNum)]));
+            debuglog("Piece " + PceChar[piece] + " on " + PrSq(brd_pList[PCEINDEX(piece, pceNum)]));
         }
     }
 
@@ -216,7 +216,7 @@ function PrintBoard() {
 
     var sq, file, rank, piece;
 
-    console.log("\nGame Board:\n");
+    debuglog("\nGame Board:\n");
 
     for (rank = RANKS.RANK_11; rank >= RANKS.RANK_1; rank--) {
         var line = "";
@@ -228,26 +228,26 @@ function PrintBoard() {
             if (piece == SQUARES.OFFBOARD) line += (" * ");
             else line += (" " + PceChar[piece] + " ");
         }
-        console.log(line);
+        debuglog(line);
     }
 
-    console.log("");
+    debuglog("");
     var line = "   ";
     for (file = FILES.FILE_A; file <= FILES.FILE_K; file++) {
         line += (' ' + FileChar.charAt(file) + ' ');
     }
-    console.log(line);
-    console.log("");
-    console.log("side:" + SideChar[brd_side]);
-    console.log("enPas:" + brd_enPas);
+    debuglog(line);
+    debuglog("");
+    debuglog("side:" + SideChar[brd_side]);
+    debuglog("enPas:" + brd_enPas);
     line = "";
     if (brd_castlePerm & CASTLEBIT.WKCA) line += 'K';
     if (brd_castlePerm & CASTLEBIT.WQCA) line += 'Q';
     if (brd_castlePerm & CASTLEBIT.BKCA) line += 'k';
     if (brd_castlePerm & CASTLEBIT.BQCA) line += 'q';
 
-    console.log("castle:" + line);
-    console.log("key:" + brd_posKey.toString(16));
+    debuglog("castle:" + line);
+    debuglog("key:" + brd_posKey.toString(16));
     // PrintPceLists();
 }
 
@@ -376,7 +376,7 @@ function ParseFen(fen) {
             continue;
 
         default:
-            console.log("FEN error \n");
+            debuglog("FEN error \n");
             alert("Invalid FEN string");
             return;
         }
@@ -423,7 +423,7 @@ function ParseFen(fen) {
     if (fen[fenCnt] != '-'  && fen[fenCnt] != undefined) {
         file = fen[fenCnt].charCodeAt() - 'a'.charCodeAt();
         rank = fen[fenCnt + 1].charCodeAt() - '1'.charCodeAt();
-        console.log("fen[fenCnt]:" + fen[fenCnt] + " File:" + file + " Rank:" + rank);
+        debuglog("fen[fenCnt]:" + fen[fenCnt] + " File:" + file + " Rank:" + rank);
         brd_enPas = FR2SQ(file, rank);
     }
 
@@ -532,7 +532,7 @@ function PrintSqAttacked() {
 
     var sq, file, rank, piece;
 
-    console.log("\nAttacked by Black:\n");
+    debuglog("\nAttacked by Black:\n");
 
     for (rank = RANKS.RANK_11; rank >= RANKS.RANK_1; rank--) {
         var line = ((rank + 1) + "  ");
@@ -543,10 +543,10 @@ function PrintSqAttacked() {
             else piece = "-";
             line += (" " + piece + " ");
         }
-        console.log(line);
+        debuglog(line);
     }
 
-    console.log("\nAttacked by White:\n");
+    debuglog("\nAttacked by White:\n");
 
     for (rank = RANKS.RANK_11; rank >= RANKS.RANK_1; rank--) {
         var line = ((rank + 1) + "  ");
@@ -557,7 +557,7 @@ function PrintSqAttacked() {
             else piece = "-";
             line += (" " + piece + " ");
         }
-        console.log(line);
+        debuglog(line);
     }
 }
 
