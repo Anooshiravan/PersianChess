@@ -30,6 +30,7 @@
 
 var START_FEN = "f111111111f/1rnbqksbnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKSBNR1/F111111111F w KQkq - 0 1";
 var variant = "Persian";
+var board_active = true;
 
 
 // start anonymous scope
@@ -1621,7 +1622,7 @@ var variant = "Persian";
             }
 
             // do it!
-            if (action === 'snapback') {
+            if (action === 'snapback' || board_active == false) {
                 snapbackDraggedPiece();
             } else if (action === 'trash') {
                 trashDraggedPiece();
@@ -1717,8 +1718,8 @@ widget.highlight = function() {
             return newPos;
         };
 
-        widget.enabled = function (bool) {
-            cfg.draggable = bool;
+        widget.is_active = function (bool) {
+            board_active = bool;
         }
 
         widget.theme = function (color) {

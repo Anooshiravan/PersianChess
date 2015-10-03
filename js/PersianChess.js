@@ -40,12 +40,15 @@
 // ══════════════════════════
 
 var debug_log = true;
+var debug_to_console = false;
 
 function debuglog (message)
 {
     if (debug_log == true) {
-        console.log ("> GUI: " + message);
-        AppendToConsole("> GUI: " + message);
+        console.log ("> " + message);
+    }
+    if (debug_to_console == true) {
+        Append("console", "> " + message);
     }
 }
 
@@ -54,6 +57,7 @@ function debuglog (message)
 // ══════════════════════════
 var theme = "green";
 var brd_history = null;
+var brd_hisPly = 0;
 var current_fen = null;
 
 // ══════════════════════════
@@ -117,6 +121,9 @@ function ProcessEngineMessage(message)
     case "pos":
         ProcessEngineMessage_Pos(msg_body);
         break;
+    case "pgn":
+        ProcessEngineMessage_Pgn(msg_body);
+        break;
     case "fen":
         ProcessEngineMessage_Fen(msg_body);
         break;
@@ -131,6 +138,9 @@ function ProcessEngineMessage(message)
         break;
     case "console":
         ProcessEngineMessage_Console(msg_body);
+        break;
+    case "debug":
+        ProcessEngineMessage_Debug(msg_body);
         break;
     default:
         debuglog ("Message not recognised: " + message)
@@ -204,7 +214,16 @@ function ProcessEngineMessage_Pos(message)
         default:
             break
     }
-    board.enabled(true);
+    from_square = message.split("|")[2].split("-")[0];
+    to_square = message.split("|")[2].split("-")[1];
+    board.highlight(from_square, to_square);
+    board.is_active(true);
+}
+
+// Pgn::
+function ProcessEngineMessage_Pgn(pgn)
+{
+    Append("movelist", pgn);
 }
 
 // Fen::
@@ -233,7 +252,7 @@ function ProcessEngineMessage_Info(info)
     if (info.split("|")[0] == "thinking")
     {
         board.logo("wait");
-        board.enabled(false);
+        board.is_active(false);
     }
 }
 
@@ -245,14 +264,21 @@ function ProcessEngineMessage_Gameover(message)
     var KingSq = message.split("|")[2];
     debuglog ("Gameover: Result:" + Result + " Rule:" + Rule + " KingSq:" + KingSq);
     board.highlight_mate(KingSq);
-    board.enabled(false);
+    board.is_active(false);
 }
 
 // Console::
 function ProcessEngineMessage_Console(message)
 {
+    Append("console", message);
     debuglog ("Print to console: " + message);
 }
+
+function ProcessEngineMessage_Debug(message)
+{
+    debuglog ("Eng_DBG: " + message);
+}
+
 
 
 // ══════════════════════════
@@ -304,14 +330,16 @@ var onBoardPosChange = function(oldPos, newPos) {
 
 var onBoardPieceDrop = function(source, target, piece, newPos, oldPos, orientation) {
     move = source + "-" + target;
-    PersianChessEngine.postMessage("parse::" + move);
-    debuglog ("Message sent to Engine to parse move:" + move);
-    setTimeout(function () {
+    if (board_active) {
+        PersianChessEngine.postMessage("parse::" + move);
+        debuglog ("Message sent to Engine to parse move:" + move);
+        setTimeout(function () {
             if (ParsedMove.split("|")[0] == move) 
             {
                 Engine_MakeMove(ParsedMove.split("|")[1]);
             }
-    }, 100);
+        }, 100);
+    }
 };
 
 function ProcessBoardPosChange(oldPos, newPos)
@@ -325,8 +353,9 @@ function ProcessBoardPosChange(oldPos, newPos)
 //  GUI Functions
 // ══════════════════════════
 
-function SetThinkTime(thinktime)
+function SetThinkTime()
 {
+    var thinktime = $('#ThinkTimeChoice').val();
     var type = thinktime.split("|")[0];
     var value = thinktime.split("|")[1];
 
@@ -334,6 +363,7 @@ function SetThinkTime(thinktime)
         case 's':
             var miliseconds = value * 1000;
             Engine_SetThinkTime(miliseconds);
+            Engine_SetSearchDepth(16);
             break;
         case 'm':
             jPrompt("Please enter the number of seconds for engine to think:", "3", "Engine think time", function(r) {
@@ -343,6 +373,7 @@ function SetThinkTime(thinktime)
                     {
                         var miliseconds = r * 1000;
                         Engine_SetThinkTime(miliseconds);
+                        Engine_SetSearchDepth(16);
                     }
                     else
                     {
@@ -403,12 +434,10 @@ function SetTheme()
 
 function StartNewGame()
 {
+    SetThinkTime();
+    SetVariant();
     PersianChessEngine.postMessage("init::new_game");
-
-    //todo: read gui and set these values
-    Engine_SetThinkTime(3000);
-    Engine_SetSearchDepth(16);
-    Engine_SetVariant('Persian');
+    board.removehighlights();
 }
 
 function FlipBoard()
@@ -438,13 +467,13 @@ function EngineOnOff()
     {
         Engine_TurnOff();
         document.getElementById("engine-button").src = "img/footer/engine_off.png";
-        document.getElementById('movelist').value += "\r\n> Engine is OFF.";
+        Append("console", "Engine is OFF.")
     }
     else
     {
         Engine_TurnOn();
         document.getElementById("engine-button").src = "img/footer/engine.png";
-        document.getElementById('movelist').value += "\r\n> Engine is ON.";
+        Append("console", "Engine is ON.")
     }
 }
 
@@ -468,8 +497,25 @@ function About()
     
 }
 
-function AppendToConsole(message)
-{
-    document.getElementById('movelist').value += "\r\n" + message;
-}
+// ══════════════════════════
+//  Console Functions
+// ══════════════════════════
 
+function Append(id, line)
+{
+    switch(id) {
+        case "movelist":
+            document.getElementById('movelist').value = line;
+            $("#movelist").trigger("change");
+            $('#movelist').scrollTop($('#movelist')[0].scrollHeight);
+            break;
+        case "console":
+            document.getElementById('console').value += "\r\n" + line;
+            $("#console").trigger("change");
+            $('#console').scrollTop($('#console')[0].scrollHeight);
+            break;
+        default:
+            debuglog ("ID is not recognised.")
+            break;
+    }
+}

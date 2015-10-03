@@ -45,11 +45,11 @@ var engine_on = false;
 //  Logging
 // ══════════════════════════
 
-var debug_log = false;
+var debug_log = true;
 
 function debuglog (message)
 {
-    if (debug_log == true) console.log ("> Engine: " + message);
+    if (debug_log == true) postMessage("debug::" + message);
 }
 
 // ══════════════════════════
@@ -65,14 +65,11 @@ importScripts(
   "Book.js",
   "MoveGenerator.js",
   "MoveHandler.js",
-  // "Perft.js",
   "Evaluator.js",
   "PvTable.js",
   "Search.js",
   "Protocol.js",
   "Init.js"
-
-  
 );
 
 // ══════════════════════════
@@ -128,7 +125,7 @@ function ProcessGuiMessage_Init(message)
     case "new_game":
         NewGame();
         var engine_position = BoardToFen().replace(/ .+$/, '');
-        SendMessageToGui("pos", engine_position);
+        SendPosition();
         break;   
     case "turn_on":
         engine_on = true;
@@ -231,7 +228,7 @@ function StartSearch() {
     MakeMove(srch_best);
     if (debug_log) PrintBoard();
     var engine_position = BoardToFen().replace(/ .+$/, '');
-    SendMessageToGui("pos", engine_position+ "|" + brd_side);
+    SendPosition();
     CheckAndSet();
 }
 
@@ -320,11 +317,29 @@ function ClearHistory()
 function SendPosition()
 {
     var engine_position = BoardToFen().replace(/ .+$/, '');
+    var moved = PrSq(FROMSQ(srch_best)) + "-" + PrSq(TOSQ(srch_best));
     SendMessageToGui("pos", engine_position + "|" + brd_side);
+    SendPGN();
 }
 
 function SendGameState()
 {
     SendMessageToGui("fen", BoardToFen());
     SendMessageToGui("history", brd_history);
+}
+
+function SendPGN()
+{
+    var pgn = "";
+    var index;
+    var nl = "";
+    for (index = 0; index < brd_hisPly; ++index) {
+        if (isEven(index)) pgn += ((index / 2) + 1).toString() + ". ";
+        pgn += PrSq(FROMSQ(brd_history[index].move)) + "-" + PrSq(TOSQ(brd_history[index].move));
+        if (isEven(index)) pgn += "  ";
+        if (!isEven(index)) pgn += "\n";
+    }
+    
+    if (!isEven(index)) nl = "\r\n";
+    SendMessageToGui("pgn", pgn)
 }

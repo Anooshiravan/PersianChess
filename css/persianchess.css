@@ -318,7 +318,7 @@ body {
     top: 2px;
     left: 2px;
 }
-.console textarea {
+.gui_container textarea {
     background: transparent;
     color: #ffffff !important;
     padding: 1px;
@@ -332,11 +332,11 @@ body {
     -webkit-overflow-scrolling: touch;
 }
 
-.console textarea:disabled {
+.gui_container textarea:disabled {
   color: #ffffff !important;
 }
 
-.console select {
+.gui_container select {
     background: #121212;
     color: #ffffff;
     padding: 1px;
@@ -344,6 +344,17 @@ body {
     font-family: "Courier New";
     border: 1px solid #777;
     margin-bottom: 10px;
+}
+
+#toggle_console {
+    background: #121212;
+    color: #ffffff;
+    padding: 1px;
+    font-size: 12px;
+    font-family: "Courier New";
+    border: 1px solid #777;
+    margin-bottom: 10px;
+    width: 20px;
 }
 
 #ThinkTimeChoice {

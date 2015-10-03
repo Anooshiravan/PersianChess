@@ -52,9 +52,11 @@
     <img src="img/footer/help.png" id="help-button" title="Help" onclick="Help();">
 </div>
 
-<div id="console" class="console">
+<div id="gui_container" class="gui_container">
 
-<select id="ThinkTimeChoice" onchange="SetThinkTime(this.value);">
+<input id="toggle_console" type="button" value="▼"></input>&nbsp;
+
+<select id="ThinkTimeChoice" onchange="SetThinkTime();">
   <option selected="selected" value="s|3">3 Sec</option>
   <option value="s|5">5 Sec</option>
   <option value="s|10">10 Sec</option>
@@ -73,14 +75,14 @@
   <option value="d|8">Depth:8</option>
 </select>&nbsp;
 
-<select id="VariantChoice" onchange="SetVariant(this.value)">
+<select id="VariantChoice" onchange="SetVariant()">
   <option value="Persian" selected="selected">Persian Princess</option>
   <option value="Citadel">Celtic Citadel</option>
   <option value="ASE">Egyptian Eye</option>
   <option value="Oriental">Oriental Omega</option>
 </select>
 
-<select id="AltFen" onchange="SetTrainingPosition(this.value)">
+<select id="AltFen" onchange="SetTrainingPosition()">
   <option value="0" selected="selected">Def.</option>
   <option value="1">TP-1</option>
   <option value="2">TP-2</option>
@@ -91,12 +93,11 @@
   <option value="7">TP-7</option>
 </select>
 
-
 <textarea name="movelist" id="movelist" disabled="disabled" >
+</textarea>
+
+<textarea name="console" id="console" disabled="disabled" >
 If you like this game, please do not forget to give it a rating and review on Google Play.
-------------------
-> Audio is OFF.
-> Engine is ON.
 </textarea>
 
 <script src="js/PersianChess.js"></script>
@@ -106,6 +107,14 @@ If you like this game, please do not forget to give it a rating and review on Go
 </div>
 
 <script>  
+
+// Toggle movelist/console
+$( "#movelist" ).hide();
+
+$( "#toggle_console" ).click(function() {
+  $( "#console" ).toggle();
+  $( "#movelist" ).toggle();
+});
 
 // Init Chess Board
 var cfg = {
@@ -168,13 +177,19 @@ function screenResize()
         imgResize(imgsize);
         document.getElementById("board").style.float = "left";
         
-        document.getElementById("console").style.float = "left";
-        document.getElementById("console").style.width = (winWidth - winHeight - Math.round(winHeight / 11) - 25) + 'px';
-        document.getElementById("console").style.marginLeft = '15px';
+        document.getElementById("gui_container").style.float = "left";
+        document.getElementById("gui_container").style.width = (winWidth - winHeight - Math.round(winHeight / 11) - 25) + 'px';
+        document.getElementById("gui_container").style.marginLeft = '15px';
+        
         document.getElementById("movelist").size = "200";
         document.getElementById("movelist").style.width = (winWidth - winHeight - Math.round(winHeight / 11) - 35) + 'px';
         document.getElementById("movelist").style.height = winHeight - 50 + 'px';
         document.getElementById("movelist").style.overflowY="scroll";
+
+        document.getElementById("console").size = "200";
+        document.getElementById("console").style.width = (winWidth - winHeight - Math.round(winHeight / 11) - 35) + 'px';
+        document.getElementById("console").style.height = winHeight - 50 + 'px';
+        document.getElementById("console").style.overflowY="scroll";
         
         document.getElementById("side").style.float = "right";
         document.getElementById("side").style.width = imgsize;
@@ -190,13 +205,18 @@ function screenResize()
         imgResize(imgsize);
         document.getElementById("board").style.float = "left";
 
-        document.getElementById("console").style.float = "left";
-        document.getElementById("console").style.width = (winWidth - 10) + 'px';
-        document.getElementById("console").style.marginTop = '10px';
-        document.getElementById("console").style.marginLeft = '0px';
+        document.getElementById("gui_container").style.float = "left";
+        document.getElementById("gui_container").style.width = (winWidth - 10) + 'px';
+        document.getElementById("gui_container").style.marginTop = '10px';
+        document.getElementById("gui_container").style.marginLeft = '0px';
+
         document.getElementById("movelist").size = "200";
         document.getElementById("movelist").style.width = (winWidth - 15) + 'px';
         document.getElementById("movelist").style.height = winHeight - winWidth - Math.round(winWidth / 11) - 50 + 'px';
+
+        document.getElementById("console").size = "200";
+        document.getElementById("console").style.width = (winWidth - 15) + 'px';
+        document.getElementById("console").style.height = winHeight - winWidth - Math.round(winWidth / 11) - 50 + 'px';
 
         document.getElementById("side").style.float = "left";
         document.getElementById("side").style.width = winWidth + 'px';
@@ -216,12 +236,17 @@ function screenResize()
         imgResize(imgsize);
         document.getElementById("board").style.float = "left";
 
-        document.getElementById("console").style.float = "left";
-        document.getElementById("console").style.width = (winWidth - winHeight - Math.round(winHeight / 11) - 25) + 'px';
-        document.getElementById("console").style.marginLeft = '15px';
+        document.getElementById("gui_container").style.float = "left";
+        document.getElementById("gui_container").style.width = (winWidth - winHeight - Math.round(winHeight / 11) - 25) + 'px';
+        document.getElementById("gui_container").style.marginLeft = '15px';
+
         document.getElementById("movelist").size = "200";
         document.getElementById("movelist").style.width = (winWidth - winHeight - Math.round(winHeight / 11) - 35) + 'px';
         document.getElementById("movelist").style.height = winHeight - 45 + 'px';
+
+        document.getElementById("console").size = "200";
+        document.getElementById("console").style.width = (winWidth - winHeight - Math.round(winHeight / 11) - 35) + 'px';
+        document.getElementById("console").style.height = winHeight - 45 + 'px';
 
         document.getElementById("side").style.float = "right";
         document.getElementById("side").style.width = imgsize;
@@ -234,13 +259,17 @@ function screenResize()
         imgResize(imgsize);
         document.getElementById("board").style.float = "left";
 
-        document.getElementById("console").style.float = "left";
-        document.getElementById("console").style.width = (winWidth - 10) + 'px';
-        document.getElementById("console").style.marginTop = '10px';
-        document.getElementById("console").style.marginLeft = '0px';
+        document.getElementById("gui_container").style.float = "left";
+        document.getElementById("gui_container").style.width = (winWidth - 10) + 'px';
+        document.getElementById("gui_container").style.marginTop = '10px';
+        document.getElementById("gui_container").style.marginLeft = '0px';
         document.getElementById("movelist").size = "200";
+
         document.getElementById("movelist").style.width = (winWidth - 15) + 'px';
         document.getElementById("movelist").style.height = winHeight - winWidth - Math.round(winWidth / 11) - 50 + 'px';
+
+        document.getElementById("console").style.width = (winWidth - 15) + 'px';
+        document.getElementById("console").style.height = winHeight - winWidth - Math.round(winWidth / 11) - 50 + 'px';
 
         document.getElementById("side").style.float = "left";
         document.getElementById("side").style.width = winWidth + 'px';

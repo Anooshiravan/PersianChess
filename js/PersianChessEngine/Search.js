@@ -338,8 +338,10 @@ function SearchPosition() {
 
 
     // iterative deepening
-    debuglog ("Starting iterative deepening: srch_depth:" + srch_depth + "srch_time:" + srch_time);
-    SendMessageToGui("debug::Starting iterative deepening: srch_depth:" + srch_depth + "srch_time:" + srch_time);
+    var srch_start_msg = "Engine Max Depth:" + srch_depth + " / Max Time:" + srch_time;
+    debuglog (srch_start_msg);
+    SendMessageToGui("console", "══════════════════════════");
+    SendMessageToGui("console", srch_start_msg);
     for (currentDepth = 1; currentDepth <= srch_depth; ++currentDepth) {
 
         bestScore = AlphaBeta(-INFINITE, INFINITE, currentDepth, BOOL.TRUE);
@@ -354,11 +356,11 @@ function SearchPosition() {
         }
 
         // Print PV line
-        var pvline = ("- Line: ");
-            for (i = 0; i < brd_PvArray.length; i++) { 
+        var pvline = ("Depth " + currentDepth + ": ");
+            for (i = 0; i < currentDepth; i++) { 
             if (brd_PvArray[i] != undefined) pvline += " " + PrMove(brd_PvArray[i]);
         }
-        SendMessageToGui("console", line);
+        debuglog (line);
         SendMessageToGui("console", pvline);
     }
     
@@ -376,11 +378,11 @@ function SearchPosition() {
 
         if (PIECE_NAMES[brd_pieces[TOSQ(srch_best)]] != "EMPTY")
         {
-            if ((srch_best & MFLAGRZ) == 0) SendMessageToGui("console", "capture");
+            if ((srch_best & MFLAGRZ) == 0) SendMessageToGui("info", "capture");
         }
         if ((srch_best & MFLAGRZ) != 0)
         {
-            SendMessageToGui("console", "rendezvous");
+            SendMessageToGui("info", "rendezvous");
         }
     }
     srch_thinking = BOOL.FALSE;
