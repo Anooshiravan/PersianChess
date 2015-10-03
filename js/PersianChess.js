@@ -56,9 +56,12 @@ function debuglog (message)
 //  Game state
 // ══════════════════════════
 var theme = "green";
-var brd_history = null;
-var brd_hisPly = 0;
-var current_fen = null;
+var current_fen = "";
+var pgn = "";
+var engine_move = "";
+var check_square = "";
+var mate_square = "";
+
 
 // ══════════════════════════
 //  Init engine
@@ -126,9 +129,6 @@ function ProcessEngineMessage(message)
         break;
     case "fen":
         ProcessEngineMessage_Fen(msg_body);
-        break;
-    case "history":
-        ProcessEngineMessage_History(msg_body);
         break;
     case "gameover":
         ProcessEngineMessage_Gameover(msg_body);
@@ -214,16 +214,16 @@ function ProcessEngineMessage_Pos(message)
         default:
             break
     }
-    from_square = message.split("|")[2].split("-")[0];
-    to_square = message.split("|")[2].split("-")[1];
-    board.highlight(from_square, to_square);
     board.is_active(true);
 }
 
 // Pgn::
-function ProcessEngineMessage_Pgn(pgn)
+function ProcessEngineMessage_Pgn(engine_pgn)
 {
-    Append("movelist", pgn);
+    debuglog ("Updating pgn: " + engine_pgn);
+    pgn = engine_pgn;
+    UpdateMoveList();
+    UpdateBoardHighlight();
 }
 
 // Fen::
@@ -233,13 +233,6 @@ function ProcessEngineMessage_Fen(fen)
     current_fen = fen;
 }
 
-// History::
-function ProcessEngineMessage_History(history)
-{
-    debuglog ("Updating brd_history.");
-    brd_history = history;
-}
-
 // Info::
 function ProcessEngineMessage_Info(info)
 {
@@ -247,7 +240,11 @@ function ProcessEngineMessage_Info(info)
     if (info.split("|")[0] == "check")
     {
         var KingSq = info.split("|")[1];
-        board.highlight_check(KingSq);
+        check_square = KingSq;
+    }
+    else
+    {
+        check_square = "";
     }
     if (info.split("|")[0] == "thinking")
     {
@@ -263,7 +260,7 @@ function ProcessEngineMessage_Gameover(message)
     var Rule = message.split("|")[1];
     var KingSq = message.split("|")[2];
     debuglog ("Gameover: Result:" + Result + " Rule:" + Rule + " KingSq:" + KingSq);
-    board.highlight_mate(KingSq);
+    mate_square = KingSq;
     board.is_active(false);
 }
 
@@ -450,14 +447,17 @@ function FlipBoard()
     }
 }
 
-function MoveBack()
+function TakeBack()
 {
-
+    PersianChessEngine.postMessage("do::takeback");
+    mate_square = "";
+    check_square = "";
+    board.removehighlights();
 }
 
 function MoveForward()
 {
-
+    PersianChessEngine.postMessage("do::forward");
 }
 
 function EngineOnOff()
@@ -501,6 +501,11 @@ function About()
 //  Console Functions
 // ══════════════════════════
 
+function isEven(n) {
+    n = Number(n);
+    return n === 0 || !! (n && !(n % 2));
+}
+
 function Append(id, line)
 {
     switch(id) {
@@ -518,4 +523,25 @@ function Append(id, line)
             debuglog ("ID is not recognised.")
             break;
     }
+}
+
+function UpdateMoveList()
+{
+    var movelist = "";
+    pgn_array = pgn.split(" ");
+    for (index = 0; index < pgn_array.length - 1; ++index) {
+        if (isEven(index)) movelist += ((index / 2) + 1).toString() + ". ";
+        movelist += pgn_array[index];
+        if (isEven(index)) movelist += "  ";
+        if (!isEven(index)) movelist += "\n";
+        if (index == pgn_array.length - 2) engine_move = pgn_array[index];
+    }
+    Append("movelist", movelist);
+}
+
+function UpdateBoardHighlight()
+{
+    board.highlight(engine_move.split("-")[0], engine_move.split("-")[1])
+    if (check_square != "") board.highlight_check(check_square);
+    if (mate_square != "") board.highlight_mate (mate_square);
 }

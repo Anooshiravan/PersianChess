@@ -107,7 +107,6 @@ function ParseMove(from, to) {
 	var found = BOOL.FALSE;
 	for(index = brd_moveListStart[brd_ply]; index < brd_moveListStart[brd_ply + 1]; ++index) {	
 		Move = brd_moveList[index];	
-		// debuglog ("###" + PrSq(FROMSQ(Move)) + "-" + PrSq(TOSQ(Move)));
 		if(FROMSQ(Move)==from && TOSQ(Move)==to) {
 			PromPce = PROMOTED(Move);
 			if(PromPce!=PIECES.EMPTY) {

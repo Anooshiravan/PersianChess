@@ -136,7 +136,7 @@ function ProcessGuiMessage_Init(message)
         SendMessageToGui("init", "engine_is_off");
         break;
     case "go":
-        if (engine_on) Think();
+        if (engine_on) MoveNow();
         break;
     default:
         debuglog ("Init::message not recognised.")
@@ -167,7 +167,7 @@ function ProcessGuiMessage_Move(parsed_move)
     MakeMove(parsed_move);
     if (debug_log) PrintBoard();
     SendPosition();
-    if (engine_on) Think();
+    if (engine_on) MoveNow();
 }
 
 function ProcessGuiMessage_Set(message)
@@ -200,7 +200,29 @@ function ProcessGuiMessage_Do(command)
     case "flip":
         GameController.BoardFlipped ^= 1;
         SendPosition();
-        break;    
+        break;
+    case "takeback":
+        if (brd_hisPly > 0) {
+            TakeMove();
+            brd_ply = 0;
+            if (debug_log) PrintBoard();
+            SendGameState();
+            SendPosition();
+        }  
+        break; 
+    case "forward":
+        var move = brd_history[brd_hisPly].move;
+        if (move != 0 && move != undefined && ParseMove(FROMSQ(move), TOSQ(move)))
+        {
+            MakeMove(move);
+        }
+        else
+        {
+            if (engine_on == true) MoveNow();
+        }
+        SendGameState();
+        SendPosition();
+        break
     default:
         debuglog ("Do::message not recognised.")
         break
@@ -211,7 +233,7 @@ function ProcessGuiMessage_Do(command)
 //  Engine functions
 // ══════════════════════════
 
-function Think()
+function MoveNow()
 {
     debuglog("Starting to think.");
     SendMessageToGui("info", "thinking");
@@ -319,27 +341,21 @@ function SendPosition()
     var engine_position = BoardToFen().replace(/ .+$/, '');
     var moved = PrSq(FROMSQ(srch_best)) + "-" + PrSq(TOSQ(srch_best));
     SendMessageToGui("pos", engine_position + "|" + brd_side);
-    SendPGN();
 }
 
 function SendGameState()
 {
     SendMessageToGui("fen", BoardToFen());
-    SendMessageToGui("history", brd_history);
+    SendMessageToGui("pgn", BoardToPGN());
 }
 
-function SendPGN()
+function BoardToPGN()
 {
     var pgn = "";
     var index;
-    var nl = "";
     for (index = 0; index < brd_hisPly; ++index) {
-        if (isEven(index)) pgn += ((index / 2) + 1).toString() + ". ";
         pgn += PrSq(FROMSQ(brd_history[index].move)) + "-" + PrSq(TOSQ(brd_history[index].move));
-        if (isEven(index)) pgn += "  ";
-        if (!isEven(index)) pgn += "\n";
+        pgn += " ";
     }
-    
-    if (!isEven(index)) nl = "\r\n";
-    SendMessageToGui("pgn", pgn)
+    return pgn;
 }
