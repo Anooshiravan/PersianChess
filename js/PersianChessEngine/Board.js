@@ -437,11 +437,8 @@ function SqAttacked(sq, side) {
     
     if (brd_pieces[sq] == SQUARES.OFFBOARD) return BOOL.FALSE;    
 
-    if (variant == "ASE")
-    {
-        if ($.inArray(sq, ASEDIA) > -1) return BOOL.TRUE;
-    }
-    
+    if (variant == "ASE" && ASEDIA.indexOf(sq) > -1) return BOOL.TRUE;
+     
     if (side == COLOURS.WHITE) {
         if (brd_pieces[sq - 14] == PIECES.wP || brd_pieces[sq - 12] == PIECES.wP) {
             return BOOL.TRUE;

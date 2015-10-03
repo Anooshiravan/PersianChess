@@ -61,6 +61,7 @@ var pgn = "";
 var engine_move = "";
 var check_square = "";
 var mate_square = "";
+var startup = true;
 
 
 // ══════════════════════════
@@ -391,9 +392,9 @@ function SetThinkTime()
     }
 }
 
-function SetVariant()
+function SetVariant(variant)
 {
-
+   Engine_SetVariant(variant);
 }
 
 function SetTrainingPosition()
@@ -431,10 +432,47 @@ function SetTheme()
 
 function StartNewGame()
 {
-    SetThinkTime();
-    SetVariant();
-    PersianChessEngine.postMessage("init::new_game");
-    board.removehighlights();
+    variant = $('#VariantChoice').val();
+    switch(variant) {
+        case "Persian":
+            variantname = "Persian Princess";
+            theme = "green";
+            break;
+        case "ASE":
+            variantname = "Egyptian Eye";
+            theme = "brown";
+            break;
+        case "Citadel":
+            variantname = "Celtic Citadel";
+            theme = "blue";
+            break;
+        case "Oriental":
+            variantname = "Oriental Omega";
+            theme = "oriental";
+            break;
+        default:
+            break;
+        }
+    if (startup == true) {
+        SetThinkTime();
+        SetVariant(variant);
+        PersianChessEngine.postMessage("init::new_game");
+        board.theme(theme);
+        board.removehighlights();
+        startup = false;
+    }
+    else
+    {
+        jConfirm("Do you want to start a new game in <b>\"" + variantname + "\"</b> variant?", "New Game", function(r) {
+            if (r) {
+                SetThinkTime();
+                SetVariant(variant);
+                PersianChessEngine.postMessage("init::new_game");
+                board.theme(theme);
+                board.removehighlights();
+            }
+        });
+    }
 }
 
 function FlipBoard()

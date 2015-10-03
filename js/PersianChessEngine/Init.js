@@ -139,6 +139,7 @@ function NewGame() {
     GameController.PlayerSide = brd_side;
     GameController.GameSaved = BOOL.FALSE;
     SendMessageToGui ("init", "new_game_started");
+    SendPosition();
 }
 
 

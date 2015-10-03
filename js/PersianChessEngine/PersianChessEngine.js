@@ -146,7 +146,7 @@ function ProcessGuiMessage_Init(message)
 
 function ProcessGuiMessage_Parse(move)
 {
-    debuglog ("Begin parsing move: " + move);
+    debuglog ("Begin parsing move: " + move + "in variant " + variant);
     var src = CBSQ2SQ(move.split("-")[0]);
     var dst = CBSQ2SQ(move.split("-")[1]);
     var parsed = ParseMove(src, dst);
@@ -177,16 +177,17 @@ function ProcessGuiMessage_Set(message)
 
     switch(set) {
     case "thinktime":
-        debuglog ("Set srch_time:" + value);
+        debuglog ("Set srch_time: " + value);
         srch_time = value;
         break;    
     case "depth":
-        debuglog ("Set srch_depth:" + value);
+        debuglog ("Set srch_depth: " + value);
         srch_depth = value;
         break; 
     case "variant":
-        debuglog ("Set variant:" + value);
-        variant = value;
+        debuglog ("Set variant: " + value);
+        setVariantDefs(value);
+        NewGame();
         break; 
     default:
         debuglog ("Set::message not recognised.")
