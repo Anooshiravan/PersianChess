@@ -35,6 +35,9 @@
  the author/inventor.
 ════════════════════════════════════════════════════════════════════
 */
+
+var version = "1.4.0";
+
 // ══════════════════════════
 //  Logging
 // ══════════════════════════
@@ -246,11 +249,15 @@ function ProcessEngineMessage_Info(info)
     {
         var KingSq = info.split("|")[1];
         check_square = KingSq;
+        timeout = setTimeout(function(){ PlaySound(check); }, 500);
     }
     else
     {
         check_square = "";
     }
+
+    PlayMoveSound(info);
+    
     if (info == "thinking")
     {
         board.logo("wait");
@@ -271,6 +278,44 @@ function ProcessEngineMessage_Gameover(message)
     debuglog ("Gameover: Result:" + Result + " Rule:" + Rule + " KingSq:" + KingSq);
     mate_square = KingSq;
     board.is_active(false);
+    var msg;
+    var end_game = Result + "|" + Rule;
+    switch(end_game) {
+        case "draw|fifty_move_rule":
+            msg = "Draw: Fifty move rule";
+            GGSound("draw");
+            break;
+        case "draw|3_ford_repetition":
+            msg = "Draw: 3-fold repetition";
+            GGSound("draw");
+            break;
+        case "draw|insufficient_material":
+            msg = "Draw: Insufficient material";
+            GGSound("draw");
+            break;
+        case "draw|citadel_rule":
+            msg = "Draw: Citadel rule";
+            GGSound("draw");
+            break;
+        case "draw|stalemate":
+            msg = "Draw: Stalemate";
+            GGSound("draw");
+            break;
+        case "blackwins|checkmate":
+            msg = "Checkmate! Black wins."
+            GGSound("blackwins");
+            break;
+        case "whitewins|checkmate":
+            msg = "Checkmate! White wins.";
+            GGSound("whitewins");
+            break;
+        default:
+            break;
+        }
+    Append ("movelist", msg);
+    timeout = setTimeout(function(){ 
+        jAlert(msg, 'Game Over');
+    }, 3000);
 }
 
 // Console::
@@ -349,6 +394,7 @@ var onBoardPieceDrop = function(source, target, piece, newPos, oldPos, orientati
             if (ParsedMove.split("|")[0] == move) 
             {
                 Engine_MakeMove(ParsedMove.split("|")[1]);
+                PlayMoveSound(ParsedMove.split("|")[2]);
             }
         }, 100);
     }
@@ -419,7 +465,7 @@ function SetTrainingPosition()
 
 function SetTheme()
 {
-    // PlaySound(click);
+    PlaySound(click);
     switch(theme) {
         case "green":
             theme = 'brown';
@@ -446,6 +492,7 @@ function SetTheme()
 
 function StartNewGame()
 {
+    PlaySound(click);
     variant = $('#VariantChoice').val();
     switch(variant) {
         case "Persian":
@@ -484,6 +531,7 @@ function StartNewGame()
                 PersianChessEngine.postMessage("init::new_game");
                 board.theme(theme);
                 board.removehighlights();
+                timeout = setTimeout(function(){ PlaySound(welcome); }, 500);
             }
         });
     }
@@ -491,7 +539,7 @@ function StartNewGame()
 
 function FlipBoard()
 {
-    // PlaySound(click);
+    PlaySound(click);
     board.flip();
     PersianChessEngine.postMessage("do::flip");
     if (PersianChessEngineOn) {
@@ -501,6 +549,7 @@ function FlipBoard()
 
 function TakeBack()
 {
+    PlaySound(click);
     PersianChessEngine.postMessage("do::takeback");
     mate_square = "";
     check_square = "";
@@ -509,12 +558,13 @@ function TakeBack()
 
 function MoveForward()
 {
+    PlaySound(click);
     PersianChessEngine.postMessage("do::forward");
 }
 
 function EngineOnOff()
 {
-    // PlaySound(click);
+    PlaySound(click);
     if (PersianChessEngineOn)
     {
         Engine_TurnOff();
@@ -529,14 +579,9 @@ function EngineOnOff()
     }
 }
 
-function AudioOnOff()
-{
-
-}
-
 function SetPosition()
 {
-    // PlaySound(click);
+    PlaySound(click);
     var txt;
     jPrompt("Please enter position FEN:", current_fen, "Insert new FEN", function(r) {
     if( r ) 
@@ -549,12 +594,17 @@ function SetPosition()
 
 function SendGameByMail()
 {
+    PlaySound(click);
 
 }
 
 function About()
 {
-    
+    PlaySound(click); 
+    var go2web = "<b>Persian Chess Engine | Version " + version + "</b>\r\n© 2009 - 2015 PersianChess.com\r\n\r\nPersian Chess is invented and programmed by:\r\n<b>Anooshiravan Ahmadi</b>\r\n\r\nClick Ok to go to the website for the detailed game information, or Cancel to return to the game.";
+     jConfirm(go2web, "About", function(r) {
+            if (r) window.open("http://www.persianchess.com/game-rules", "_system", "location=no");
+    });  
 }
 
 // ══════════════════════════
@@ -606,4 +656,46 @@ function UpdateBoardHighlight()
         if (check_square != "") board.highlight_check(check_square);
         if (mate_square != "") board.highlight_mate (mate_square);
     }, 600);
+}
+
+function GGSound(result) {
+    if (result == "draw") {
+        timeout = setTimeout(function(){ PlaySound(draw); }, 500);
+    }
+    else if (result == "whitewins") {
+        timeout = setTimeout(function(){ PlaySound(checkmate); }, 500);
+        timeout = setTimeout(function(){ PlaySound(whitewins); }, 2000);
+    }
+    else if (result == "blackwins") {
+        timeout = setTimeout(function(){ PlaySound(checkmate); }, 500);
+        timeout = setTimeout(function(){ PlaySound(blackwins); }, 2000);
+    }
+    timeout = setTimeout(function(){ PlaySound(gg); }, 3000);
+}
+
+function PlayMoveSound(flag)
+{
+    var delay = 300;
+    switch(flag) {
+        case "quite":
+            setTimeout(function(){ PlaySound(quite_move); }, delay);
+            break;
+        case "en_passant":
+            setTimeout(function(){ PlaySound(capture); }, delay);
+            break;
+        case "castle":
+            setTimeout(function(){ PlaySound(quite_move); }, delay);
+            break;
+        case "rendezvous":
+            setTimeout(function(){ PlaySound(quite_move); }, delay);
+            break;
+        case "capture":
+            setTimeout(function(){ PlaySound(capture); }, delay);
+            break;
+        case "promote":
+            setTimeout(function(){ PlaySound(quite_move); }, delay);
+            break;
+        default:
+            break;
+    }
 }

@@ -28,11 +28,6 @@
  */
 
 
-var START_FEN = "f111111111f/1rnbqksbnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKSBNR1/F111111111F w KQkq - 0 1";
-var variant = "Persian";
-var board_active = true;
-
-
 // start anonymous scope
 ;
 (function () {
@@ -1899,7 +1894,7 @@ widget.highlight = function() {
         //------------------------------------------------------------------------------
 
         var opts = {
-              lines: 8 // The number of lines to draw
+              lines: 12 // The number of lines to draw
             , length: 6 // The length of each line
             , width: 4 // The line thickness
             , radius: 12 // The radius of the inner circle

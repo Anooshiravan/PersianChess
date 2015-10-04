@@ -150,9 +150,18 @@ function ProcessGuiMessage_Parse(move)
     var src = CBSQ2SQ(move.split("-")[0]);
     var dst = CBSQ2SQ(move.split("-")[1]);
     var parsed = ParseMove(src, dst);
+    
     if (parsed != NOMOVE) 
     {
-        SendMessageToGui("parsed", move + "|" + parsed);
+        var msg = move + "|" + parsed;
+        var flag = "|quite";
+        if((parsed & MFLAGEP)   != 0)   flag = "|en_passant"
+        if((parsed & MFLAGCA)   != 0)   flag = "|castle"
+        if((parsed & MFLAGRZ)   != 0)   flag = "|rendezvous"
+        if((parsed & MFLAGCAP)  != 0)   flag = "|capture"
+        if((parsed & MFLAGPROM) != 0)   flag = "|promote"
+        msg += flag;
+        SendMessageToGui("parsed", msg);
     }
     else
     {
@@ -255,6 +264,15 @@ function StartSearch() {
     if (debug_log) PrintBoard();
     var engine_position = BoardToFen().replace(/ .+$/, '');
     SendPosition();
+    
+    // Send move info for move sound
+    var flag = "quite";
+    if((srch_best & MFLAGEP)   != 0)   flag = "|en_passant"
+    if((srch_best & MFLAGCA)   != 0)   flag = "|castle"
+    if((srch_best & MFLAGRZ)   != 0)   flag = "|rendezvous"
+    if((srch_best & MFLAGCAP)  != 0)   flag = "|capture"
+    if((srch_best & MFLAGPROM) != 0)   flag = "|promote"
+    SendMessageToGui("info", flag);
     CheckAndSet();
 }
 
@@ -369,7 +387,6 @@ function SetFen(this_fen)
     var current_fen = BoardToFen();
     if (ParseFen(this_fen))
     {
-        console.log ("######## fen is parsed")
         GameController.PlayerSide = brd_side;
         CheckAndSet();
         EvalPosition();
