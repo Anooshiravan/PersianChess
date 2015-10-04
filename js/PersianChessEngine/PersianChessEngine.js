@@ -221,8 +221,6 @@ function ProcessGuiMessage_Do(command)
         {
             if (engine_on == true) MoveNow();
         }
-        SendGameState();
-        SendPosition();
         break
     default:
         debuglog ("Do::message not recognised.")

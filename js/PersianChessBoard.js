@@ -337,7 +337,6 @@ var board_active = true;
     SQ85LEFTDIA[8] = "j2";
     SQ85LEFTDIA[9] = "no-k1";
     
-
     //------------------------------------------------------------------------------
     // Chess Util Functions
     //------------------------------------------------------------------------------
@@ -1894,55 +1893,58 @@ widget.highlight = function() {
             $('#' + SQUARE_ELS_IDS[square]).addClass(CSS.highlight4)
         };
         
-        widget.wait = function (bool) {
-            var waitsquare;
-            if (CURRENT_ORIENTATION == 'white')
-            {
-                waitsquare = 'f11';
-            }
-            else
-            {
-                waitsquare = 'f1';
-            }
-            
-            $('#' + SQUARE_ELS_IDS[waitsquare]).removeClass(CSS.wait);
-            $('#' + SQUARE_ELS_IDS[waitsquare]).removeClass(CSS.showsidewhite);
-            $('#' + SQUARE_ELS_IDS[waitsquare]).removeClass(CSS.showsideblack);            
 
-            if (bool == true)
-            {
-                thinking = true;
-                $('#' + SQUARE_ELS_IDS[waitsquare]).addClass(CSS.wait);
-            }
-            else
-            {
-                thinking = false;
-                
-            }
-        };
+        //------------------------------------------------------------------------------
+        // Spiner
+        //------------------------------------------------------------------------------
 
+        var opts = {
+              lines: 12 // The number of lines to draw
+            , length: 5 // The length of each line
+            , width: 4 // The line thickness
+            , radius: 15 // The radius of the inner circle
+            , scale: 1 // Scales overall size of the spinner
+            , corners: 0 // Corner roundness (0..1)
+            , color: '#BCBCBC' // #rgb or #rrggbb or array of colors
+            , opacity: 0.10 // Opacity of the lines
+            , rotate: 34 // The rotation offset
+            , direction: 1 // 1: clockwise, -1: counterclockwise
+            , speed: 1.2 // Rounds per second
+            , trail: 74 // Afterglow percentage
+            , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+            , zIndex: 2e9 // The z-index (defaults to 2000000000)
+            , className: 'spinner' // The CSS class to assign to the spinner
+            , top: '50%' // Top position relative to parent
+            , left: '50%' // Left position relative to parent
+            , shadow: false // Whether to render a shadow
+            , hwaccel: false // Whether to use hardware acceleration
+            , position: 'absolute' // Element positioning
+            }
+
+        var spinner = new Spinner(opts);
 
         widget.logo = function (logo)
         {
             var logo_square;
             if (CURRENT_ORIENTATION == 'white') logo_square = 'f11';
             else logo_square = 'f1';
-
+            var target = document.getElementById(SQUARE_ELS_IDS[logo_square]);
+              
             switch(logo) {
                 case "white_to_move":
-                    $('#' + SQUARE_ELS_IDS[logo_square]).removeClass(CSS.wait);
+                    spinner.stop();
                     $('#' + SQUARE_ELS_IDS[logo_square]).removeClass(CSS.showsideblack);  
                     $('#' + SQUARE_ELS_IDS[logo_square]).addClass(CSS.showsidewhite);
                     break;
                 case "black_to_move":
-                    $('#' + SQUARE_ELS_IDS[logo_square]).removeClass(CSS.wait);
+                    spinner.stop();
                     $('#' + SQUARE_ELS_IDS[logo_square]).removeClass(CSS.showsidewhite);  
                     $('#' + SQUARE_ELS_IDS[logo_square]).addClass(CSS.showsideblack);
                     break;
                 case "wait":
-                    $('#' + SQUARE_ELS_IDS[logo_square]).removeClass(CSS.showsidewhite);
-                    $('#' + SQUARE_ELS_IDS[logo_square]).removeClass(CSS.showsideblack);  
-                    $('#' + SQUARE_ELS_IDS[logo_square]).addClass(CSS.wait);
+                    // $('#' + SQUARE_ELS_IDS[logo_square]).removeClass(CSS.showsidewhite);
+                    // $('#' + SQUARE_ELS_IDS[logo_square]).removeClass(CSS.showsideblack);  
+                    spinner.spin(target);
                     break;
                 default:
                     break
