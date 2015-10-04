@@ -48,7 +48,7 @@
     <img src="img/footer/play.png" id="play-button" title="Move Now" onclick="MoveForward();">
     <img src="img/footer/engine.png" id="engine-button" title="Start/Stop Engine" onclick="EngineOnOff();">
     <img src="img/footer/audio_off.png" id="audio-button" title="Audio On/Off" onclick="AudioOnOff();">
-    <img src="img/footer/fen.png" id="fen-button" title="Show/Set FEN" onclick="SetFen();">
+    <img src="img/footer/fen.png" id="fen-button" title="Show/Set FEN" onclick="SetPosition();">
     <img src="img/footer/save.png" id="save-button" title="Save PGN" onclick="SendPGN();">
     <img src="img/footer/help.png" id="help-button" title="Help" onclick="Help();">
 </div>
@@ -197,7 +197,6 @@ function screenResize()
 
 
         board.resize();
-        board.wait(false);
       }
       else
       {

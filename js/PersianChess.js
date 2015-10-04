@@ -55,8 +55,11 @@ function debuglog (message)
 // ══════════════════════════
 //  Game state
 // ══════════════════════════
+var START_FEN = "f111111111f/1rnbqksbnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKSBNR1/F111111111F w KQkq - 0 1";
+var variant = "Persian";
+var board_active = true;
 var theme = "green";
-var current_fen = "";
+var current_fen = START_FEN;
 var pgn = "";
 var engine_move = "";
 var check_square = "";
@@ -201,10 +204,11 @@ function ProcessEngineMessage_Pos(message)
     else
     {
         debuglog ("Updating GUI position...");
-        board.position(engine_position);
+        setTimeout(function () {
+            board.position(engine_position);
+        }, 300);
     }
     var board_side = message.split("|")[1];
-
     switch(board_side) {
         case '0':
             board.logo ("white_to_move");
@@ -247,10 +251,14 @@ function ProcessEngineMessage_Info(info)
     {
         check_square = "";
     }
-    if (info.split("|")[0] == "thinking")
+    if (info == "thinking")
     {
         board.logo("wait");
         board.is_active(false);
+    }
+    if (info == "invalid_fen")
+    {
+        jAlert("Fen string is invalid.", "Error")
     }
 }
 
@@ -317,6 +325,12 @@ function ProcessEngineMessage_Debug(message)
         debuglog("Setting Engine max depth to: " + depth);
         PersianChessEngine.postMessage("set::depth|" + depth);
     }
+    function Engine_SetFen(fen)
+    {
+        debuglog("Setting Engine FEN to: " + fen);
+        PersianChessEngine.postMessage("set::fen|" + fen);
+    }
+
 
 // ══════════════════════════
 //  Board Event processing
@@ -520,9 +534,17 @@ function AudioOnOff()
 
 }
 
-function SetPositionFen()
+function SetPosition()
 {
-
+    // PlaySound(click);
+    var txt;
+    jPrompt("Please enter position FEN:", current_fen, "Insert new FEN", function(r) {
+    if( r ) 
+        {
+            var new_fen = r;
+            Engine_SetFen(new_fen);
+        }
+    });
 }
 
 function SendGameByMail()
@@ -579,7 +601,9 @@ function UpdateMoveList()
 
 function UpdateBoardHighlight()
 {
-    board.highlight(engine_move.split("-")[0], engine_move.split("-")[1])
-    if (check_square != "") board.highlight_check(check_square);
-    if (mate_square != "") board.highlight_mate (mate_square);
+    setTimeout(function () {
+        board.highlight(engine_move.split("-")[0], engine_move.split("-")[1])
+        if (check_square != "") board.highlight_check(check_square);
+        if (mate_square != "") board.highlight_mate (mate_square);
+    }, 600);
 }

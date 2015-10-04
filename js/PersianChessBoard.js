@@ -1899,15 +1899,15 @@ widget.highlight = function() {
         //------------------------------------------------------------------------------
 
         var opts = {
-              lines: 12 // The number of lines to draw
-            , length: 5 // The length of each line
+              lines: 8 // The number of lines to draw
+            , length: 6 // The length of each line
             , width: 4 // The line thickness
-            , radius: 15 // The radius of the inner circle
+            , radius: 12 // The radius of the inner circle
             , scale: 1 // Scales overall size of the spinner
             , corners: 0 // Corner roundness (0..1)
-            , color: '#BCBCBC' // #rgb or #rrggbb or array of colors
+            , color: '#FFFFFF' // #rgb or #rrggbb or array of colors
             , opacity: 0.10 // Opacity of the lines
-            , rotate: 34 // The rotation offset
+            , rotate: 0 // The rotation offset
             , direction: 1 // 1: clockwise, -1: counterclockwise
             , speed: 1.2 // Rounds per second
             , trail: 74 // Afterglow percentage

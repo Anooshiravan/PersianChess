@@ -189,6 +189,10 @@ function ProcessGuiMessage_Set(message)
         setVariantDefs(value);
         NewGame();
         break; 
+    case "fen":
+        debuglog ("Set FEN: " + value);
+        SetFen(value);
+        break; 
     default:
         debuglog ("Set::message not recognised.")
         break
@@ -216,6 +220,7 @@ function ProcessGuiMessage_Do(command)
         if (move != 0 && move != undefined && ParseMove(FROMSQ(move), TOSQ(move)))
         {
             MakeMove(move);
+            SendPosition();
         }
         else
         {
@@ -357,4 +362,23 @@ function BoardToPGN()
         pgn += " ";
     }
     return pgn;
+}
+
+function SetFen(this_fen)
+{
+    var current_fen = BoardToFen();
+    if (ParseFen(this_fen))
+    {
+        console.log ("######## fen is parsed")
+        GameController.PlayerSide = brd_side;
+        CheckAndSet();
+        EvalPosition();
+        SendPosition();
+    }
+    else
+    {
+        SendMessageToGui("info", "invalid_fen");
+        ParseFen(current_fen);
+        SendPosition();
+    }
 }

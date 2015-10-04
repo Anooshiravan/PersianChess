@@ -377,8 +377,7 @@ function ParseFen(fen) {
 
         default:
             debuglog("FEN error \n");
-            alert("Invalid FEN string");
-            return;
+            return false;
         }
 
         for (i = 0; i < count; i++) {
@@ -429,7 +428,9 @@ function ParseFen(fen) {
 
     brd_posKey = GeneratePosKey();
     UpdateListsMaterial();
+    return true;
 }
+
 function SqAttacked(sq, side) {
     var pce;
     var t_sq;
