@@ -531,6 +531,7 @@ function StartNewGame()
                 PersianChessEngine.postMessage("init::new_game");
                 board.theme(theme);
                 board.removehighlights();
+                ClearConsole();
                 timeout = setTimeout(function(){ PlaySound(audio_welcome); }, 500);
             }
         });
@@ -620,26 +621,32 @@ function Append(id, line)
 {
     switch(id) {
         case "movelist":
-            document.getElementById('movelist').value = line;
+            document.getElementById("movelist").value = line;
             $("#movelist").trigger("change");
-            $('#movelist').scrollTop($('#movelist')[0].scrollHeight);
+            $("#movelist").scrollTop($("#movelist")[0].scrollHeight);
             break;
         case "console":
-            if (document.getElementById('console').value.startsWith("If")) 
+            if (document.getElementById("console").value.startsWith("If")) 
             {
-                document.getElementById('console').value = line;
+                document.getElementById("console").value = line;
             }
             else
             {
-                document.getElementById('console').value += "\r\n" + line;
+                document.getElementById("console").value += "\r\n" + line;
             }
             $("#console").trigger("change");
-            $('#console').scrollTop($('#console')[0].scrollHeight);
+            $("#console").scrollTop($("#console")[0].scrollHeight);
             break;
         default:
             debuglog ("ID is not recognised.")
             break;
     }
+}
+
+function ClearConsole()
+{
+    document.getElementById("movelist").value = "";
+    document.getElementById("console").value = "";
 }
 
 function UpdateMoveList()
