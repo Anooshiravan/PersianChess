@@ -249,7 +249,7 @@ function ProcessEngineMessage_Info(info)
     {
         var KingSq = info.split("|")[1];
         check_square = KingSq;
-        timeout = setTimeout(function(){ PlaySound(check); }, 500);
+        timeout = setTimeout(function(){ PlaySound(audio_check); }, 500);
     }
     else
     {
@@ -283,31 +283,31 @@ function ProcessEngineMessage_Gameover(message)
     switch(end_game) {
         case "draw|fifty_move_rule":
             msg = "Draw: Fifty move rule";
-            GGSound("draw");
+            PlayGGSound("draw");
             break;
         case "draw|3_ford_repetition":
             msg = "Draw: 3-fold repetition";
-            GGSound("draw");
+            PlayGGSound("draw");
             break;
         case "draw|insufficient_material":
             msg = "Draw: Insufficient material";
-            GGSound("draw");
+            PlayGGSound("draw");
             break;
         case "draw|citadel_rule":
             msg = "Draw: Citadel rule";
-            GGSound("draw");
+            PlayGGSound("draw");
             break;
         case "draw|stalemate":
             msg = "Draw: Stalemate";
-            GGSound("draw");
+            PlayGGSound("draw");
             break;
         case "blackwins|checkmate":
             msg = "Checkmate! Black wins."
-            GGSound("blackwins");
+            PlayGGSound("blackwins");
             break;
         case "whitewins|checkmate":
             msg = "Checkmate! White wins.";
-            GGSound("whitewins");
+            PlayGGSound("whitewins");
             break;
         default:
             break;
@@ -465,7 +465,7 @@ function SetTrainingPosition()
 
 function SetTheme()
 {
-    PlaySound(click);
+    PlaySound(audio_click);
     switch(theme) {
         case "green":
             theme = 'brown';
@@ -492,7 +492,7 @@ function SetTheme()
 
 function StartNewGame()
 {
-    PlaySound(click);
+    PlaySound(audio_click);
     variant = $('#VariantChoice').val();
     switch(variant) {
         case "Persian":
@@ -531,7 +531,7 @@ function StartNewGame()
                 PersianChessEngine.postMessage("init::new_game");
                 board.theme(theme);
                 board.removehighlights();
-                timeout = setTimeout(function(){ PlaySound(welcome); }, 500);
+                timeout = setTimeout(function(){ PlaySound(audio_welcome); }, 500);
             }
         });
     }
@@ -539,7 +539,7 @@ function StartNewGame()
 
 function FlipBoard()
 {
-    PlaySound(click);
+    PlaySound(audio_click);
     board.flip();
     PersianChessEngine.postMessage("do::flip");
     if (PersianChessEngineOn) {
@@ -549,7 +549,7 @@ function FlipBoard()
 
 function TakeBack()
 {
-    PlaySound(click);
+    PlaySound(audio_click);
     PersianChessEngine.postMessage("do::takeback");
     mate_square = "";
     check_square = "";
@@ -558,13 +558,13 @@ function TakeBack()
 
 function MoveForward()
 {
-    PlaySound(click);
+    PlaySound(audio_click);
     PersianChessEngine.postMessage("do::forward");
 }
 
 function EngineOnOff()
 {
-    PlaySound(click);
+    PlaySound(audio_click);
     if (PersianChessEngineOn)
     {
         Engine_TurnOff();
@@ -581,7 +581,7 @@ function EngineOnOff()
 
 function SetPosition()
 {
-    PlaySound(click);
+    PlaySound(audio_click);
     var txt;
     jPrompt("Please enter position FEN:", current_fen, "Insert new FEN", function(r) {
     if( r ) 
@@ -594,22 +594,22 @@ function SetPosition()
 
 function SendGameByMail()
 {
-    PlaySound(click);
+    PlaySound(audio_click);
 
 }
 
 function About()
 {
-    PlaySound(click); 
+    PlaySound(audio_click); 
     var go2web = "<b>Persian Chess Engine | Version " + version + "</b>\r\n© 2009 - 2015 PersianChess.com\r\n\r\nPersian Chess is invented and programmed by:\r\n<b>Anooshiravan Ahmadi</b>\r\n\r\nClick Ok to go to the website for the detailed game information, or Cancel to return to the game.";
      jConfirm(go2web, "About", function(r) {
             if (r) window.open("http://www.persianchess.com/game-rules", "_system", "location=no");
     });  
 }
 
-// ══════════════════════════
-//  Console Functions
-// ══════════════════════════
+// ══════════════════════════════
+//  Console and Audio Functions
+// ══════════════════════════════
 
 function isEven(n) {
     n = Number(n);
@@ -625,7 +625,14 @@ function Append(id, line)
             $('#movelist').scrollTop($('#movelist')[0].scrollHeight);
             break;
         case "console":
-            document.getElementById('console').value += "\r\n" + line;
+            if (document.getElementById('console').value.startsWith("If")) 
+            {
+                document.getElementById('console').value = line;
+            }
+            else
+            {
+                document.getElementById('console').value += "\r\n" + line;
+            }
             $("#console").trigger("change");
             $('#console').scrollTop($('#console')[0].scrollHeight);
             break;
@@ -658,19 +665,19 @@ function UpdateBoardHighlight()
     }, 600);
 }
 
-function GGSound(result) {
+function PlayGGSound(result) {
     if (result == "draw") {
-        timeout = setTimeout(function(){ PlaySound(draw); }, 500);
+        timeout = setTimeout(function(){ PlaySound(audio_draw); }, 500);
     }
     else if (result == "whitewins") {
-        timeout = setTimeout(function(){ PlaySound(checkmate); }, 500);
-        timeout = setTimeout(function(){ PlaySound(whitewins); }, 2000);
+        timeout = setTimeout(function(){ PlaySound(audio_checkmate); }, 500);
+        timeout = setTimeout(function(){ PlaySound(audio_whitewins); }, 2000);
     }
     else if (result == "blackwins") {
-        timeout = setTimeout(function(){ PlaySound(checkmate); }, 500);
-        timeout = setTimeout(function(){ PlaySound(blackwins); }, 2000);
+        timeout = setTimeout(function(){ PlaySound(audio_checkmate); }, 500);
+        timeout = setTimeout(function(){ PlaySound(audio_blackwins); }, 2000);
     }
-    timeout = setTimeout(function(){ PlaySound(gg); }, 3000);
+    timeout = setTimeout(function(){ PlaySound(audio_gg); }, 3000);
 }
 
 function PlayMoveSound(flag)
@@ -678,22 +685,22 @@ function PlayMoveSound(flag)
     var delay = 300;
     switch(flag) {
         case "quite":
-            setTimeout(function(){ PlaySound(quite_move); }, delay);
+            setTimeout(function(){ PlaySound(audio_move); }, delay);
             break;
         case "en_passant":
-            setTimeout(function(){ PlaySound(capture); }, delay);
+            setTimeout(function(){ PlaySound(audio_capture); }, delay);
             break;
         case "castle":
-            setTimeout(function(){ PlaySound(quite_move); }, delay);
+            setTimeout(function(){ PlaySound(audio_move); }, delay);
             break;
         case "rendezvous":
-            setTimeout(function(){ PlaySound(quite_move); }, delay);
+            setTimeout(function(){ PlaySound(audio_move); }, delay);
             break;
         case "capture":
-            setTimeout(function(){ PlaySound(capture); }, delay);
+            setTimeout(function(){ PlaySound(audio_capture); }, delay);
             break;
         case "promote":
-            setTimeout(function(){ PlaySound(quite_move); }, delay);
+            setTimeout(function(){ PlaySound(audio_move); }, delay);
             break;
         default:
             break;

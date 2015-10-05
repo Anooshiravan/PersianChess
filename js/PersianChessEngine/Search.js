@@ -333,15 +333,20 @@ function SearchPosition() {
     if (bestMove != NOMOVE) {
         srch_best = bestMove;
         srch_thinking = BOOL.FALSE;
+        var console_msg = "Book move: " + PrMove(bestMove);
+        SendMessageToGui("console", console_msg);
         return;
     }
 
-
-    // iterative deepening
-    var srch_start_msg = "Engine Max Depth:" + srch_depth + " / Max Time:" + srch_time;
+    var srch_start_msg;
+    if (srch_time != 2147483647) srch_start_msg =  "Engine time: " + srch_time / 1000 + " seconds";
+    else srch_start_msg = "Engine depth: " + srch_depth;
     debuglog (srch_start_msg);
-    SendMessageToGui("console", "══════════════════════════");
+    SendMessageToGui("console", "———————————————————");
     SendMessageToGui("console", srch_start_msg);
+    
+    // iterative deepening
+
     for (currentDepth = 1; currentDepth <= srch_depth; ++currentDepth) {
 
         bestScore = AlphaBeta(-INFINITE, INFINITE, currentDepth, BOOL.TRUE);

@@ -22,21 +22,21 @@ var lla;
 var lla_loaded = false;
 var audio5js = null;
 
-var welcome = 'audio/welcome.mp3';
-var click = 'audio/click.mp3';
-var quite_move = 'audio/move.mp3';
-var end = 'audio/end.mp3';
-var check = 'audio/check.mp3';
-var capture = 'audio/capture.mp3';
-var checkmate= 'audio/checkmate.mp3';
-var whitewins = 'audio/whitewins.mp3';
-var blackwins = 'audio/blackwins.mp3';
-var draw = 'audio/draw.mp3';
-var gg = 'audio/gg.mp3';
+var audio_welcome = 'audio/welcome.mp3';
+var audio_click = 'audio/click.mp3';
+var audio_move = 'audio/move.mp3';
+var audio_end = 'audio/end.mp3';
+var audio_check = 'audio/check.mp3';
+var audio_capture = 'audio/capture.mp3';
+var audio_checkmate= 'audio/checkmate.mp3';
+var audio_whitewins = 'audio/whitewins.mp3';
+var audio_blackwins = 'audio/blackwins.mp3';
+var audio_draw = 'audio/draw.mp3';
+var audio_gg = 'audio/gg.mp3';
 
 function AudioOnOff()
 {
-    PlaySound(click);
+    PlaySound(audio_click);
     if (audio_on == true)
     {
         audio5js = null;
@@ -61,49 +61,49 @@ function LoadAudio()
         lla_loaded = true;
         
         // preload audio resource
-        lla.preloadFX(welcome, welcome, 1, function(msg){
+        lla.preloadFX(audio_welcome, audio_welcome, 1, function(msg){
         }, function(msg){
-            console.log( 'error: ' + msg );
+            debuglog( 'error: ' + msg );
         });
-        lla.preloadFX(click, click, 1, function(msg){
+        lla.preloadFX(audio_click, audio_click, 1, function(msg){
         }, function(msg){
-            console.log( 'error: ' + msg );
+            debuglog( 'error: ' + msg );
         });
-        lla.preloadFX(move, move, 1, function(msg){
+        lla.preloadFX(audio_move, audio_move, 1, function(msg){
         }, function(msg){
-            console.log( 'error: ' + msg );
+            debuglog( 'error: ' + msg );
         });
-        lla.preloadFX(end, end, function(msg){
+        lla.preloadFX(audio_end, audio_end, function(msg){
         }, function(msg){
-            console.log( 'error: ' + msg );
+            debuglog( 'error: ' + msg );
         });
-        lla.preloadFX(check, check, function(msg){
+        lla.preloadFX(audio_check, audio_check, function(msg){
         }, function(msg){
-            console.log( 'error: ' + msg );
+            debuglog( 'error: ' + msg );
         });
-        lla.preloadFX(capture, capture, function(msg){
+        lla.preloadFX(audio_capture, audio_capture, function(msg){
         }, function(msg){
-            console.log( 'error: ' + msg );
+            debuglog( 'error: ' + msg );
         });
-        lla.preloadFX(checkmate, checkmate, function(msg){
+        lla.preloadFX(audio_checkmate, audio_checkmate, function(msg){
         }, function(msg){
-            console.log( 'error: ' + msg );
+            debuglog( 'error: ' + msg );
         });
-        lla.preloadFX(whitewins, whitewins, function(msg){
+        lla.preloadFX(audio_whitewins, audio_whitewins, function(msg){
         }, function(msg){
-            console.log( 'error: ' + msg );
+            debuglog( 'error: ' + msg );
         });
-        lla.preloadFX(blackwins, blackwins, function(msg){
+        lla.preloadFX(audio_blackwins, audio_blackwins, function(msg){
         }, function(msg){
-            console.log( 'error: ' + msg );
+            debuglog( 'error: ' + msg );
         });
-        lla.preloadFX(draw, draw, function(msg){
+        lla.preloadFX(audio_draw, audio_draw, function(msg){
         }, function(msg){
-            console.log( 'error: ' + msg );
+            debuglog( 'error: ' + msg );
         });
-        lla.preloadFX(gg, gg, function(msg){
+        lla.preloadFX(audio_gg, audio_gg, function(msg){
         }, function(msg){
-            console.log( 'error: ' + msg );
+            debuglog( 'error: ' + msg );
         });
     }
     else

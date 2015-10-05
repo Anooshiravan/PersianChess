@@ -114,9 +114,17 @@ If you like this game, please do not forget to give it a rating and review on Go
 $( "#movelist" ).hide();
 
 $( "#toggle_console" ).click(function() {
-  PlaySound(click);
-  $( "#console" ).toggle();
-  $( "#movelist" ).toggle();
+  
+  PlaySound(audio_click);
+  
+  $("#console" ).toggle();
+  $("#console").trigger("change");
+  $("#console").scrollTop($("#console")[0].scrollHeight);
+  
+  $("#movelist" ).toggle();
+  $("#movelist").trigger("change");
+  $("#movelist").scrollTop($("#movelist")[0].scrollHeight);
+
 });
 
 // Init Chess Board
