@@ -49,6 +49,7 @@ var audio_on = false;
 // Turn on audio for Android, it remains off for browsers until user choose to turn audio on
 if (is_Android())
 {
+    alert ("Android")
     document.getElementById("audio-button").src = "img/footer/audio.png";
     audio_on = true;
 }
@@ -94,7 +95,7 @@ function LoadAudio()
     if( window.plugins && window.plugins.LowLatencyAudio ) {
         lla = window.plugins.LowLatencyAudio;
         lla_loaded = true;
-        
+
         // preload audio resource
         lla.preloadFX(audio_welcome, audio_welcome, 1, function(msg){
         }, function(msg){
@@ -151,21 +152,18 @@ function PlaySound(sound)
 {
     if (audio_on == false) return;
 
-    try {
-        if (lla_loaded == true) 
+    if (lla_loaded == true) 
+        {
+            lla.play(sound);
+        }
+    else
+        {
+            if (audio5js != null)
             {
-                lla.play(sound);
+                audio5js.load(sound);
+                audio5js.play();
             }
-        else
-            {
-                if (audio5js != null)
-                {
-                    audio5js.load(sound);
-                    audio5js.play();
-                }
-            }
-    }
-    catch(e){}
+        }
 }
 
 
