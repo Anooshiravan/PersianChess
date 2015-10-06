@@ -380,15 +380,6 @@ function SearchPosition() {
     {
         // There is no engine error or errors are recovered, continue.
         srch_best = bestMove;
-
-        if (PIECE_NAMES[brd_pieces[TOSQ(srch_best)]] != "EMPTY")
-        {
-            if ((srch_best & MFLAGRZ) == 0) SendMessageToGui("info", "capture");
-        }
-        if ((srch_best & MFLAGRZ) != 0)
-        {
-            SendMessageToGui("info", "rendezvous");
-        }
     }
     srch_thinking = BOOL.FALSE;
     

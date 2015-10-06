@@ -169,6 +169,7 @@ function ProcessEngineMessage_Init(message)
             break;
         case "new_game_started":
             debuglog ("New game started. Turning the Engine on, set the default thinktime, variant and depth.");
+            RestoreGameSettings();
             Engine_TurnOn();
             break;
         case "engine_is_on":
@@ -230,6 +231,7 @@ function ProcessEngineMessage_Pgn(engine_pgn)
 {
     debuglog ("Updating pgn: " + engine_pgn);
     pgn = engine_pgn;
+    Set_LocalStorageValue("pgn", pgn);
     UpdateMoveList();
     UpdateBoardHighlight();
 }
@@ -239,6 +241,7 @@ function ProcessEngineMessage_Fen(fen)
 {
     debuglog ("Updating current_fen: " + fen);
     current_fen = fen;
+    Set_LocalStorageValue("fen", current_fen);
 }
 
 // Info::
@@ -455,6 +458,7 @@ function SetThinkTime()
 function SetVariant(variant)
 {
    Engine_SetVariant(variant);
+   Set_LocalStorageValue("variant", variant);
 }
 
 function SetTrainingPosition()
@@ -487,7 +491,7 @@ function SetTheme()
             break;
         }
     board.theme(theme);
-    board.wait(false);
+    Set_LocalStorageValue("theme", theme);
 }
 
 function StartNewGame()
@@ -532,6 +536,7 @@ function StartNewGame()
                 board.theme(theme);
                 board.removehighlights();
                 ClearConsole();
+                ResetGameSettings();
                 timeout = setTimeout(function(){ PlaySound(audio_welcome); }, 500);
             }
         });
