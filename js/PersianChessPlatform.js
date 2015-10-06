@@ -45,15 +45,6 @@ var platform = Platform();
 // ══════════════════════════
 
 var audio_on = false;
-
-// Turn on audio for Android, it remains off for browsers until user choose to turn audio on
-if (is_Android())
-{
-    alert ("Android")
-    document.getElementById("audio-button").src = "img/footer/audio.png";
-    audio_on = true;
-}
-
 var lla;
 var lla_loaded = false;
 var audio5js = null;
@@ -92,6 +83,12 @@ function AudioOnOff()
 
 function LoadAudio()
 {
+    // Turn on audio for Android, it remains off for browsers until user choose to turn audio on
+    if (is_Android())
+    {
+        document.getElementById("audio-button").src = "img/footer/audio.png";
+        audio_on = true;
+    }
     if( window.plugins && window.plugins.LowLatencyAudio ) {
         lla = window.plugins.LowLatencyAudio;
         lla_loaded = true;
@@ -154,7 +151,6 @@ function PlaySound(sound)
 
     if (lla_loaded == true) 
         {
-            alert ("playing");
             lla.play(sound);
         }
     else
