@@ -154,6 +154,7 @@ function PlaySound(sound)
 
     if (lla_loaded == true) 
         {
+            alert ("playing");
             lla.play(sound);
         }
     else
