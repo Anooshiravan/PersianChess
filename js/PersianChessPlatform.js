@@ -94,7 +94,6 @@ function LoadAudio()
     if( window.plugins && window.plugins.LowLatencyAudio ) {
         lla = window.plugins.LowLatencyAudio;
         lla_loaded = true;
-        alert ("lla loaded.")
         
         // preload audio resource
         lla.preloadFX(audio_welcome, audio_welcome, 1, function(msg){
@@ -150,11 +149,8 @@ function LoadAudio()
 
 function PlaySound(sound)
 {
-    alert ("starting play sound.")
-
     if (audio_on == false) return;
 
-    alert ("trying play sound.")
     try {
         if (lla_loaded == true) 
             {
@@ -169,7 +165,7 @@ function PlaySound(sound)
                 }
             }
     }
-    catch(ex){ alert(ex.message)}
+    catch(e){}
 }
 
 
