@@ -45,7 +45,7 @@ var engine_on = false;
 //  Logging
 // ══════════════════════════
 
-var debug_log = true;
+var debug_log = false;
 
 function debuglog (message)
 {

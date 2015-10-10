@@ -42,7 +42,7 @@ var version = "1.4.0";
 //  Logging
 // ══════════════════════════
 
-var debug_log = true;
+var debug_log = false;
 var debug_to_console = false;
 
 function debuglog (message)
