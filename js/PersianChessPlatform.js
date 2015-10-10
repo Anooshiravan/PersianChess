@@ -96,47 +96,47 @@ function LoadAudio()
         // preload audio resource
         lla.preloadFX(audio_welcome, audio_welcome, 1, function(msg){
         }, function(msg){
-            debuglog( 'error: ' + msg );
+            debuglog( 'error: ' + msg , 2 );
         });
         lla.preloadFX(audio_click, audio_click, 1, function(msg){
         }, function(msg){
-            debuglog( 'error: ' + msg );
+            debuglog( 'error: ' + msg , 3 );
         });
         lla.preloadFX(audio_move, audio_move, 1, function(msg){
         }, function(msg){
-            debuglog( 'error: ' + msg );
+            debuglog( 'error: ' + msg , 3 );
         });
         lla.preloadFX(audio_end, audio_end, function(msg){
         }, function(msg){
-            debuglog( 'error: ' + msg );
+            debuglog( 'error: ' + msg , 3 );
         });
         lla.preloadFX(audio_check, audio_check, function(msg){
         }, function(msg){
-            debuglog( 'error: ' + msg );
+            debuglog( 'error: ' + msg , 3 );
         });
         lla.preloadFX(audio_capture, audio_capture, function(msg){
         }, function(msg){
-            debuglog( 'error: ' + msg );
+            debuglog( 'error: ' + msg , 3 );
         });
         lla.preloadFX(audio_checkmate, audio_checkmate, function(msg){
         }, function(msg){
-            debuglog( 'error: ' + msg );
+            debuglog( 'error: ' + msg , 3 );
         });
         lla.preloadFX(audio_whitewins, audio_whitewins, function(msg){
         }, function(msg){
-            debuglog( 'error: ' + msg );
+            debuglog( 'error: ' + msg , 3 );
         });
         lla.preloadFX(audio_blackwins, audio_blackwins, function(msg){
         }, function(msg){
-            debuglog( 'error: ' + msg );
+            debuglog( 'error: ' + msg , 3 );
         });
         lla.preloadFX(audio_draw, audio_draw, function(msg){
         }, function(msg){
-            debuglog( 'error: ' + msg );
+            debuglog( 'error: ' + msg , 3 );
         });
         lla.preloadFX(audio_gg, audio_gg, function(msg){
         }, function(msg){
-            debuglog( 'error: ' + msg );
+            debuglog( 'error: ' + msg , 3 );
         });
     }
     else

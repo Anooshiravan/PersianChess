@@ -205,6 +205,10 @@ function ProcessGuiMessage_Set(message)
         debuglog ("Set History: " + value);
         SetHistory(value);
         SendPosition();
+        break;
+    case "tp":
+        debuglog ("Set TP: " + value);
+        SetFen(Get_TP_Fen(value));        
         break; 
     default:
         debuglog ("Set::message not recognised.")

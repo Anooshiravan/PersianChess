@@ -42,28 +42,13 @@ var version = "1.4.0";
 //  Logging
 // ══════════════════════════
 
-var debug_log_L1 = true;
-var debug_log_L2 = false;
+var debug_log_level = 3;
 var debug_to_console = false;
 
-function debuglog_L1 (message)
+function debuglog (message, level)
 {
-    if (debug_log_L1 == true) {
-        console.log ("> " + message);
-    }
-    if (debug_to_console == true) {
-        Append("console", "> " + message);
-    }
-}
-
-function debuglog_L2 (message)
-{
-    if (debug_log_L2 == true) {
-        console.log (">> " + message);
-    }
-    if (debug_to_console == true) {
-        Append("console", "> " + message);
-    }
+    if (level <= debug_log_level) console.log ("> " + message);
+    if (debug_to_console) Append("console", "> " + message);
 }
 
 // ══════════════════════════
@@ -93,7 +78,7 @@ var PersianChessEngine;
 
         function StartEngine()
         {
-            debuglog_L1("Starting WebWorker Engine...")
+            debuglog("Starting WebWorker Engine...", 1)
 
             if (!PersianChessEngineValid) {
                 return false;
@@ -107,12 +92,12 @@ var PersianChessEngine;
                         ProcessEngineMessage(e.data)
                     }
                     PersianChessEngine.error = function (e) {
-                        debuglog_L1("Error from WebWorker Engine:" + e.message);
+                        debuglog("Error from WebWorker Engine:" + e.message, 1);
                     }
                     PersianChessEngine.postMessage("init::hello");
                 } catch (error) {
                     PersianChessEngineValid = false;
-                        debuglog_L1("Failed to load the WebWorker Engine." + error);
+                        debuglog("Failed to load the WebWorker Engine." + error, 1);
                 }
             }
             return PersianChessEngineValid;
@@ -127,7 +112,7 @@ function RestartEngine()
     PersianChessEngine = null;
     PersianChessEngineValid = true;
     startup = true;
-    location.reload();
+    StartEngine();
 }
 
 
@@ -187,28 +172,28 @@ function ProcessEngineMessage_Init(message)
 {
     switch(message) {
         case "hi":
-            debuglog_L1 ("Engine connected.");
+            debuglog ("Engine connected.", 1);
             PersianChessEngine.postMessage("init::start_engine");
             break;
         case "engine_started":
-            debuglog_L2 ("Engine started.");
+            debuglog("Engine started.", 2);
             StartNewGame();
             break;
         case "new_game_started":
-            debuglog_L2 ("New game started. Turning the Engine on, set the default thinktime, variant and depth.");
+            debuglog ("New game started. Turning the Engine on, set the default thinktime, variant and depth." , 2);
             RestoreGameSettings();
             Engine_TurnOn();
             break;
         case "engine_is_on":
-            debuglog_L1 ("Engine is on.");
+            debuglog ("Engine is on.", 1);
             PersianChessEngineOn = true;
             break;
         case "engine_is_off":
-            debuglog_L1 ("Engine is off.");
+            debuglog ("Engine is off.", 1);
             PersianChessEngineOn = false;
             break;
         default:
-            debuglog_L1 ("Message not recognised.");
+            debuglog ("Message not recognised.", 1);
             break
     }
 }
@@ -217,7 +202,7 @@ function ProcessEngineMessage_Init(message)
 var ParsedMove = "NOMOVE";
 function ProcessEngineMessage_Parsed(message)
 {
-    debuglog_L2 ("Move parsed by enigne: " + message);
+    debuglog ("Move parsed by enigne: " + message , 2);
     // Move is parsed by enigne 
     ParsedMove = message;
 }
@@ -225,7 +210,7 @@ function ProcessEngineMessage_Parsed(message)
 // Pos::
 function ProcessEngineMessage_Pos(message)
 {
-    debuglog_L1 ("Engine Position received: " + message)
+    debuglog ("Engine Position received: " + message, 1)
     var engine_position = message.split("|")[0];
     setTimeout(function () {
         board.position(engine_position);
@@ -249,7 +234,7 @@ function ProcessEngineMessage_Pos(message)
 // Pgn::
 function ProcessEngineMessage_History(engine_history)
 {
-    debuglog_L2 ("Updating History: " + engine_history);
+    debuglog ("Updating History: " + engine_history , 2);
     Set_LocalStorageValue("history", engine_history);
 
     HistoryToPGN(engine_history);
@@ -267,7 +252,7 @@ function ProcessEngineMessage_BestMove(best_move)
 // Fen::
 function ProcessEngineMessage_Fen(fen)
 {
-    debuglog_L2 ("Updating current_fen: " + fen);
+    debuglog ("Updating current_fen: " + fen , 2);
     current_fen = fen;
     Set_LocalStorageValue("fen", current_fen);
 }
@@ -275,7 +260,7 @@ function ProcessEngineMessage_Fen(fen)
 // Info::
 function ProcessEngineMessage_Info(info)
 {
-    debuglog_L2 ("Info: " + info);
+    debuglog ("Info: " + info , 2);
     if (info.split("|")[0] == "check")
     {
         var KingSq = info.split("|")[1];
@@ -307,7 +292,7 @@ function ProcessEngineMessage_Gameover(message)
     var Result = message.split("|")[0];
     var Rule = message.split("|")[1];
     var KingSq = message.split("|")[2];
-    debuglog_L1 ("Gameover: Result:" + Result + " Rule:" + Rule + " KingSq:" + KingSq);
+    debuglog ("Gameover: Result:" + Result + " Rule:" + Rule + " KingSq:" + KingSq , 1);
     mate_square = KingSq;
     board.is_active(false);
     var msg;
@@ -355,12 +340,12 @@ function ProcessEngineMessage_Gameover(message)
 function ProcessEngineMessage_Console(message)
 {
     Append("console", message);
-    debuglog_L2 ("Print to console: " + message);
+    debuglog ("Print to console: " + message , 2);
 }
 
 function ProcessEngineMessage_Debug(message)
 {
-    debuglog_L1 ("Eng_DBG: " + message);
+    debuglog("Eng_DBG: " + message , 1);
 }
 
 
@@ -370,47 +355,52 @@ function ProcessEngineMessage_Debug(message)
 // ══════════════════════════
     function Engine_MakeMove(ParsedMove)
     {
-        debuglog_L2("Engine to move: " + ParsedMove);
+        debuglog ("Engine to move: " + ParsedMove , 2);
         PersianChessEngine.postMessage("move::" + ParsedMove);
     }
     function Engine_Go()
     {
-        debuglog_L2("Engine to think.");
+        debuglog ("Engine to think." , 2);
         PersianChessEngine.postMessage("init::go");
     }
     function Engine_TurnOn()
     {
-        debuglog_L2("Turn on Engine.");
+        debuglog ("Turn on Engine." , 2);
         PersianChessEngine.postMessage("init::turn_on");
     }
     function Engine_TurnOff()
     {
-        debuglog_L2("Turn off Engine.");
+        debuglog ("Turn off Engine." , 2);
         PersianChessEngine.postMessage("init::turn_off");
     }
     function Engine_SetThinkTime(thinktime)
     {
-        debuglog_L2("Setting Engine think time to: " + thinktime);
+        debuglog ("Setting Engine think time to: " + thinktime , 2);
         PersianChessEngine.postMessage("set::thinktime|" + thinktime);
     }
     function Engine_SetVariant(variant)
     {
-        debuglog_L2("Setting Engine variant to: " + variant);
+        debuglog ("Setting Engine variant to: " + variant , 2);
         PersianChessEngine.postMessage("set::variant|" + variant);
     }
     function Engine_SetSearchDepth(depth)
     {
-        debuglog_L2("Setting Engine max depth to: " + depth);
+        debuglog ("Setting Engine max depth to: " + depth , 2);
         PersianChessEngine.postMessage("set::depth|" + depth);
     }
     function Engine_SetFen(fen)
     {
-        debuglog_L2("Setting Engine FEN to: " + fen);
+        debuglog ("Setting Engine FEN to: " + fen , 2);
         PersianChessEngine.postMessage("set::fen|" + fen);
+    }
+    function Engine_SetTP(tp)
+    {
+        debuglog ("Setting Engine TP to: " + tp , 2);
+        PersianChessEngine.postMessage("set::tp|" + tp);
     }
     function Engine_SetHistory(history)
     {
-        debuglog_L2("Setting Engine History to: " + history);
+        debuglog ("Setting Engine History to: " + history , 2);
         PersianChessEngine.postMessage("set::history|" + history);
     }
 
@@ -427,7 +417,7 @@ var onBoardPieceDrop = function(source, target, piece, newPos, oldPos, orientati
     move = source + "-" + target;
     if (board_active) {
         PersianChessEngine.postMessage("parse::" + move);
-        debuglog_L2 ("Message sent to Engine to parse move:" + move);
+        debuglog ("Message sent to Engine to parse move:" + move , 2);
         setTimeout(function () {
             if (ParsedMove.split("|")[0] == move) 
             {
@@ -504,8 +494,22 @@ function SetVariant(variant)
 
 function SetTrainingPosition()
 {
-
-
+    tp_number = document.getElementById("TP").value;
+    if (tp_number == "0")
+    {
+        StartNewGame();
+    }
+    else
+    {
+        variant = document.getElementById("VariantChoice").value;
+        jConfirm("Do you want to set the position to Training Position #" + tp_number + " ?", "Training Position", function(r) {
+        if (r) 
+            {
+                var tp = "TP_FEN_" + tp_number + "_" + variant;
+                Engine_SetTP(tp);
+            }
+        });
+    }
 }
 
 function SetTheme()
@@ -617,21 +621,23 @@ function EngineOnOff()
     PlaySound(audio_click);
     CheckEngineBusy();
 
-    if (PersianChessEngineOn)
+    if (engine_thinking == false)
     {
-        Engine_TurnOff();
-        document.getElementById("engine-button").src = "img/footer/engine_off.png";
-        Append("console", "Engine is OFF.")
-        PersianChessEngineOn = false;
+        if (PersianChessEngineOn)
+        {
+            Engine_TurnOff();
+            document.getElementById("engine-button").src = "img/footer/engine_off.png";
+            Append("console", "Engine is OFF.")
+            PersianChessEngineOn = false;
+        }
+        else
+        {
+            Engine_TurnOn();
+            document.getElementById("engine-button").src = "img/footer/engine.png";
+            Append("console", "Engine is ON.")
+            PersianChessEngineOn = true;
+        }
     }
-    else
-    {
-        Engine_TurnOn();
-        document.getElementById("engine-button").src = "img/footer/engine.png";
-        Append("console", "Engine is ON.")
-        PersianChessEngineOn = true;
-    }
-    
 }
 
 function CheckEngineBusy()
@@ -663,7 +669,19 @@ function SetPosition()
 function SendGameByMail()
 {
     PlaySound(audio_click);
-
+    var msgsendpgn = "Do you want to send this game as PGN format by email?";
+    jConfirm(msgsendpgn, "Send PGN", function(r) {
+        if (r) 
+            {
+                var emailbody = "";
+                if (document.getElementById('movelist').value != '')
+                {
+                    emailbody = document.getElementById('movelist').value;
+                    emailbody = emailbody.replace(/(?:\r\n|\r|\n)/g, '%0D%0A');
+                    window.open("mailto:?subject=Persian Chess game&body=" + emailbody);
+            }
+        }
+    });
 }
 
 function About()
@@ -706,7 +724,7 @@ function Append(id, line)
             $("#console").scrollTop($("#console")[0].scrollHeight);
             break;
         default:
-            debuglog_L2 ("ID is not recognised.")
+            debuglog ("ID is not recognised." , 2)
             break;
     }
 }

@@ -1969,12 +1969,16 @@ widget.highlight = function() {
         }
 
         function mousedownSquare(e) {
+            
             // do nothing if we're not draggable
             if (cfg.draggable !== true) return;
-            // do nothing if the board is in thinking state
-            if (thinking == true) return;
-
             var square = $(this).attr('data-square');
+            var logo_square;
+
+            if (CURRENT_ORIENTATION == 'white') logo_square = 'f11';
+            else logo_square = 'f1';
+
+            if (square == logo_square) CheckEngineBusy();
 
             // Move by click is not working properly on Android, needs debugging
             // movebyclick(square);
