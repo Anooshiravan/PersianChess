@@ -67,6 +67,7 @@ var pgn = "";
 var engine_move = "";
 var check_square = "";
 var mate_square = "";
+var gameover = false;
 var startup = true;
 
 
@@ -131,8 +132,11 @@ function ProcessEngineMessage(message)
     case "pos":
         ProcessEngineMessage_Pos(msg_body);
         break;
-    case "pgn":
-        ProcessEngineMessage_Pgn(msg_body);
+    case "history":
+        ProcessEngineMessage_History(msg_body);
+        break;
+    case "bestmove":
+        ProcessEngineMessage_BestMove(msg_body);
         break;
     case "fen":
         ProcessEngineMessage_Fen(msg_body);
@@ -227,13 +231,21 @@ function ProcessEngineMessage_Pos(message)
 }
 
 // Pgn::
-function ProcessEngineMessage_Pgn(engine_pgn)
+function ProcessEngineMessage_History(engine_history)
 {
-    debuglog ("Updating pgn: " + engine_pgn);
-    pgn = engine_pgn;
-    Set_LocalStorageValue("pgn", pgn);
-    UpdateMoveList();
+    debuglog ("Updating History: " + engine_history);
+    Set_LocalStorageValue("history", engine_history);
+
+    HistoryToPGN(engine_history);
+
+    UpdateMoveList();    
     UpdateBoardHighlight();
+}
+
+// Pgn::
+function ProcessEngineMessage_BestMove(best_move)
+{
+    if (vs_engine()) PostMoveToForeignEngine(best_move);
 }
 
 // Fen::
@@ -316,6 +328,7 @@ function ProcessEngineMessage_Gameover(message)
             break;
         }
     Append ("movelist", msg);
+    gameover = true;
     timeout = setTimeout(function(){ 
         jAlert(msg, 'Game Over');
     }, 3000);
@@ -377,6 +390,11 @@ function ProcessEngineMessage_Debug(message)
     {
         debuglog("Setting Engine FEN to: " + fen);
         PersianChessEngine.postMessage("set::fen|" + fen);
+    }
+    function Engine_SetHistory(history)
+    {
+        debuglog("Setting Engine History to: " + history);
+        PersianChessEngine.postMessage("set::history|" + history);
     }
 
 
@@ -666,6 +684,16 @@ function UpdateMoveList()
         if (index == pgn_array.length - 2) engine_move = pgn_array[index];
     }
     Append("movelist", movelist);
+}
+
+function HistoryToPGN(history)
+{
+    pgn = "";
+    page = history.split(" ");
+    for (index = 0; index < page.length - 1 ; ++index) {
+        var h_array = page[index].split("/");
+        pgn += h_array[0] + " ";
+    }
 }
 
 function UpdateBoardHighlight()

@@ -38,7 +38,6 @@
 <div>
 <div id="board">
         <script src="js/PersianChessBoard.js"></script>
-        <script src="js/PersianChessPlatform.js"></script>
 </div>
 
 <div id="side">
@@ -103,6 +102,7 @@ If you like this game, please do not forget to give it a rating and review on Go
 </textarea>
 
 <script src="js/PersianChess.js"></script>
+<script src="js/PersianChessPlatform.js"></script>
 
 </div>
 
@@ -140,13 +140,6 @@ var cfg = {
 };
 var board = new ChessBoard(document.getElementById("board"), cfg);  
 board.theme("green");
-
-// Play vs engines in iFrame
-window.onmessage = function(e){
-    if (e.data != '') {
-        playForeignEngineMove(e.data);
-    }
-};
 
 // Capture back button
 document.addEventListener("deviceready", onDeviceReady, false);

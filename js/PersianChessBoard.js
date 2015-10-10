@@ -487,7 +487,6 @@
     // returns false if the obj is not a valid position object
     function objToFen(obj) {
         if (validPositionObject(obj) !== true) {
-            console.log("here");
             return false;
         }
 

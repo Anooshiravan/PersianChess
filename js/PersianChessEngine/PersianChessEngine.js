@@ -146,7 +146,7 @@ function ProcessGuiMessage_Init(message)
 
 function ProcessGuiMessage_Parse(move)
 {
-    debuglog ("Begin parsing move: " + move + "in variant " + variant);
+    debuglog ("Begin parsing move: " + move + " in variant " + variant);
     var src = CBSQ2SQ(move.split("-")[0]);
     var dst = CBSQ2SQ(move.split("-")[1]);
     var parsed = ParseMove(src, dst);
@@ -201,6 +201,10 @@ function ProcessGuiMessage_Set(message)
     case "fen":
         debuglog ("Set FEN: " + value);
         SetFen(value);
+        break;
+    case "history":
+        debuglog ("Set History: " + value);
+        SetHistory(value);
         break; 
     default:
         debuglog ("Set::message not recognised.")
@@ -368,19 +372,44 @@ function SendPosition()
 function SendGameState()
 {
     SendMessageToGui("fen", BoardToFen());
-    SendMessageToGui("pgn", BoardToPGN());
+    if (BoardToHistory().length > 1) SendMessageToGui("history", BoardToHistory());
 }
 
-function BoardToPGN()
+function BoardToHistory()
 {
-    var pgn = "";
+    var history = "";
     var index;
     for (index = 0; index < brd_hisPly; ++index) {
-        pgn += PrSq(FROMSQ(brd_history[index].move)) + "-" + PrSq(TOSQ(brd_history[index].move));
-        pgn += " ";
+        history += PrSq(FROMSQ(brd_history[index].move)) + "-" + PrSq(TOSQ(brd_history[index].move)) + "/" ;
+        history += brd_history[index].move + "/";
+        history += brd_history[index].posKey + "/";
+        history += brd_history[index].fiftyMove + "/";
+        history += brd_history[index].enPas + "/";
+        history += brd_history[index].castlePerm + "/";
+        history += brd_hisPly + "/";
+        history += brd_ply;
+        history += " ";
     }
-    return pgn;
+    return history;
 }
+
+function SetHistory(this_history)
+{
+    page = this_history.split(" ");
+    if (page.length < 2) return;
+
+    for (index = 0; index < page.length - 1 ; ++index) {
+        var h_array = page[index].split("/");
+        brd_history[index].move = h_array[1];
+        brd_history[index].posKey = h_array[2];
+        brd_history[index].fiftyMove = h_array[3];
+        brd_history[index].enPas = h_array[4];
+        brd_history[index].castlePerm = h_array[5];
+        brd_hisPly = h_array[6];
+        brd_ply = h_array[7];
+    }
+}
+
 
 function SetFen(this_fen)
 {

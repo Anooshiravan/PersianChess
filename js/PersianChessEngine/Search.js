@@ -335,6 +335,7 @@ function SearchPosition() {
         srch_thinking = BOOL.FALSE;
         var console_msg = "Book move: " + PrMove(bestMove);
         SendMessageToGui("console", console_msg);
+        SendMessageToGui("bestmove", PrMove(bestMove));
         return;
     }
 
@@ -380,6 +381,7 @@ function SearchPosition() {
     {
         // There is no engine error or errors are recovered, continue.
         srch_best = bestMove;
+        SendMessageToGui("bestmove", PrMove(bestMove));
     }
     srch_thinking = BOOL.FALSE;
     

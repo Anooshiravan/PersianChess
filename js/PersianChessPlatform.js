@@ -38,7 +38,7 @@ function is_Android()
 }
 
 var platform = Platform();
-
+if (is_Android()) debug_log = false;
 
 // ══════════════════════════
 //  Audio
@@ -224,12 +224,110 @@ function Get_LocalStorageValue(name)
 
 function RestoreGameSettings()
 {
+    if (vs_engine()) return;
+    
+    // FEN
     var ls_fen = Get_LocalStorageValue("fen");
     if (ls_fen != undefined && ls_fen != "" && ls_fen != null) Engine_SetFen(ls_fen);
+
+    // PGN
+    var ls_history = Get_LocalStorageValue("history");
+    if (ls_history != undefined && ls_history != "" && ls_history != null) 
+    {
+            Engine_SetHistory(ls_history);
+            HistoryToPGN(ls_history);
+            UpdateMoveList();
+    }
 }
 
 function ResetGameSettings()
 {
     var ls_fen = "";
     Set_LocalStorageValue("fen", ls_fen)
+
+    var ls_history = "";
+    Set_LocalStorageValue("history", ls_history)
+
+}
+
+
+// ══════════════════════════
+//  Engine competition
+// ══════════════════════════
+var this_engine = '';
+
+function vs_engine()
+{
+    try
+    {
+        if (window.self !== window.top)
+        {
+            window.onmessage = function(e){
+                if (e.data != '') {
+                    PlayForeignEngine(e.data);
+                }
+            };
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    catch(ex)
+    {
+        return false;
+    }
+}
+
+function PlayForeignEngine(message)
+{
+    if (gameover) return;
+
+    if (vs_engine()) 
+    {
+        if (message == "request")
+        {
+            window.top.postMessage("fen-" + current_fen, '*');
+            engine = "engine1";
+            return;
+        }
+
+        if (message.startsWith('fen'))
+        {
+            this_fen = message.split('-')[1];
+            Engine_SetFen(this_fen);
+            engine = "engine2";
+            board.theme("blue");
+            return;
+        }
+
+        move = message;
+        if (board_active) {
+            PersianChessEngine.postMessage("parse::" + move);
+            setTimeout(function () {
+                if (ParsedMove.split("|")[0] == move) 
+                {
+                    Engine_MakeMove(ParsedMove.split("|")[1]);
+                    PlayMoveSound(ParsedMove.split("|")[2]);
+                }
+                else
+                {
+                    window.top.postMessage("request", '*');
+                }
+            }, 300);
+        }
+    }
+}
+
+function PostMoveToForeignEngine(this_move)
+{
+    if (this_engine == '') 
+    {
+        window.top.postMessage("engine1-" + this_move, '*');
+    }
+    else
+    {
+        window.top.postMessage(engine + "-" + this_move, '*');   
+    }
 }
