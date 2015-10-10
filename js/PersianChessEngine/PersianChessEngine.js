@@ -45,7 +45,7 @@ var engine_on = false;
 //  Logging
 // ══════════════════════════
 
-var debug_log = false;
+var debug_log = true;
 
 function debuglog (message)
 {
@@ -196,7 +196,6 @@ function ProcessGuiMessage_Set(message)
     case "variant":
         debuglog ("Set variant: " + value);
         setVariantDefs(value);
-        NewGame();
         break; 
     case "fen":
         debuglog ("Set FEN: " + value);
@@ -205,6 +204,7 @@ function ProcessGuiMessage_Set(message)
     case "history":
         debuglog ("Set History: " + value);
         SetHistory(value);
+        SendPosition();
         break; 
     default:
         debuglog ("Set::message not recognised.")
@@ -262,7 +262,8 @@ function MoveNow()
 
 function StartSearch() {
     if (srch_time == undefined || srch_time <= 0) srch_time = 3000;
-    debuglog ("Starting search: srch_depth:" + srch_depth + " srch_time: " + srch_time);
+    if (srch_depth == 0 || srch_depth == undefined) srch_depth = MAXDEPTH;
+    debuglog ("Starting search: srch_depth: " + srch_depth + " srch_time: " + srch_time);
     SearchPosition();
     MakeMove(srch_best);
     if (debug_log) PrintBoard();

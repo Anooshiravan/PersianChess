@@ -238,16 +238,30 @@ function RestoreGameSettings()
             HistoryToPGN(ls_history);
             UpdateMoveList();
     }
+
+    // Variant
+    var ls_variant = Get_LocalStorageValue("variant");
+    if (ls_variant != undefined && ls_variant != "" && ls_variant != null) 
+        {
+            Engine_SetVariant(ls_variant);
+            $('#VariantChoice').val(ls_variant);
+        }
+
+    // ThinkTime
+    var ls_thinktime = Get_LocalStorageValue("thinktime");
+    if (ls_thinktime != undefined && ls_thinktime != "" && ls_thinktime != null) 
+        {
+            $('#ThinkTimeChoice').val(ls_thinktime);
+            SetThinkTime()
+        }
 }
 
 function ResetGameSettings()
 {
-    var ls_fen = "";
-    Set_LocalStorageValue("fen", ls_fen)
-
-    var ls_history = "";
-    Set_LocalStorageValue("history", ls_history)
-
+    Set_LocalStorageValue("fen", "");
+    Set_LocalStorageValue("history", "");
+    Set_LocalStorageValue("variant", "");
+    Set_LocalStorageValue("thinktime", "");
 }
 
 

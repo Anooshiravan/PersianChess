@@ -42,13 +42,24 @@ var version = "1.4.0";
 //  Logging
 // ══════════════════════════
 
-var debug_log = false;
+var debug_log_L1 = true;
+var debug_log_L2 = false;
 var debug_to_console = false;
 
-function debuglog (message)
+function debuglog_L1 (message)
 {
-    if (debug_log == true) {
+    if (debug_log_L1 == true) {
         console.log ("> " + message);
+    }
+    if (debug_to_console == true) {
+        Append("console", "> " + message);
+    }
+}
+
+function debuglog_L2 (message)
+{
+    if (debug_log_L2 == true) {
+        console.log (">> " + message);
     }
     if (debug_to_console == true) {
         Append("console", "> " + message);
@@ -69,6 +80,7 @@ var check_square = "";
 var mate_square = "";
 var gameover = false;
 var startup = true;
+var engine_thinking = false;
 
 
 // ══════════════════════════
@@ -81,7 +93,7 @@ var PersianChessEngine;
 
         function StartEngine()
         {
-            debuglog ("Starting WebWorker Engine...")
+            debuglog_L1("Starting WebWorker Engine...")
 
             if (!PersianChessEngineValid) {
                 return false;
@@ -95,18 +107,29 @@ var PersianChessEngine;
                         ProcessEngineMessage(e.data)
                     }
                     PersianChessEngine.error = function (e) {
-                        debuglog("Error from WebWorker Engine:" + e.message);
+                        debuglog_L1("Error from WebWorker Engine:" + e.message);
                     }
                     PersianChessEngine.postMessage("init::hello");
                 } catch (error) {
                     PersianChessEngineValid = false;
-                        debuglog("Failed to load the WebWorker Engine." + error);
+                        debuglog_L1("Failed to load the WebWorker Engine." + error);
                 }
             }
             return PersianChessEngineValid;
         }
 
 StartEngine();
+
+
+function RestartEngine()
+{
+    PersianChessEngine.terminate();
+    PersianChessEngine = null;
+    PersianChessEngineValid = true;
+    startup = true;
+    location.reload();
+}
+
 
 // ══════════════════════════
 //  Engine Message processing
@@ -164,28 +187,28 @@ function ProcessEngineMessage_Init(message)
 {
     switch(message) {
         case "hi":
-            debuglog ("Engine connected.");
+            debuglog_L1 ("Engine connected.");
             PersianChessEngine.postMessage("init::start_engine");
             break;
         case "engine_started":
-            debuglog ("Engine started.");
+            debuglog_L2 ("Engine started.");
             StartNewGame();
             break;
         case "new_game_started":
-            debuglog ("New game started. Turning the Engine on, set the default thinktime, variant and depth.");
+            debuglog_L2 ("New game started. Turning the Engine on, set the default thinktime, variant and depth.");
             RestoreGameSettings();
             Engine_TurnOn();
             break;
         case "engine_is_on":
-            debuglog ("Engine is on.");
+            debuglog_L1 ("Engine is on.");
             PersianChessEngineOn = true;
             break;
         case "engine_is_off":
-            debuglog ("Engine is off.");
+            debuglog_L1 ("Engine is off.");
             PersianChessEngineOn = false;
             break;
         default:
-            debuglog ("Message not recognised.");
+            debuglog_L1 ("Message not recognised.");
             break
     }
 }
@@ -194,7 +217,7 @@ function ProcessEngineMessage_Init(message)
 var ParsedMove = "NOMOVE";
 function ProcessEngineMessage_Parsed(message)
 {
-    debuglog ("Move parsed by enigne: " + message);
+    debuglog_L2 ("Move parsed by enigne: " + message);
     // Move is parsed by enigne 
     ParsedMove = message;
 }
@@ -202,20 +225,12 @@ function ProcessEngineMessage_Parsed(message)
 // Pos::
 function ProcessEngineMessage_Pos(message)
 {
-    debuglog ("Engine Position received: " + message)
+    debuglog_L1 ("Engine Position received: " + message)
     var engine_position = message.split("|")[0];
-    var gui_position = board.fen();
-    if (engine_position == gui_position) 
-    {
-        debuglog ("Position is up to date.")
-    }
-    else
-    {
-        debuglog ("Updating GUI position...");
-        setTimeout(function () {
-            board.position(engine_position);
-        }, 300);
-    }
+    setTimeout(function () {
+        board.position(engine_position);
+    }, 300);
+    
     var board_side = message.split("|")[1];
     switch(board_side) {
         case '0':
@@ -228,12 +243,13 @@ function ProcessEngineMessage_Pos(message)
             break
     }
     board.is_active(true);
+    engine_thinking = false;
 }
 
 // Pgn::
 function ProcessEngineMessage_History(engine_history)
 {
-    debuglog ("Updating History: " + engine_history);
+    debuglog_L2 ("Updating History: " + engine_history);
     Set_LocalStorageValue("history", engine_history);
 
     HistoryToPGN(engine_history);
@@ -251,7 +267,7 @@ function ProcessEngineMessage_BestMove(best_move)
 // Fen::
 function ProcessEngineMessage_Fen(fen)
 {
-    debuglog ("Updating current_fen: " + fen);
+    debuglog_L2 ("Updating current_fen: " + fen);
     current_fen = fen;
     Set_LocalStorageValue("fen", current_fen);
 }
@@ -259,7 +275,7 @@ function ProcessEngineMessage_Fen(fen)
 // Info::
 function ProcessEngineMessage_Info(info)
 {
-    debuglog ("Info: " + info);
+    debuglog_L2 ("Info: " + info);
     if (info.split("|")[0] == "check")
     {
         var KingSq = info.split("|")[1];
@@ -277,6 +293,7 @@ function ProcessEngineMessage_Info(info)
     {
         board.logo("wait");
         board.is_active(false);
+        engine_thinking = true;
     }
     if (info == "invalid_fen")
     {
@@ -290,7 +307,7 @@ function ProcessEngineMessage_Gameover(message)
     var Result = message.split("|")[0];
     var Rule = message.split("|")[1];
     var KingSq = message.split("|")[2];
-    debuglog ("Gameover: Result:" + Result + " Rule:" + Rule + " KingSq:" + KingSq);
+    debuglog_L1 ("Gameover: Result:" + Result + " Rule:" + Rule + " KingSq:" + KingSq);
     mate_square = KingSq;
     board.is_active(false);
     var msg;
@@ -338,12 +355,12 @@ function ProcessEngineMessage_Gameover(message)
 function ProcessEngineMessage_Console(message)
 {
     Append("console", message);
-    debuglog ("Print to console: " + message);
+    debuglog_L2 ("Print to console: " + message);
 }
 
 function ProcessEngineMessage_Debug(message)
 {
-    debuglog ("Eng_DBG: " + message);
+    debuglog_L1 ("Eng_DBG: " + message);
 }
 
 
@@ -353,47 +370,47 @@ function ProcessEngineMessage_Debug(message)
 // ══════════════════════════
     function Engine_MakeMove(ParsedMove)
     {
-        debuglog("Engine to move: " + ParsedMove);
+        debuglog_L2("Engine to move: " + ParsedMove);
         PersianChessEngine.postMessage("move::" + ParsedMove);
     }
     function Engine_Go()
     {
-        debuglog("Engine to think.");
+        debuglog_L2("Engine to think.");
         PersianChessEngine.postMessage("init::go");
     }
     function Engine_TurnOn()
     {
-        debuglog("Turn on Engine.");
+        debuglog_L2("Turn on Engine.");
         PersianChessEngine.postMessage("init::turn_on");
     }
     function Engine_TurnOff()
     {
-        debuglog("Turn off Engine.");
+        debuglog_L2("Turn off Engine.");
         PersianChessEngine.postMessage("init::turn_off");
     }
     function Engine_SetThinkTime(thinktime)
     {
-        debuglog("Setting Engine think time to: " + thinktime);
+        debuglog_L2("Setting Engine think time to: " + thinktime);
         PersianChessEngine.postMessage("set::thinktime|" + thinktime);
     }
     function Engine_SetVariant(variant)
     {
-        debuglog("Setting Engine variant to: " + variant);
+        debuglog_L2("Setting Engine variant to: " + variant);
         PersianChessEngine.postMessage("set::variant|" + variant);
     }
     function Engine_SetSearchDepth(depth)
     {
-        debuglog("Setting Engine max depth to: " + depth);
+        debuglog_L2("Setting Engine max depth to: " + depth);
         PersianChessEngine.postMessage("set::depth|" + depth);
     }
     function Engine_SetFen(fen)
     {
-        debuglog("Setting Engine FEN to: " + fen);
+        debuglog_L2("Setting Engine FEN to: " + fen);
         PersianChessEngine.postMessage("set::fen|" + fen);
     }
     function Engine_SetHistory(history)
     {
-        debuglog("Setting Engine History to: " + history);
+        debuglog_L2("Setting Engine History to: " + history);
         PersianChessEngine.postMessage("set::history|" + history);
     }
 
@@ -410,7 +427,7 @@ var onBoardPieceDrop = function(source, target, piece, newPos, oldPos, orientati
     move = source + "-" + target;
     if (board_active) {
         PersianChessEngine.postMessage("parse::" + move);
-        debuglog ("Message sent to Engine to parse move:" + move);
+        debuglog_L2 ("Message sent to Engine to parse move:" + move);
         setTimeout(function () {
             if (ParsedMove.split("|")[0] == move) 
             {
@@ -434,9 +451,13 @@ function ProcessBoardPosChange(oldPos, newPos)
 
 function SetThinkTime()
 {
+    if (engine_thinking) return;
+
     var thinktime = $('#ThinkTimeChoice').val();
+    Set_LocalStorageValue("thinktime", thinktime);
     var type = thinktime.split("|")[0];
     var value = thinktime.split("|")[1];
+
 
     switch(type) {
         case 's':
@@ -475,6 +496,8 @@ function SetThinkTime()
 
 function SetVariant(variant)
 {
+   if (engine_thinking) return;
+
    Engine_SetVariant(variant);
    Set_LocalStorageValue("variant", variant);
 }
@@ -537,9 +560,8 @@ function StartNewGame()
             break;
         }
     if (startup == true) {
-        SetThinkTime();
-        SetVariant(variant);
         PersianChessEngine.postMessage("init::new_game");
+        Engine_TurnOn();
         board.theme(theme);
         board.removehighlights();
         startup = false;
@@ -548,8 +570,9 @@ function StartNewGame()
     {
         jConfirm("Do you want to start a new game in <b>\"" + variantname + "\"</b> variant?", "New Game", function(r) {
             if (r) {
+                if (engine_thinking) RestartEngine();
                 SetThinkTime();
-                SetVariant(variant);
+                SetVariant(variant); // SetVariant starts a new game automatically
                 PersianChessEngine.postMessage("init::new_game");
                 board.theme(theme);
                 board.removehighlights();
@@ -566,6 +589,7 @@ function FlipBoard()
     PlaySound(audio_click);
     board.flip();
     PersianChessEngine.postMessage("do::flip");
+    
     if (PersianChessEngineOn) {
         Engine_Go();
     }
@@ -573,6 +597,7 @@ function FlipBoard()
 
 function TakeBack()
 {
+    if (engine_thinking) return;
     PlaySound(audio_click);
     PersianChessEngine.postMessage("do::takeback");
     mate_square = "";
@@ -582,6 +607,7 @@ function TakeBack()
 
 function MoveForward()
 {
+    if (engine_thinking) return;
     PlaySound(audio_click);
     PersianChessEngine.postMessage("do::forward");
 }
@@ -589,18 +615,36 @@ function MoveForward()
 function EngineOnOff()
 {
     PlaySound(audio_click);
+    CheckEngineBusy();
+
     if (PersianChessEngineOn)
     {
         Engine_TurnOff();
         document.getElementById("engine-button").src = "img/footer/engine_off.png";
         Append("console", "Engine is OFF.")
+        PersianChessEngineOn = false;
     }
     else
     {
         Engine_TurnOn();
         document.getElementById("engine-button").src = "img/footer/engine.png";
         Append("console", "Engine is ON.")
+        PersianChessEngineOn = true;
     }
+    
+}
+
+function CheckEngineBusy()
+{
+    if (engine_thinking) {
+        jConfirm("Engine is thinking, do you want to stop it?", "Stop engine", function(r) {
+            if (r) {
+               RestartEngine();
+               return true;
+            }
+        });
+    }
+    return false;
 }
 
 function SetPosition()
@@ -630,6 +674,7 @@ function About()
             if (r) window.open("http://www.persianchess.com/game-rules", "_system", "location=no");
     });  
 }
+
 
 // ══════════════════════════════
 //  Console and Audio Functions
@@ -661,7 +706,7 @@ function Append(id, line)
             $("#console").scrollTop($("#console")[0].scrollHeight);
             break;
         default:
-            debuglog ("ID is not recognised.")
+            debuglog_L2 ("ID is not recognised.")
             break;
     }
 }

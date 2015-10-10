@@ -320,16 +320,13 @@ function AlphaBeta(alpha, beta, depth, DoNull) {
 }
 
 function SearchPosition() {
+          
     var bestMove = NOMOVE;
-    var bestScore = -INFINITE;
-    var currentDepth = 0;
-    var pvNum = 0;
-    var line;
-        
+    var iterativeDepth = srch_depth;
     ClearForSearch();
 
+    // Book move
     bestMove = BookMove();
-
     if (bestMove != NOMOVE) {
         srch_best = bestMove;
         srch_thinking = BOOL.FALSE;
@@ -339,6 +336,7 @@ function SearchPosition() {
         return;
     }
 
+    // Start search
     var srch_start_msg;
     if (srch_time != 2147483647) srch_start_msg =  "Engine time: " + srch_time / 1000 + " seconds";
     else srch_start_msg = "Engine depth: " + srch_depth;
@@ -346,9 +344,78 @@ function SearchPosition() {
     SendMessageToGui("console", "———————————————————");
     SendMessageToGui("console", srch_start_msg);
     
-    // iterative deepening
+    // Iterative deepening in max-depth
+    bestMove = IterativeDeepening(srch_depth);
 
-    for (currentDepth = 1; currentDepth <= srch_depth; ++currentDepth) {
+    // Fail safe level one, search in depth 3
+    if (bestMove == NOMOVE || bestMove == undefined || SanityCheck(bestMove) == BOOL.FALSE) {
+        if (GameController.GameOver == BOOL.FALSE)
+        {
+            SendMessageToGui("console", "> Fail safe L1, Depth 3");
+            engine_error_L1++;
+            FailSafeResetBoard();
+            bestMove = IterativeDeepening(3);
+        }
+    }
+
+    // Fail safe level two, search in depth 1 (just a good legal move)
+    if (bestMove == NOMOVE || bestMove == undefined || SanityCheck(bestMove) == BOOL.FALSE) {
+        if (GameController.GameOver == BOOL.FALSE)
+        {
+            SendMessageToGui("console", "> Fail safe L2: Depth 1");
+            engine_error_L2++;
+            FailSafeResetBoard();
+            bestMove = IterativeDeepening(1);
+        }
+    }
+
+    if (bestMove == NOMOVE || bestMove == undefined || SanityCheck(bestMove) == BOOL.FALSE) {
+        if (GameController.GameOver == BOOL.FALSE)
+        {
+            SendMessageToGui("init", "engine_error");
+            return;
+        }
+    }
+    else 
+    {
+        // There is no engine error or errors are recovered, continue.
+        srch_best = bestMove;
+        SendMessageToGui("bestmove", PrMove(bestMove));
+    }
+    srch_thinking = BOOL.FALSE;
+    
+    ShowErrorMoves();
+    ShowPerformance();
+}
+
+function FailSafeResetBoard()
+{
+        // Backup board
+        fen = BoardToFen();
+        var brd_hisPly_bak = brd_hisPly;
+        var brd_history_bak = brd_history;
+        var brd_history_notes_bak = brd_history_notes;
+        // Reset all
+        init_engine();
+        ResetBoard();
+        ClearForSearch();
+        // Restore board
+        ParseFen(fen);
+        brd_hisPly = brd_hisPly_bak;
+        brd_history = brd_history_bak;
+        brd_history_notes = brd_history_notes_bak;
+}
+
+
+function IterativeDeepening(id_depth)
+{
+    var bestMove = NOMOVE;
+    var bestScore = -INFINITE;
+    var pvNum = 0;
+    var line;
+    var currentDepth = 0;
+
+    for (currentDepth = 1; currentDepth <= id_depth; ++currentDepth) {
 
         bestScore = AlphaBeta(-INFINITE, INFINITE, currentDepth, BOOL.TRUE);
         if (srch_stop == BOOL.TRUE) break;
@@ -369,25 +436,9 @@ function SearchPosition() {
         debuglog (line);
         SendMessageToGui("console", pvline);
     }
-    
-    if (bestMove == NOMOVE || bestMove == undefined || SanityCheck(bestMove) == BOOL.FALSE) {
-        if (GameController.GameOver == BOOL.FLASE)
-        {
-            SendMessageToGui("init", "engine_error");
-            return;
-        }
-    }
-    else 
-    {
-        // There is no engine error or errors are recovered, continue.
-        srch_best = bestMove;
-        SendMessageToGui("bestmove", PrMove(bestMove));
-    }
-    srch_thinking = BOOL.FALSE;
-    
-    ShowErrorMoves();
-    ShowPerformance();
+    return bestMove;
 }
+
 
 function ShowPerformance()
 {
