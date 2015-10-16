@@ -1886,7 +1886,7 @@ widget.highlight = function() {
             removeSquareHighlights();
             $('#' + SQUARE_ELS_IDS[square]).addClass(CSS.highlight4)
         };
-
+        
 
         //------------------------------------------------------------------------------
         // Spiner
@@ -1955,7 +1955,7 @@ widget.highlight = function() {
         //------------------------------------------------------------------------------
 
         function isTouchDevice() {
-            return false; // ('ontouchstart' in document.documentElement);
+            return ('ontouchstart' in document.documentElement);
         }
 
         // reference: http://www.quirksmode.org/js/detect.html
@@ -1967,11 +1967,6 @@ widget.highlight = function() {
         function stopDefault(e) {
             e.preventDefault();
         }
-
-        
-        var f_square = "";
-        var t_square = "";
-        var begin_move = true;
 
         function mousedownSquare(e) {
             
@@ -1988,60 +1983,32 @@ widget.highlight = function() {
             // Move by click is not working properly on Android, needs debugging
             // movebyclick(square);
             
-            
-            if (begin_move == true)
-            {
-                // no piece on this square
-                if (validSquare(square) !== true ||
-                    CURRENT_POSITION.hasOwnProperty(square) !== true) {
-                    return;
-                }
-
-                $('#' + SQUARE_ELS_IDS[square]).addClass(CSS.highlight1);
-                f_square = square;
-                begin_move = false;
+            // no piece on this square
+            if (validSquare(square) !== true ||
+                CURRENT_POSITION.hasOwnProperty(square) !== true) {
+                return;
             }
-            else 
-            {
-                removeSquareHighlights();
-                t_square = square;
-                begin_move = true;
-                boardMoved(f_square, t_square);
-            }            
-           
-            // beginDraggingPiece(square, CURRENT_POSITION[square], e.pageX, e.pageY);
+
+            
+            
+            beginDraggingPiece(square, CURRENT_POSITION[square], e.pageX, e.pageY);
         }
 
         function touchstartSquare(e) {
             // do nothing if we're not draggable
             if (cfg.draggable !== true) return;
+
             var square = $(this).attr('data-square');
-            var logo_square;
 
-            if (CURRENT_ORIENTATION == 'white') logo_square = 'f11';
-            else logo_square = 'f1';
-
-            if (square == logo_square) CheckEngineBusy();
-
-            if (begin_move == true)
-            {
-                // no piece on this square
-                if (validSquare(square) !== true ||
-                    CURRENT_POSITION.hasOwnProperty(square) !== true) {
-                    return;
-                }
-
-                $('#' + SQUARE_ELS_IDS[square]).addClass(CSS.highlight1);
-                f_square = square;
-                begin_move = false;
+            // no piece on this square
+            if (validSquare(square) !== true ||
+                CURRENT_POSITION.hasOwnProperty(square) !== true) {
+                return;
             }
-            else 
-            {
-                removeSquareHighlights();
-                t_square = square;
-                begin_move = true;
-                boardMoved(f_square, t_square);
-            }           
+
+            e = e.originalEvent;
+            beginDraggingPiece(square, CURRENT_POSITION[square],
+                e.changedTouches[0].pageX, e.changedTouches[0].pageY);
         }
 
         function mousedownSparePiece(e) {
@@ -2073,7 +2040,7 @@ widget.highlight = function() {
 
         function touchmoveWindow(e) {
             // do nothing if we are not dragging a piece
-            return;
+            if (DRAGGING_A_PIECE !== true) return;
 
             // prevent screen from scrolling
             e.preventDefault();
@@ -2094,7 +2061,7 @@ widget.highlight = function() {
 
         function touchendWindow(e) {
             // do nothing if we are not dragging a piece
-            return;
+            if (DRAGGING_A_PIECE !== true) return;
 
             // get the location
             var location = isXYOnSquare(e.originalEvent.changedTouches[0].pageX,
