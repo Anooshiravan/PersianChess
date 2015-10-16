@@ -797,8 +797,8 @@ function ProcessBoardPosChange(oldPos, newPos)
 var cfg = {
     draggable: true,
     dropOffBoard: 'snapback', // this is the default
-    moveSpeed: 450,
-    snapbackSpeed: 500,
+    moveSpeed: 100,
+    snapbackSpeed: 100,
     snapSpeed: 100,
     position: 'start',
     onChange: onBoardPosChange,
