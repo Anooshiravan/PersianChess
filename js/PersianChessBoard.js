@@ -2015,18 +2015,37 @@ widget.highlight = function() {
         function touchstartSquare(e) {
             // do nothing if we're not draggable
             if (cfg.draggable !== true) return;
-
             var square = $(this).attr('data-square');
+            var logo_square;
 
-            // no piece on this square
-            if (validSquare(square) !== true ||
-                CURRENT_POSITION.hasOwnProperty(square) !== true) {
-                return;
+            if (CURRENT_ORIENTATION == 'white') logo_square = 'f11';
+            else logo_square = 'f1';
+
+            if (square == logo_square) CheckEngineBusy();
+
+            // Move by click is not working properly on Android, needs debugging
+            // movebyclick(square);
+            
+            
+            if (begin_move == true)
+            {
+                // no piece on this square
+                if (validSquare(square) !== true ||
+                    CURRENT_POSITION.hasOwnProperty(square) !== true) {
+                    return;
+                }
+
+                $('#' + SQUARE_ELS_IDS[square]).addClass(CSS.highlight1);
+                f_square = square;
+                begin_move = false;
             }
-
-            e = e.originalEvent;
-            beginDraggingPiece(square, CURRENT_POSITION[square],
-                e.changedTouches[0].pageX, e.changedTouches[0].pageY);
+            else 
+            {
+                removeSquareHighlights();
+                t_square = square;
+                begin_move = true;
+                boardMoved(f_square, t_square);
+            }           
         }
 
         function mousedownSparePiece(e) {
