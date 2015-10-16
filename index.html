@@ -22,11 +22,10 @@
 <head>
 <meta charset="UTF-8" />
 <title>Play Persian Chess</title>
+<link rel="stylesheet" href="css/jquery.mobile-1.4.5.css" type="text/css" media="all" />
 <link rel='stylesheet' href='css/persianchess.css' type='text/css' media='all' />
-<link rel="stylesheet" href="css/jquery.alerts.css" type="text/css" media="all" />
-  <script src="js/lib/json3.min.js"></script>
   <script src="js/lib/jquery-2.1.4.min.js"></script>
-  <script src="js/lib/jquery.ui.draggable.js" type="text/javascript"></script>
+  <script src="js/lib/jquery.mobile-1.4.5.min.js"></script>
   <script src="js/lib/jquery.alerts.js" type="text/javascript"></script>
   <script src="js/lib/jquery.cookie.js" type="text/javascript"></script>
   <script src="js/lib/audio5.js"></script>
@@ -35,269 +34,106 @@
 </head>
 <body>
 
-<div>
-<div id="board">
-        <script src="js/PersianChessBoard.js"></script>
+<div id="home" data-role="page" data-theme="b">
+  <div role="main" class="ui-content" style="padding: 0px">
+    <div class="ui-grid-a">
+      <div id="board_container" class="ui-block-a" style="background-color: black; padding: 0px; margin: 0px;">
+        <div id="board">
+        </div>
+      </div>
+      <div id="controls_container" class="ui-block-b">
+        <a href="#settings_panel" class="ui-btn ui-btn-inline ui-icon-bars ui-btn-icon-notext"></a>
+        <a href="#newgame_panel" class="ui-btn ui-btn-inline ui-icon-home ui-btn-icon-notext"></a>
+        <a class="ui-btn ui-btn-inline ui-icon-arrow-l ui-btn-icon-notext" onclick="TakeBack();"></a>
+        <a class="ui-btn ui-btn-inline ui-icon-arrow-r ui-btn-icon-notext" onclick="MoveForward();"></a>
+        <a class="ui-btn ui-btn-inline ui-icon-grid ui-btn-icon-notext" onclick="ToggleConsole();"></a>
+      </div>
+      <div id="console_container" class="ui-block-b">
+        <textarea id="movelist" disabled></textarea>
+        <textarea id="console" disabled></textarea>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Settings Panel -->
+  <div data-role="panel" data-position="right" data-display="overlay" id="settings_panel">
+    <div align="center"><img src="img/logo48.png" border=0></div>
+    <hr>
+    <div class="ui-grid-a flipContain">
+      <div class="ui-block-a">
+          <label for="engine_switch">Engine:</label>
+      </div>
+      <div class="ui-block-b">
+          <select name="engine_switch" id="engine_switch" data-role="flipswitch" onchange="EngineOnOff();">
+              <option value="off">Off</option>
+              <option selected="selected" value="on">On</option>
+          </select>
+      </div>
+  </div>
+
+
+    <div>
+      <select data-native-menu="false" id="Theme" onChange="SetTheme(this.value);">
+        <option selected="selected" value="green">Caspian</option>
+        <option value="brown">Pyramid</option>
+        <option value="blue">Atlantic</option>
+        <option value="oriental">Oriental</option>
+      </select>
+    </div>
+    <div>
+      <select data-native-menu="false" id="ThinkTimeChoice" onchange="SetThinkTime();">
+        <option selected="selected" value="s|3">3 Sec</option>
+        <option value="s|5">5 Sec</option>
+        <option value="s|10">10 Sec</option>
+        <option value="s|20">20 Sec</option>
+        <option value="s|30">30 Sec</option>
+        <option value="s|45">45 Sec</option>
+        <option value="s|60">60 Sec</option>
+        <option value="m|.">Enter think time</option>
+        <option value="na|.">---------------</option>
+        <option value="d|2">Depth:2</option>
+        <option value="d|3">Depth:3</option>
+        <option value="d|4">Depth:4</option>
+        <option value="d|5">Depth:5</option>
+        <option value="d|6">Depth:6</option>
+        <option value="d|7">Depth:7</option>
+        <option value="d|8">Depth:8</option>
+      </select>
+     </div>
+
+  </div>
+
+
+  <!-- `New Game Panel -->
+  <div data-role="panel" data-position="right" data-display="overlay" id="newgame_panel">
+    <div align="center"><img src="img/logo48.png" border=0></div>
+    <hr>
+    <div align="center">New Game</div>
+    <div>
+       <select data-native-menu="false" id="VariantChoice">
+          <option value="Persian" selected="selected">Persian Princess</option>
+          <option value="Citadel">Celtic Citadel</option>
+          <option value="ASE">Egyptian Eye</option>
+          <option value="Oriental">Oriental Omega</option>
+       </select>
+    </div>
+    <div>
+       <select data-native-menu="false" id="ColorChoice">
+          <option value="White" selected="selected">Play white</option>
+          <option value="Black">Play black</option>
+       </select>
+    </div>
+    <div>
+      <a data-role="button" data-icon="arrow-r" data-iconpos="right" data-theme="a" onclick="StartNewGame(); return false" rel="external">Start</a>
+    </div>
+
 </div>
 
-<div id="side">
-    <img src="img/footer/brown.png" id="theme-button" onclick="SetTheme();">
-    <img src="img/footer/new.png" id="new-button" title="New Game" onclick="StartNewGame();">
-    <img src="img/footer/flip.png" id="flip-button" title="Flip Board" onclick="FlipBoard();">
-    <img src="img/footer/takeback.png" id="takeback-button" title="Take Back" onclick="TakeBack();">
-    <img src="img/footer/play.png" id="play-button" title="Move Now" onclick="MoveForward();">
-    <img src="img/footer/engine.png" id="engine-button" title="Start/Stop Engine" onclick="EngineOnOff();">
-    <img src="img/footer/audio_off.png" id="audio-button" title="Audio On/Off" onclick="AudioOnOff();">
-    <img src="img/footer/fen.png" id="fen-button" title="Show/Set FEN" onclick="SetPosition();">
-    <img src="img/footer/save.png" id="save-button" title="Save PGN" onclick="SendGameByMail();">
-    <img src="img/footer/help.png" id="help-button" title="Help" onclick="About();">
-</div>
-
-<div id="gui_container" class="gui_container">
-
-<input id="toggle_console" type="button" value="▼"></input>&nbsp;
-
-<select id="ThinkTimeChoice" onchange="SetThinkTime();">
-  <option selected="selected" value="s|3">3 Sec</option>
-  <option value="s|5">5 Sec</option>
-  <option value="s|10">10 Sec</option>
-  <option value="s|20">20 Sec</option>
-  <option value="s|30">30 Sec</option>
-  <option value="s|45">45 Sec</option>
-  <option value="s|60">60 Sec</option>
-  <option value="m|.">Enter think time</option>
-  <option value="na|.">---------------</option>
-  <option value="d|2">Depth:2</option>
-  <option value="d|3">Depth:3</option>
-  <option value="d|4">Depth:4</option>
-  <option value="d|5">Depth:5</option>
-  <option value="d|6">Depth:6</option>
-  <option value="d|7">Depth:7</option>
-  <option value="d|8">Depth:8</option>
-</select>&nbsp;
-
-<select id="VariantChoice" onchange="StartNewGame();">
-  <option value="Persian" selected="selected">Persian Princess</option>
-  <option value="Citadel">Celtic Citadel</option>
-  <option value="ASE">Egyptian Eye</option>
-  <option value="Oriental">Oriental Omega</option>
-</select>
-
-<select id="TP" onchange="SetTrainingPosition()">
-  <option value="0" selected="selected">Def.</option>
-  <option value="1">TP-1</option>
-  <option value="2">TP-2</option>
-  <option value="3">TP-3</option>
-  <option value="4">TP-4</option>
-  <option value="5">TP-5</option>
-  <option value="6">TP-6</option>
-  <option value="7">TP-7</option>
-</select>
-
-<textarea name="movelist" id="movelist" disabled="disabled" >
-</textarea>
-
-<textarea name="console" id="console" disabled="disabled" >
-If you like this game, please do not forget to give it a rating and review on Google Play.
-</textarea>
-
-<script src="js/PersianChess.js"></script>
+<script src="js/PersianChessBoard.js"></script>
 <script src="js/PersianChessPlatform.js"></script>
-
-</div>
-
-</div>
-
-<script>  
-
-// Toggle movelist/console
-$( "#movelist" ).hide();
-
-$( "#toggle_console" ).click(function() {
-  
-  PlaySound(audio_click);
-  
-  $("#console" ).toggle();
-  $("#console").trigger("change");
-  $("#console").scrollTop($("#console")[0].scrollHeight);
-  
-  $("#movelist" ).toggle();
-  $("#movelist").trigger("change");
-  $("#movelist").scrollTop($("#movelist")[0].scrollHeight);
-
-});
-
-// Init Chess Board
-var cfg = {
-    draggable: true,
-    dropOffBoard: 'snapback', // this is the default
-    moveSpeed: 300,
-    snapbackSpeed: 250,
-    snapSpeed: 100,
-    onChange: onBoardPosChange,
-    onDrop: onBoardPieceDrop,
-    position: 'start'
-};
-var board = new ChessBoard(document.getElementById("board"), cfg);  
-board.theme("green");
-
-// Capture back button
-document.addEventListener("deviceready", onDeviceReady, false);
-function onDeviceReady(){
-    document.addEventListener("backbutton", function(e){
-       TakeBack();
-    }, false);
-
-  // Load Audio
-  LoadAudio();
-}
-
-// Sizing the screen
-
-window.addEventListener("touchmove", function(e) {
-    e.preventDefault();
-}, false);
-
-window.onresize = function(event) {
-    screenResize();
-};
-
-screenResize();
-
-//settings
-$.cookie.raw = true;
-//$$ restoreSettings();
-
-function screenResize()
-{
-    var winHeight = $(window).height();
-    var winWidth = $(window).width();
-
-      if (winWidth > winHeight) // Landscape
-      {
-        document.getElementById("board").style.width= winHeight + 4 + 'px';
-        imgsize = (Math.round(winHeight / 11) - 1) + 'px';
-        imgResize(imgsize);
-        document.getElementById("board").style.float = "left";
-        
-        document.getElementById("gui_container").style.float = "left";
-        document.getElementById("gui_container").style.width = (winWidth - winHeight - Math.round(winHeight / 11) - 25) + 'px';
-        document.getElementById("gui_container").style.marginLeft = '15px';
-        
-        document.getElementById("movelist").size = "200";
-        document.getElementById("movelist").style.width = (winWidth - winHeight - Math.round(winHeight / 11) - 35) + 'px';
-        document.getElementById("movelist").style.height = winHeight - 50 + 'px';
-        document.getElementById("movelist").style.overflowY="scroll";
-
-        document.getElementById("console").size = "200";
-        document.getElementById("console").style.width = (winWidth - winHeight - Math.round(winHeight / 11) - 35) + 'px';
-        document.getElementById("console").style.height = winHeight - 50 + 'px';
-        document.getElementById("console").style.overflowY="scroll";
-        
-        document.getElementById("side").style.float = "right";
-        document.getElementById("side").style.width = imgsize;
-
-
-        board.resize();
-      }
-      else
-      {
-        document.getElementById("board").style.width= winWidth + 4 + 'px';
-        imgsize = (Math.round(winWidth / 11) - 1) + 'px';
-        imgResize(imgsize);
-        document.getElementById("board").style.float = "left";
-
-        document.getElementById("gui_container").style.float = "left";
-        document.getElementById("gui_container").style.width = (winWidth - 10) + 'px';
-        document.getElementById("gui_container").style.marginTop = '10px';
-        document.getElementById("gui_container").style.marginLeft = '0px';
-
-        document.getElementById("movelist").size = "200";
-        document.getElementById("movelist").style.width = (winWidth - 15) + 'px';
-        document.getElementById("movelist").style.height = winHeight - winWidth - Math.round(winWidth / 11) - 50 + 'px';
-
-        document.getElementById("console").size = "200";
-        document.getElementById("console").style.width = (winWidth - 15) + 'px';
-        document.getElementById("console").style.height = winHeight - winWidth - Math.round(winWidth / 11) - 50 + 'px';
-
-        document.getElementById("side").style.float = "left";
-        document.getElementById("side").style.width = winWidth + 'px';
-        board.resize();
-    }
-}
-
-
- // Handling orientation 
-  function doOnOrientationChange()
-  {
-    var imgsize;
-      if (winWidth > winHeight)
-      {
-        document.getElementById("board").style.width= winHeight + 4 + 'px';
-        imgsize = (Math.round(winHeight / 11) - 1) + 'px';
-        imgResize(imgsize);
-        document.getElementById("board").style.float = "left";
-
-        document.getElementById("gui_container").style.float = "left";
-        document.getElementById("gui_container").style.width = (winWidth - winHeight - Math.round(winHeight / 11) - 25) + 'px';
-        document.getElementById("gui_container").style.marginLeft = '15px';
-
-        document.getElementById("movelist").size = "200";
-        document.getElementById("movelist").style.width = (winWidth - winHeight - Math.round(winHeight / 11) - 35) + 'px';
-        document.getElementById("movelist").style.height = winHeight - 45 + 'px';
-
-        document.getElementById("console").size = "200";
-        document.getElementById("console").style.width = (winWidth - winHeight - Math.round(winHeight / 11) - 35) + 'px';
-        document.getElementById("console").style.height = winHeight - 45 + 'px';
-
-        document.getElementById("side").style.float = "right";
-        document.getElementById("side").style.width = imgsize;
-        board.resize();
-      }
-      else
-      {
-        document.getElementById("board").style.width= winWidth + 4 + 'px';
-        imgsize = (Math.round(winWidth / 11) - 1) + 'px';
-        imgResize(imgsize);
-        document.getElementById("board").style.float = "left";
-
-        document.getElementById("gui_container").style.float = "left";
-        document.getElementById("gui_container").style.width = (winWidth - 10) + 'px';
-        document.getElementById("gui_container").style.marginTop = '10px';
-        document.getElementById("gui_container").style.marginLeft = '0px';
-        document.getElementById("movelist").size = "200";
-
-        document.getElementById("movelist").style.width = (winWidth - 15) + 'px';
-        document.getElementById("movelist").style.height = winHeight - winWidth - Math.round(winWidth / 11) - 50 + 'px';
-
-        document.getElementById("console").style.width = (winWidth - 15) + 'px';
-        document.getElementById("console").style.height = winHeight - winWidth - Math.round(winWidth / 11) - 50 + 'px';
-
-        document.getElementById("side").style.float = "left";
-        document.getElementById("side").style.width = winWidth + 'px';
-        board.resize();
-      }
-      winWidth = $(window).width();
-      winHeight = $(window).height();
-  }
-  window.addEventListener('orientationchange', doOnOrientationChange);
-
-function imgResize(imgsize)
-{
-        document.getElementById("theme-button").style.height = document.getElementById("theme-button").style.width = 
-        document.getElementById("flip-button").style.height = document.getElementById("flip-button").style.width =
-        document.getElementById("save-button").style.height = document.getElementById("save-button").style.width =
-        document.getElementById("new-button").style.height = document.getElementById("new-button").style.width =
-        document.getElementById("fen-button").style.height = document.getElementById("fen-button").style.width =
-        document.getElementById("engine-button").style.height = document.getElementById("engine-button").style.width =
-        document.getElementById("audio-button").style.height = document.getElementById("audio-button").style.width =
-        document.getElementById("takeback-button").style.height = document.getElementById("takeback-button").style.width =
-        document.getElementById("play-button").style.height = document.getElementById("play-button").style.width =
-        document.getElementById("help-button").style.height = document.getElementById("help-button").style.width =
-        imgsize;
-}
-
-</script>
+<script src="js/PersianChess.js"></script>
 
 </body>
 </html>

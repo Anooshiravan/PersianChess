@@ -42,7 +42,7 @@ var version = "1.4.0";
 //  Logging
 // ══════════════════════════
 
-var debug_log_level = 3;
+var debug_log_level = 1;
 var debug_to_console = false;
 
 function debuglog (message, level)
@@ -66,7 +66,6 @@ var mate_square = "";
 var gameover = false;
 var startup = true;
 var engine_thinking = false;
-
 
 // ══════════════════════════
 //  Init engine
@@ -406,36 +405,6 @@ function ProcessEngineMessage_Debug(message)
 
 
 // ══════════════════════════
-//  Board Event processing
-// ══════════════════════════
-
-var onBoardPosChange = function(oldPos, newPos) {
-    ProcessBoardPosChange(oldPos, newPos);
-};
-
-var onBoardPieceDrop = function(source, target, piece, newPos, oldPos, orientation) {
-    move = source + "-" + target;
-    if (board_active) {
-        PersianChessEngine.postMessage("parse::" + move);
-        debuglog ("Message sent to Engine to parse move:" + move , 2);
-        setTimeout(function () {
-            if (ParsedMove.split("|")[0] == move) 
-            {
-                Engine_MakeMove(ParsedMove.split("|")[1]);
-                PlayMoveSound(ParsedMove.split("|")[2]);
-            }
-        }, 100);
-    }
-};
-
-function ProcessBoardPosChange(oldPos, newPos)
-{
-    // Do nothing
-    // debuglog("Board Position Changed.");
-    // debuglog("New position: " + ChessBoard.objToFen(newPos));
-}
-
-// ══════════════════════════
 //  GUI Functions
 // ══════════════════════════
 
@@ -512,29 +481,9 @@ function SetTrainingPosition()
     }
 }
 
-function SetTheme()
+function SetTheme(theme)
 {
     PlaySound(audio_click);
-    switch(theme) {
-        case "green":
-            theme = 'brown';
-            document.getElementById("theme-button").src = "img/footer/blue.png";
-            break;
-        case "brown":
-            theme = 'blue';
-            document.getElementById("theme-button").src = "img/footer/oriental.png";
-            break;
-        case "blue":
-            theme = 'oriental';
-            document.getElementById("theme-button").src = "img/footer/green.png";
-            break;
-        case "oriental":
-            theme = 'green';
-            document.getElementById("theme-button").src = "img/footer/brown.png";
-            break;
-        default:
-            break;
-        }
     board.theme(theme);
     Set_LocalStorageValue("theme", theme);
 }
@@ -572,19 +521,16 @@ function StartNewGame()
     }
     else
     {
-        jConfirm("Do you want to start a new game in <b>\"" + variantname + "\"</b> variant?", "New Game", function(r) {
-            if (r) {
-                if (engine_thinking) RestartEngine();
-                SetThinkTime();
-                SetVariant(variant); // SetVariant starts a new game automatically
-                PersianChessEngine.postMessage("init::new_game");
-                board.theme(theme);
-                board.removehighlights();
-                ClearConsole();
-                ResetGameSettings();
-                timeout = setTimeout(function(){ PlaySound(audio_welcome); }, 500);
-            }
-        });
+        if (engine_thinking) RestartEngine();
+        SetThinkTime();
+        SetVariant(variant);
+        ResetGameSettings();
+        PersianChessEngine.postMessage("init::new_game");
+        board.theme(theme);
+        board.removehighlights();
+        ClearConsole();
+        $("#newgame_panel").panel("close");
+        timeout = setTimeout(function(){ PlaySound(audio_welcome); }, 500);
     }
 }
 
@@ -595,7 +541,7 @@ function FlipBoard()
     PersianChessEngine.postMessage("do::flip");
     
     if (PersianChessEngineOn) {
-        Engine_Go();
+        // Engine_Go();
     }
 }
 
@@ -623,19 +569,15 @@ function EngineOnOff()
 
     if (engine_thinking == false)
     {
-        if (PersianChessEngineOn)
+        if (document.getElementById("engine_switch").value == "on")
         {
-            Engine_TurnOff();
-            document.getElementById("engine-button").src = "img/footer/engine_off.png";
-            Append("console", "Engine is OFF.")
-            PersianChessEngineOn = false;
+            Engine_TurnOn();
+            PersianChessEngineOn = true;
         }
         else
         {
-            Engine_TurnOn();
-            document.getElementById("engine-button").src = "img/footer/engine.png";
-            Append("console", "Engine is ON.")
-            PersianChessEngineOn = true;
+            Engine_TurnOff();
+            PersianChessEngineOn = false;
         }
     }
 }
@@ -809,3 +751,62 @@ function PlayMoveSound(flag)
             break;
     }
 }
+
+// ══════════════════════════
+//  Board Event processing
+// ══════════════════════════
+
+var onBoardPosChange = function(oldPos, newPos) {
+    ProcessBoardPosChange(oldPos, newPos);
+};
+
+var onBoardPieceDrop = function(source, target, piece, newPos, oldPos, orientation) {
+    move = source + "-" + target;
+    if (board_active) {
+        PersianChessEngine.postMessage("parse::" + move);
+        debuglog ("Message sent to Engine to parse move:" + move , 2);
+        setTimeout(function () {
+            if (ParsedMove.split("|")[0] == move) 
+            {
+                Engine_MakeMove(ParsedMove.split("|")[1]);
+                PlayMoveSound(ParsedMove.split("|")[2]);
+            }
+        }, 100);
+    }
+};
+
+function ProcessBoardPosChange(oldPos, newPos)
+{
+    // Do nothing
+    // debuglog("Board Position Changed.");
+    // debuglog("New position: " + ChessBoard.objToFen(newPos));
+}
+
+
+// ══════════════════════════
+//  Init board
+// ══════════════════════════
+
+var cfg = {
+    draggable: true,
+    dropOffBoard: 'snapback', // this is the default
+    moveSpeed: 300,
+    snapbackSpeed: 250,
+    snapSpeed: 100,
+    position: 'start',
+    onChange: onBoardPosChange,
+    onDrop: onBoardPieceDrop
+};
+var board = new ChessBoard(document.getElementById("board"), cfg);  
+
+
+function ToggleConsole() {
+  PlaySound(audio_click);
+  $("#console" ).toggle();
+  $("#console").trigger("change");
+  $("#console").scrollTop($("#console")[0].scrollHeight);
+  $("#movelist" ).toggle();
+  $("#movelist").trigger("change");
+  $("#movelist").scrollTop($("#movelist")[0].scrollHeight);
+}
+$( "#movelist" ).hide();

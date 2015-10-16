@@ -345,3 +345,86 @@ function PostMoveToForeignEngine(this_move)
         window.top.postMessage(engine + "-" + this_move, '*');   
     }
 }
+
+// ══════════════════════════
+//  Orientation
+// ══════════════════════════
+
+window.onresize = function(event) {
+    screenResize();
+};
+
+function screenResize()
+{
+  var winHeight = document.body.parentNode.clientHeight;
+  var winWidth = document.body.parentNode.clientWidth;
+  var board_width;
+  var board_container_width = 0;
+  var board_container_float = "";
+  var console_container_width = 0;
+  var console_container_float = "";
+  var controls_container_width = 0;
+  var controls_container_float = "";
+
+
+  if (winWidth > winHeight) // Landscape
+  {
+    board_container_width = winHeight;
+    board_container_height = board_container_width;
+    board_container_float = "left";
+    board_width = board_container_width;
+
+    controls_container_width =  42;
+    controls_container_height = winHeight;
+    controls_container_float = "right";
+
+    console_container_width = winWidth - board_container_width - controls_container_width - 20;
+    console_container_height = winHeight - 12;
+    console_container_float = "right";
+  }
+  else
+  {
+    board_container_width = winWidth;
+    board_container_height = board_container_width;
+    board_container_float = "left";
+    board_width = board_container_width;
+
+    controls_container_width =  winWidth;
+    controls_container_height = 42;
+    controls_container_float = "left";
+
+    console_container_width = winWidth;
+    console_container_height = winHeight - board_container_height - controls_container_height - 12;
+    console_container_float = "left";
+    
+  }
+
+document.getElementById("board_container").style.width = board_container_width + 'px';
+document.getElementById("board_container").style.height = board_container_height + 'px';
+document.getElementById("board_container").style.float = board_container_float;
+document.getElementById("board").style.width = board_width + 'px';
+
+document.getElementById("console_container").style.width = console_container_width + 'px';
+document.getElementById("console_container").style.height = console_container_height + 'px';
+document.getElementById("console_container").style.float = console_container_float;
+
+
+document.getElementById("controls_container").style.width = controls_container_width + 'px';
+document.getElementById("controls_container").style.height = controls_container_height + 'px';
+document.getElementById("controls_container").style.float = controls_container_float;
+
+
+// board.resize();
+}
+
+screenResize();
+
+
+$( "#board" ).dblclick(function() {
+  FlipBoard();
+});
+
+$( "#console_container" ).dblclick(function() {
+  alert( "Movelist: Handler for .dblclick() called." );
+});
+

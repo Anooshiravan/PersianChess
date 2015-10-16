@@ -35,7 +35,6 @@ html {
 body {
     margin: 0px;
     padding: 0px;
-    background:url("../img/darkbg.jpg");
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -399,4 +398,62 @@ body {
     border: 1px solid #777;
     margin-bottom: 10px;
     max-width: 60px;  
+}
+
+#movelist, #console {
+    background: transparent;
+    color: #ffffff !important;
+    padding: 1px;
+    padding-left: 5px;
+    padding-top: 5px;
+    font-size: 13px;
+    font-family: "Courier New";
+    border: 2px solid #777;
+    margin-bottom: 10px;
+    overflow-y: visible;
+    font-weight: bold;
+    -webkit-overflow-scrolling: touch;
+}
+
+.ui-disabled, .ui-state-disabled
+{
+    opacity: 1 !important;
+    height: 100% !important;
+}
+
+.ui-page {
+    background: transparent;
+}
+.ui-content{
+    background: transparent;
+}
+
+
+.ui-btn-icon-notext:after {
+    -webkit-border-radius: 0em;
+    border-radius: 0em;
+}
+
+.ui-icon-back:after {
+    background-image: url("../img/buttons/back.png");
+}
+
+
+[data-role=page], .ui-panel-wrapper {
+    margin: 0px;
+    padding: 0px;
+    background-image: url("../img/darkbg.jpg") !important;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover; 
+}
+
+.flipContain .ui-block-a {
+    width: 30%;
+    line-height: 48px;
+}
+.flipContain .ui-block-b {
+    width: 70%;
+    text-align: right;
 }
