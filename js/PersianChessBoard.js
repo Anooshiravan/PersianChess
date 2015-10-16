@@ -1886,7 +1886,7 @@ widget.highlight = function() {
             removeSquareHighlights();
             $('#' + SQUARE_ELS_IDS[square]).addClass(CSS.highlight4)
         };
-        
+
 
         //------------------------------------------------------------------------------
         // Spiner
@@ -1968,6 +1968,11 @@ widget.highlight = function() {
             e.preventDefault();
         }
 
+        
+        var f_square = "";
+        var t_square = "";
+        var begin_move = true;
+
         function mousedownSquare(e) {
             
             // do nothing if we're not draggable
@@ -1983,15 +1988,28 @@ widget.highlight = function() {
             // Move by click is not working properly on Android, needs debugging
             // movebyclick(square);
             
-            // no piece on this square
-            if (validSquare(square) !== true ||
-                CURRENT_POSITION.hasOwnProperty(square) !== true) {
-                return;
-            }
+            
+            if (begin_move == true)
+            {
+                // no piece on this square
+                if (validSquare(square) !== true ||
+                    CURRENT_POSITION.hasOwnProperty(square) !== true) {
+                    return;
+                }
 
-            
-            
-            beginDraggingPiece(square, CURRENT_POSITION[square], e.pageX, e.pageY);
+                $('#' + SQUARE_ELS_IDS[square]).addClass(CSS.highlight1);
+                f_square = square;
+                begin_move = false;
+            }
+            else 
+            {
+                removeSquareHighlights();
+                t_square = square;
+                begin_move = true;
+                boardMoved(f_square, t_square);
+            }            
+           
+            // beginDraggingPiece(square, CURRENT_POSITION[square], e.pageX, e.pageY);
         }
 
         function touchstartSquare(e) {

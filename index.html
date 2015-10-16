@@ -60,6 +60,13 @@
   <!-- Settings Panel -->
   <div data-role="panel" data-position="right" data-display="overlay" id="settings_panel">
     <div align="center"><img src="img/logo48.png" border=0></div>
+    <div align="center" id="panel_title">
+      <b>Persian Chess<b><br> 
+        Version 1.4.0
+        © 2009 - 2015 PersianChess.com<br>
+        Invented and programmed by:<br>
+        <b>Anooshiravan Ahmadi</b>
+    </div>
     <hr>
     <div class="ui-grid-a flipContain">
       <div class="ui-block-a">
@@ -86,20 +93,15 @@
       <select data-native-menu="false" id="ThinkTimeChoice" onchange="SetThinkTime();">
         <option selected="selected" value="s|3">3 Sec</option>
         <option value="s|5">5 Sec</option>
-        <option value="s|10">10 Sec</option>
-        <option value="s|20">20 Sec</option>
+        <option value="s|15">15 Sec</option>
         <option value="s|30">30 Sec</option>
-        <option value="s|45">45 Sec</option>
         <option value="s|60">60 Sec</option>
         <option value="m|.">Enter think time</option>
-        <option value="na|.">---------------</option>
         <option value="d|2">Depth:2</option>
         <option value="d|3">Depth:3</option>
         <option value="d|4">Depth:4</option>
         <option value="d|5">Depth:5</option>
         <option value="d|6">Depth:6</option>
-        <option value="d|7">Depth:7</option>
-        <option value="d|8">Depth:8</option>
       </select>
      </div>
 
@@ -109,6 +111,9 @@
   <!-- `New Game Panel -->
   <div data-role="panel" data-position="right" data-display="overlay" id="newgame_panel">
     <div align="center"><img src="img/logo48.png" border=0></div>
+    <div align="center" id="panel_title">
+      <b>Persian Chess<b><br> 
+    </div>
     <hr>
     <div align="center">New Game</div>
     <div>
@@ -129,7 +134,10 @@
       <a data-role="button" data-icon="arrow-r" data-iconpos="right" data-theme="a" onclick="StartNewGame(); return false" rel="external">Start</a>
     </div>
 
-</div>
+  </div>
+
+  <!-- Game over pupup -->
+  <div data-role="popup" id="gameover_popup" class="ui-content"></div>
 
 <script src="js/PersianChessBoard.js"></script>
 <script src="js/PersianChessPlatform.js"></script>

@@ -424,7 +424,4 @@ $( "#board" ).dblclick(function() {
   FlipBoard();
 });
 
-$( "#console_container" ).dblclick(function() {
-  alert( "Movelist: Handler for .dblclick() called." );
-});
 

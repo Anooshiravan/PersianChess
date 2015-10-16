@@ -42,7 +42,7 @@ var version = "1.4.0";
 //  Logging
 // ══════════════════════════
 
-var debug_log_level = 1;
+var debug_log_level = 0;
 var debug_to_console = false;
 
 function debuglog (message, level)
@@ -281,7 +281,7 @@ function ProcessEngineMessage_Info(info)
     }
     if (info == "invalid_fen")
     {
-        jAlert("Fen string is invalid.", "Error")
+        // jAlert("Fen string is invalid.", "Error")
     }
 }
 
@@ -330,9 +330,11 @@ function ProcessEngineMessage_Gameover(message)
         }
     Append ("movelist", msg);
     gameover = true;
+
+    $('#gameover_popup').html("<div align=\"center\"><b>Game over</b></div><div>" + msg + "</div>");
     timeout = setTimeout(function(){ 
-        jAlert(msg, 'Game Over');
-    }, 3000);
+        $('#gameover_popup').popup('open');
+    }, 300);
 }
 
 // Console::
@@ -425,21 +427,7 @@ function SetThinkTime()
             Engine_SetSearchDepth(16);
             break;
         case 'm':
-            jPrompt("Please enter the number of seconds for engine to think:", "3", "Engine think time", function(r) {
-                if(r) 
-                {
-                    if (!isNaN(r) && parseInt(r) > 0)
-                    {
-                        var miliseconds = r * 1000;
-                        Engine_SetThinkTime(miliseconds);
-                        Engine_SetSearchDepth(16);
-                    }
-                    else
-                    {
-                        jAlert("Please enter a numerical value bigger than 0.", "Incorrect value")
-                    }
-                }        
-            });
+            // Todo: manual think time
             break;
         case 'na':
             break;
@@ -599,6 +587,7 @@ function SetPosition()
 {
     PlaySound(audio_click);
     var txt;
+    /*
     jPrompt("Please enter position FEN:", current_fen, "Insert new FEN", function(r) {
     if( r ) 
         {
@@ -606,6 +595,7 @@ function SetPosition()
             Engine_SetFen(new_fen);
         }
     });
+    */
 }
 
 function SendGameByMail()
@@ -775,6 +765,23 @@ var onBoardPieceDrop = function(source, target, piece, newPos, oldPos, orientati
     }
 };
 
+function boardMoved(source, target)
+{
+    move = source + "-" + target;
+    if (board_active) {
+        PersianChessEngine.postMessage("parse::" + move);
+        debuglog ("Message sent to Engine to parse move:" + move , 2);
+        setTimeout(function () {
+            if (ParsedMove.split("|")[0] == move) 
+            {
+                Engine_MakeMove(ParsedMove.split("|")[1]);
+                PlayMoveSound(ParsedMove.split("|")[2]);
+            }
+        }, 100);
+    }
+}
+
+
 function ProcessBoardPosChange(oldPos, newPos)
 {
     // Do nothing
@@ -790,8 +797,8 @@ function ProcessBoardPosChange(oldPos, newPos)
 var cfg = {
     draggable: true,
     dropOffBoard: 'snapback', // this is the default
-    moveSpeed: 300,
-    snapbackSpeed: 250,
+    moveSpeed: 450,
+    snapbackSpeed: 500,
     snapSpeed: 100,
     position: 'start',
     onChange: onBoardPosChange,
@@ -809,4 +816,4 @@ function ToggleConsole() {
   $("#movelist").trigger("change");
   $("#movelist").scrollTop($("#movelist")[0].scrollHeight);
 }
-$( "#movelist" ).hide();
+$( "#console" ).hide();
