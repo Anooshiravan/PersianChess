@@ -2023,10 +2023,6 @@ widget.highlight = function() {
 
             if (square == logo_square) CheckEngineBusy();
 
-            // Move by click is not working properly on Android, needs debugging
-            // movebyclick(square);
-            
-            
             if (begin_move == true)
             {
                 // no piece on this square
@@ -2077,7 +2073,7 @@ widget.highlight = function() {
 
         function touchmoveWindow(e) {
             // do nothing if we are not dragging a piece
-            if (DRAGGING_A_PIECE !== true) return;
+            return;
 
             // prevent screen from scrolling
             e.preventDefault();
@@ -2098,7 +2094,7 @@ widget.highlight = function() {
 
         function touchendWindow(e) {
             // do nothing if we are not dragging a piece
-            if (DRAGGING_A_PIECE !== true) return;
+            return;
 
             // get the location
             var location = isXYOnSquare(e.originalEvent.changedTouches[0].pageX,
