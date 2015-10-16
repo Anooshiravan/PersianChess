@@ -765,23 +765,6 @@ var onBoardPieceDrop = function(source, target, piece, newPos, oldPos, orientati
     }
 };
 
-function boardMoved(source, target)
-{
-    move = source + "-" + target;
-    if (board_active) {
-        PersianChessEngine.postMessage("parse::" + move);
-        debuglog ("Message sent to Engine to parse move:" + move , 2);
-        setTimeout(function () {
-            if (ParsedMove.split("|")[0] == move) 
-            {
-                Engine_MakeMove(ParsedMove.split("|")[1]);
-                PlayMoveSound(ParsedMove.split("|")[2]);
-            }
-        }, 100);
-    }
-}
-
-
 function ProcessBoardPosChange(oldPos, newPos)
 {
     // Do nothing
@@ -797,8 +780,8 @@ function ProcessBoardPosChange(oldPos, newPos)
 var cfg = {
     draggable: true,
     dropOffBoard: 'snapback', // this is the default
-    moveSpeed: 100,
-    snapbackSpeed: 100,
+    moveSpeed: 300,
+    snapbackSpeed: 250,
     snapSpeed: 100,
     position: 'start',
     onChange: onBoardPosChange,
