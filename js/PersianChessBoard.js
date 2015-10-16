@@ -1955,7 +1955,7 @@ widget.highlight = function() {
         //------------------------------------------------------------------------------
 
         function isTouchDevice() {
-            return ('ontouchstart' in document.documentElement);
+            return false; // ('ontouchstart' in document.documentElement);
         }
 
         // reference: http://www.quirksmode.org/js/detect.html
