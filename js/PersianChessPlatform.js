@@ -241,7 +241,15 @@ function RestoreGameSettings()
     if (ls_variant != undefined && ls_variant != "" && ls_variant != null) 
         {
             Engine_SetVariant(ls_variant);
-            $('#VariantChoice').val(ls_variant);
+            board.set_variant(ls_variant);
+            board.theme(GetVariantTheme(ls_variant));
+        }
+
+    // Theme
+    var ls_theme = Get_LocalStorageValue("theme");
+    if (ls_theme != undefined && ls_theme != "" && ls_theme != null) 
+        {
+            board.theme(ls_theme);
         }
 
     // ThinkTime
@@ -258,7 +266,7 @@ function ResetGameSettings()
 {
     Set_LocalStorageValue("fen", "");
     Set_LocalStorageValue("history", "");
-    Set_LocalStorageValue("variant", "");
+    Set_LocalStorageValue("theme", "");
 }
 
 
@@ -387,7 +395,7 @@ function screenResize()
     board_container_width = winWidth;
     board_container_height = board_container_width;
     board_container_float = "left";
-    board_width = board_container_width;
+    board_width = board_container_width + 6;
 
     controls_container_width =  winWidth;
     controls_container_height = 42;
@@ -417,8 +425,6 @@ document.getElementById("controls_container").style.width = controls_container_w
 document.getElementById("controls_container").style.height = controls_container_height + 'px';
 document.getElementById("controls_container").style.float = controls_container_float;
 
-
-// board.resize();
 }
 screenResize();
 

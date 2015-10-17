@@ -108,10 +108,10 @@ StartEngine();
 function RestartEngine()
 {
     PersianChessEngine.terminate();
-    PersianChessEngine = null;
+    setTimeout(function () { PersianChessEngine = null; }, 300);
     PersianChessEngineValid = true;
     startup = true;
-    StartEngine();
+    setTimeout(function () { StartEngine(); }, 700);
 }
 
 
@@ -201,9 +201,15 @@ function ProcessEngineMessage_Init(message)
 var ParsedMove = "NOMOVE";
 function ProcessEngineMessage_Parsed(message)
 {
-    debuglog ("Move parsed by enigne: " + message , 2);
-    ParsedMove = message;
-    board.removehighlights();
+    debuglog ("Move parsed by enigne: " + message , 1);
+    if (message == "NOMOVE")
+    {
+        board.removehighlights();
+    }
+    else
+    {
+        ParsedMove = message;
+    }
 }
 
 // Pos::
@@ -213,7 +219,7 @@ function ProcessEngineMessage_Pos(message)
     var engine_position = message.split("|")[0];
     setTimeout(function () {
         board.position(engine_position);
-    }, 700);
+    }, 300);
     
     var board_side = message.split("|")[1];
     switch(board_side) {
@@ -422,29 +428,13 @@ function SetThinkTime()
 function SetVariant(variant)
 {
    if (engine_thinking) return;
-
    Engine_SetVariant(variant);
    Set_LocalStorageValue("variant", variant);
 }
 
 function SetTrainingPosition()
 {
-    tp_number = document.getElementById("TP").value;
-    if (tp_number == "0")
-    {
-        StartNewGame();
-    }
-    else
-    {
-        variant = document.getElementById("VariantChoice").value;
-        jConfirm("Do you want to set the position to Training Position #" + tp_number + " ?", "Training Position", function(r) {
-        if (r) 
-            {
-                var tp = "TP_FEN_" + tp_number + "_" + variant;
-                Engine_SetTP(tp);
-            }
-        });
-    }
+    
 }
 
 function SetTheme(theme)
@@ -454,31 +444,38 @@ function SetTheme(theme)
     Set_LocalStorageValue("theme", theme);
 }
 
+function GetVariantTheme(variant)
+{
+    switch(variant) {
+        case "Persian":
+            return "green";
+            break;
+        case "ASE":
+            return "brown";
+            break;
+        case "Citadel":
+            return "blue";
+            break;
+        case "Oriental":
+            return "oriental";
+            break;
+        default:
+            break;
+    }
+}
+
 function StartNewGame()
 {
     PlaySound(audio_click);
     variant = $('#VariantChoice').val();
-    switch(variant) {
-        case "Persian":
-            variantname = "Persian Princess";
-            theme = "green";
-            break;
-        case "ASE":
-            variantname = "Egyptian Eye";
-            theme = "brown";
-            break;
-        case "Citadel":
-            variantname = "Celtic Citadel";
-            theme = "blue";
-            break;
-        case "Oriental":
-            variantname = "Oriental Omega";
-            theme = "oriental";
-            break;
-        default:
-            break;
-        }
+    theme = GetVariantTheme(variant);
+
     if (startup == true) {
+        if (Get_LocalStorageValue("variant") != undefined && Get_LocalStorageValue("variant") != "")
+        {
+            SetVariant(Get_LocalStorageValue("variant"));
+        }
+
         PersianChessEngine.postMessage("init::new_game");
         Engine_TurnOn();
         check_square = "";
@@ -536,7 +533,7 @@ function EngineOnOff()
 {
     PlaySound(audio_click);
     if (engine_thinking) RestartEngine();
-    
+
     if (document.getElementById("engine_switch").value == "on")
         {
             Engine_TurnOn();

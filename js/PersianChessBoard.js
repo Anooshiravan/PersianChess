@@ -533,8 +533,9 @@
         // use unique class names to prevent clashing with anything else on the page
         // and simplify selectors
         var CSS = {
+            
             alpha: 'alpha-d2270',
-            black: 'black-3c85d',
+            black: 'black-green-3c85d',
             board: 'board-b72b1',
             chessboard: 'chessboard-63f37',
             clearfix: 'clearfix-7da63',
@@ -554,12 +555,12 @@
             sparePiecesBottom: 'spare-pieces-bottom-ae20f',
             sparePiecesTop: 'spare-pieces-top-4028b',
             square: 'square-55d63',
-            white: 'white-1e1d7',
-            off: 'off-53d36',
-            ase: 'ase-53d37',
-            persian: 'persian-53d37',
-            rightdia: 'rightdia-53d38',
-            leftdia: 'leftdia-53d39',            
+            white: 'white-green-1e1d7',
+            off: 'off-green-53d36',
+            ase: 'ase-green-53d37',
+            persian: 'persian-green-53d37',
+            rightdia: 'rightdia-green-53d38',
+            leftdia: 'leftdia-green-53d39',            
             header: 'header-23des',
             footer: 'footer-23des'
         };
@@ -1713,6 +1714,11 @@ widget.highlight = function() {
 
         widget.is_active = function (bool) {
             board_active = bool;
+        }
+
+        widget.set_variant = function (this_variant) {
+            variant = this_variant;
+            drawBoard();
         }
 
         widget.theme = function (color) {
