@@ -66,6 +66,15 @@
     </div>
     <hr>
     
+    <div>
+      <select data-native-menu="false" data-mini="true" id="Theme" onChange="SetTheme(this.value);">
+        <option selected="selected" value="green">Caspian</option>
+        <option value="brown">Pyramid</option>
+        <option value="blue">River</option>
+        <option value="oriental">Oriental</option>
+      </select>
+    </div>
+
     <div class="ui-grid-a flipContain">
       <div class="ui-block-a">
           <label for="engine_switch" class="courier_new_big">Engine:</label>
@@ -76,6 +85,11 @@
               <option selected="selected" value="on">On</option>
           </select>
       </div>
+    </div>
+    
+    <div class="ui-grid-a flipContain">
+      <label for="ThinkTimeChoice" class="courier_new_big">Think time:</label>
+      <input type="range" name="ThinkTimeChoice" id="ThinkTimeChoice" data-highlight="true" min="3" max="100" value="3">
     </div>
 
     <div class="ui-grid-a flipContain">
@@ -88,22 +102,6 @@
               <option value="on">On</option>
           </select>
       </div>
-    </div>
-
-
-    <div>
-      <label for="Theme" class="courier_new_big">Theme:</label>
-      <select data-native-menu="false" data-mini="true" id="Theme" onChange="SetTheme(this.value);">
-        <option selected="selected" value="green">Caspian</option>
-        <option value="brown">Pyramid</option>
-        <option value="blue">River</option>
-        <option value="oriental">Oriental</option>
-      </select>
-    </div>
-    <br>
-    <div class="ui-grid-a flipContain">
-      <label for="ThinkTimeChoice" class="courier_new_big">Think time:</label>
-      <input type="range" name="ThinkTimeChoice" id="ThinkTimeChoice" data-highlight="true" min="3" max="100" value="3">
     </div>
 
   </div>

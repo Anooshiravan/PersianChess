@@ -106,7 +106,8 @@ StartEngine();
 
 function RestartEngine()
 {
-    PersianChessEngine = 1;
+    PersianChessEngine.terminate();
+    PersianChessEngine = undefined;
     PersianChessEngineValid = true;
     startup = true;
     setTimeout(function () { StartEngine(); }, 700);
