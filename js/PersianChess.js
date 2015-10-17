@@ -213,7 +213,7 @@ function ProcessEngineMessage_Pos(message)
     var engine_position = message.split("|")[0];
     setTimeout(function () {
         board.position(engine_position);
-    }, 300);
+    }, 700);
     
     var board_side = message.split("|")[1];
     switch(board_side) {
@@ -798,6 +798,10 @@ var cfg = {
 var board = new ChessBoard(document.getElementById("board"), cfg);  
 
 
+// ══════════════════════════
+//  Windowing
+// ══════════════════════════
+
 function ToggleConsole() {
   PlaySound(audio_click);
   $("#console" ).toggle();
@@ -808,3 +812,29 @@ function ToggleConsole() {
   $("#movelist").scrollTop($("#movelist")[0].scrollHeight);
 }
 $( "#console" ).hide();
+
+
+// Capture back button
+document.addEventListener("deviceready", onDeviceReady, false);
+function onDeviceReady(){
+    document.addEventListener("backbutton", function(e){
+       TakeBack();
+    }, false);
+
+  // Load Audio
+  LoadAudio();
+}
+
+
+// Sizing the screen
+window.addEventListener("touchmove", function(e) {
+    e.preventDefault();
+}, false);
+
+window.onresize = function(event) {
+    screenResize();
+    board.resize();
+};
+
+//settings
+$.cookie.raw = true;

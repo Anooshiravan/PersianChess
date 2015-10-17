@@ -416,7 +416,6 @@ document.getElementById("controls_container").style.float = controls_container_f
 
 // board.resize();
 }
-
 screenResize();
 
 
