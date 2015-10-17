@@ -765,11 +765,20 @@ var onBoardPieceDrop = function(source, target, piece, newPos, oldPos, orientati
     }
 };
 
-function ProcessBoardPosChange(oldPos, newPos)
+function boardMoved(source, target)
 {
-    // Do nothing
-    // debuglog("Board Position Changed.");
-    // debuglog("New position: " + ChessBoard.objToFen(newPos));
+    move = source + "-" + target;
+    if (board_active) {
+        PersianChessEngine.postMessage("parse::" + move);
+        debuglog ("Message sent to Engine to parse move:" + move , 2);
+        setTimeout(function () {
+            if (ParsedMove.split("|")[0] == move) 
+            {
+                Engine_MakeMove(ParsedMove.split("|")[1]);
+                PlayMoveSound(ParsedMove.split("|")[2]);
+            }
+        }, 100);
+    }
 }
 
 
@@ -784,7 +793,6 @@ var cfg = {
     snapbackSpeed: 250,
     snapSpeed: 100,
     position: 'start',
-    onChange: onBoardPosChange,
     onDrop: onBoardPieceDrop
 };
 var board = new ChessBoard(document.getElementById("board"), cfg);  

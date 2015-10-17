@@ -1972,6 +1972,7 @@ widget.highlight = function() {
             
             // do nothing if we're not draggable
             if (cfg.draggable !== true) return;
+            if (isTouchDevice() === true) return;
             var square = $(this).attr('data-square');
             var logo_square;
 
@@ -1988,8 +1989,6 @@ widget.highlight = function() {
                 CURRENT_POSITION.hasOwnProperty(square) !== true) {
                 return;
             }
-
-            
             
             beginDraggingPiece(square, CURRENT_POSITION[square], e.pageX, e.pageY);
         }
@@ -1997,10 +1996,11 @@ widget.highlight = function() {
         var f_square = "";
         var t_square = "";
         var begin_move = true;
-        
+
         function touchstartSquare(e) {
             // do nothing if we're not draggable
             if (cfg.draggable !== true) return;
+
             var square = $(this).attr('data-square');
             var logo_square;
 
@@ -2024,6 +2024,7 @@ widget.highlight = function() {
             else 
             {
                 removeSquareHighlights();
+                $('#' + SQUARE_ELS_IDS[square]).addClass(CSS.highlight1);
                 t_square = square;
                 begin_move = true;
                 boardMoved(f_square, t_square);
@@ -2040,6 +2041,7 @@ widget.highlight = function() {
         }
 
         function touchstartSparePiece(e) {
+            return;
             // do nothing if sparePieces is not enabled
             if (cfg.sparePieces !== true) return;
 
@@ -2058,6 +2060,7 @@ widget.highlight = function() {
         }
 
         function touchmoveWindow(e) {
+            return;
             // do nothing if we are not dragging a piece
             if (DRAGGING_A_PIECE !== true) return;
 
@@ -2079,6 +2082,7 @@ widget.highlight = function() {
         }
 
         function touchendWindow(e) {
+            return;
             // do nothing if we are not dragging a piece
             if (DRAGGING_A_PIECE !== true) return;
 
