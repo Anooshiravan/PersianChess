@@ -86,7 +86,6 @@ function LoadAudio()
     // Turn on audio for Android, it remains off for browsers until user choose to turn audio on
     if (is_Android())
     {
-        document.getElementById("audio-button").src = "img/footer/audio.png";
         audio_on = true;
     }
     if( window.plugins && window.plugins.LowLatencyAudio ) {
