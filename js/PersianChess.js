@@ -503,6 +503,8 @@ function StartNewGame()
     if (startup == true) {
         PersianChessEngine.postMessage("init::new_game");
         Engine_TurnOn();
+        check_square = "";
+        mate_square = "";
         board.theme(theme);
         board.removehighlights();
         startup = false;
@@ -514,6 +516,8 @@ function StartNewGame()
         SetVariant(variant);
         ResetGameSettings();
         PersianChessEngine.postMessage("init::new_game");
+        check_square = "";
+        mate_square = "";
         board.theme(theme);
         board.removehighlights();
         ClearConsole();
