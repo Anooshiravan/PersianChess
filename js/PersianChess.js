@@ -83,22 +83,21 @@ var PersianChessEngine;
                 return false;
             }
 
-            if (PersianChessEngine == null) {
-                PersianChessEngineValid = true;
-                try {
-                    PersianChessEngine = new Worker("js/PersianChessEngine/PersianChessEngine.js");
-                    PersianChessEngine.onmessage = function (e) {
-                        ProcessEngineMessage(e.data)
-                    }
-                    PersianChessEngine.error = function (e) {
-                        debuglog("Error from WebWorker Engine:" + e.message, 1);
-                    }
-                    PersianChessEngine.postMessage("init::hello");
-                } catch (error) {
-                    PersianChessEngineValid = false;
-                        debuglog("Failed to load the WebWorker Engine." + error, 1);
+            PersianChessEngineValid = true;
+            try {
+                PersianChessEngine = new Worker("js/PersianChessEngine/PersianChessEngine.js");
+                PersianChessEngine.onmessage = function (e) {
+                    ProcessEngineMessage(e.data)
                 }
+                PersianChessEngine.error = function (e) {
+                    debuglog("Error from WebWorker Engine:" + e.message, 1);
+                }
+                PersianChessEngine.postMessage("init::hello");
+            } catch (error) {
+                PersianChessEngineValid = false;
+                    debuglog("Failed to load the WebWorker Engine." + error, 1);
             }
+            
             return PersianChessEngineValid;
         }
 
@@ -107,8 +106,7 @@ StartEngine();
 
 function RestartEngine()
 {
-    PersianChessEngine.terminate();
-    setTimeout(function () { PersianChessEngine = null; }, 300);
+    PersianChessEngine = 1;
     PersianChessEngineValid = true;
     startup = true;
     setTimeout(function () { StartEngine(); }, 700);
@@ -498,6 +496,11 @@ function StartNewGame()
         ClearConsole();
         $("#newgame_panel").panel("close");
         timeout = setTimeout(function(){ PlaySound(audio_welcome); }, 500);
+        if ($('#ColorChoice').val() == "Black")
+        {
+            FlipBoard();
+            Engine_Go();
+        }
     }
 }
 

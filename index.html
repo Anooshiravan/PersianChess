@@ -44,6 +44,7 @@
         <a href="#newgame_panel" class="ui-btn ui-btn-inline ui-icon-home ui-btn-icon-notext"></a>
         <a class="ui-btn ui-btn-inline ui-icon-arrow-l ui-btn-icon-notext" onclick="TakeBack();"></a>
         <a class="ui-btn ui-btn-inline ui-icon-arrow-r ui-btn-icon-notext" onclick="MoveForward();"></a>
+        <a class="ui-btn ui-btn-inline ui-icon-recycle ui-btn-icon-notext" onclick="FlipBoard();"></a>
         <a class="ui-btn ui-btn-inline ui-icon-grid ui-btn-icon-notext" onclick="ToggleConsole();"></a>
       </div>
       <div id="console_container" class="ui-block-b">
@@ -58,21 +59,19 @@
   <!-- Settings Panel -->
   <div data-role="panel" data-position="right" data-display="overlay" id="settings_panel">
     <div align="center"><img src="img/logo48.png" border=0></div>
-    <div align="center" id="panel_title">
+    <div align="center" id="panel_title" class="courier_new_small">
       <b>Persian Chess<b><br> 
         Version 1.4.0
-        © 2009 - 2015 PersianChess.com<br>
-        Invented and programmed by:<br>
-        <b>Anooshiravan Ahmadi</b>
+        © 2009 - 2015 PersianChess.com
     </div>
     <hr>
     
     <div class="ui-grid-a flipContain">
       <div class="ui-block-a">
-          <label for="engine_switch">Engine:</label>
+          <label for="engine_switch" class="courier_new_big">Engine:</label>
       </div>
       <div class="ui-block-b">
-          <select name="engine_switch" id="engine_switch" data-role="flipswitch" onchange="EngineOnOff();">
+          <select name="engine_switch" id="engine_switch" data-role="flipswitch" data-mini="true" onchange="EngineOnOff();">
               <option value="off">Off</option>
               <option selected="selected" value="on">On</option>
           </select>
@@ -81,10 +80,10 @@
 
     <div class="ui-grid-a flipContain">
       <div class="ui-block-a">
-          <label for="engine_switch">Audio:</label>
+          <label for="engine_switch" class="courier_new_big">Audio:</label>
       </div>
       <div class="ui-block-b">
-          <select name="audio_switch" id="audio_switch" data-role="flipswitch" onchange="AudioOnOff();">
+          <select name="audio_switch" id="audio_switch" data-role="flipswitch" data-mini="true" onchange="AudioOnOff();">
               <option value="off">Off</option>
               <option value="on">On</option>
           </select>
@@ -93,17 +92,17 @@
 
 
     <div>
-      <label for="Theme">Theme:</label>
-      <select data-native-menu="false" id="Theme" onChange="SetTheme(this.value);">
+      <label for="Theme" class="courier_new_big">Theme:</label>
+      <select data-native-menu="false" data-mini="true" id="Theme" onChange="SetTheme(this.value);">
         <option selected="selected" value="green">Caspian</option>
         <option value="brown">Pyramid</option>
         <option value="blue">River</option>
         <option value="oriental">Oriental</option>
       </select>
     </div>
-    
+    <br>
     <div class="ui-grid-a flipContain">
-      <label for="ThinkTimeChoice">Think time:</label>
+      <label for="ThinkTimeChoice" class="courier_new_big">Think time:</label>
       <input type="range" name="ThinkTimeChoice" id="ThinkTimeChoice" data-highlight="true" min="3" max="100" value="3">
     </div>
 
@@ -113,13 +112,13 @@
   <!-- `New Game Panel -->
   <div data-role="panel" data-position="right" data-display="overlay" id="newgame_panel">
     <div align="center"><img src="img/logo48.png" border=0></div>
-    <div align="center" id="panel_title">
+    <div align="center" class="courier_new_small" id="panel_title">
       <b>Persian Chess<b><br> 
     </div>
     <hr>
-    <div align="center">New Game</div>
+    <div align="center" class="courier_new_big">New Game</div>
     <div>
-       <select data-native-menu="false" id="VariantChoice">
+       <select data-native-menu="false" data-mini="true" id="VariantChoice">
           <option value="Persian">Persian Princess</option>
           <option value="Citadel">Celtic Citadel</option>
           <option value="ASE">Egyptian Eye</option>
@@ -127,13 +126,13 @@
        </select>
     </div>
     <div>
-       <select data-native-menu="false" id="ColorChoice">
+       <select data-native-menu="false" data-mini="true" id="ColorChoice">
           <option value="White" selected="selected">Play white</option>
           <option value="Black">Play black</option>
        </select>
     </div>
     <div>
-      <a data-role="button" data-icon="arrow-r" data-iconpos="right" data-theme="a" onclick="StartNewGame(); return false" rel="external">Start</a>
+      <a data-role="button" data-icon="arrow-r" data-iconpos="right" data-theme="a" data-mini="true" onclick="StartNewGame(); return false" rel="external">Start</a>
     </div>
 
   </div>
