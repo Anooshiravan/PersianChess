@@ -42,7 +42,7 @@ var version = "1.4.0";
 //  Logging
 // ══════════════════════════
 
-var debug_log_level = 0;
+var debug_log_level = 1;
 var debug_to_console = false;
 
 function debuglog (message, level)
@@ -202,8 +202,8 @@ var ParsedMove = "NOMOVE";
 function ProcessEngineMessage_Parsed(message)
 {
     debuglog ("Move parsed by enigne: " + message , 2);
-    // Move is parsed by enigne 
     ParsedMove = message;
+    board.removehighlights();
 }
 
 // Pos::
@@ -412,34 +412,12 @@ function ProcessEngineMessage_Debug(message)
 
 function SetThinkTime()
 {
-    if (engine_thinking) return;
-
     var thinktime = $('#ThinkTimeChoice').val();
     Set_LocalStorageValue("thinktime", thinktime);
-    var type = thinktime.split("|")[0];
-    var value = thinktime.split("|")[1];
-
-
-    switch(type) {
-        case 's':
-            var miliseconds = value * 1000;
-            Engine_SetThinkTime(miliseconds);
-            Engine_SetSearchDepth(16);
-            break;
-        case 'm':
-            // Todo: manual think time
-            break;
-        case 'na':
-            break;
-        case 'd':
-            var infinite_thinktime = 2147483647;
-            Engine_SetThinkTime(infinite_thinktime);
-            Engine_SetSearchDepth(value);
-            break;
-        default:
-            break
-    }
+    var miliseconds = thinktime * 1000;
+    Engine_SetThinkTime(miliseconds);
 }
+
 
 function SetVariant(variant)
 {
@@ -539,7 +517,7 @@ function FlipBoard()
 
 function TakeBack()
 {
-    if (engine_thinking) return;
+    if (engine_thinking) RestartEngine();
     PlaySound(audio_click);
     PersianChessEngine.postMessage("do::takeback");
     mate_square = "";
@@ -557,11 +535,9 @@ function MoveForward()
 function EngineOnOff()
 {
     PlaySound(audio_click);
-    CheckEngineBusy();
-
-    if (engine_thinking == false)
-    {
-        if (document.getElementById("engine_switch").value == "on")
+    if (engine_thinking) RestartEngine();
+    
+    if (document.getElementById("engine_switch").value == "on")
         {
             Engine_TurnOn();
             PersianChessEngineOn = true;
@@ -571,20 +547,6 @@ function EngineOnOff()
             Engine_TurnOff();
             PersianChessEngineOn = false;
         }
-    }
-}
-
-function CheckEngineBusy()
-{
-    if (engine_thinking) {
-        jConfirm("Engine is thinking, do you want to stop it?", "Stop engine", function(r) {
-            if (r) {
-               RestartEngine();
-               return true;
-            }
-        });
-    }
-    return false;
 }
 
 function SetPosition()
@@ -620,14 +582,6 @@ function SendGameByMail()
     });
 }
 
-function About()
-{
-    PlaySound(audio_click); 
-    var go2web = "<b>Persian Chess Engine | Version " + version + "</b>\r\n© 2009 - 2015 PersianChess.com\r\n\r\nPersian Chess is invented and programmed by:\r\n<b>Anooshiravan Ahmadi</b>\r\n\r\nClick Ok to go to the website for the detailed game information, or Cancel to return to the game.";
-     jConfirm(go2web, "About", function(r) {
-            if (r) window.open("http://www.persianchess.com/game-rules", "_system", "location=no");
-    });  
-}
 
 
 // ══════════════════════════════

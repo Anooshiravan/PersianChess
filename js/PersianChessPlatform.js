@@ -64,22 +64,17 @@ var audio_gg = 'audio/gg.mp3';
 function AudioOnOff()
 {
     PlaySound(audio_click);
-    if (audio_on == true)
+    if (document.getElementById("audio_switch").value == "off")
     {
         audio5js = null;
-        document.getElementById("audio-button").src = "img/footer/audio_off.png";
         audio_on = false;
-        document.getElementById('movelist').value += "\r\n> Audio is OFF.";
     }
     else
     {
         audio5js = new Audio5js;
-        document.getElementById("audio-button").src = "img/footer/audio.png";
         audio_on = true;
-        document.getElementById('movelist').value += "\r\n> Audio is ON.";
     }
 }
-
 
 function LoadAudio()
 {
@@ -87,7 +82,10 @@ function LoadAudio()
     if (is_Android())
     {
         audio_on = true;
+        document.getElementById("audio_switch").value == "on";
     }
+
+
     if( window.plugins && window.plugins.LowLatencyAudio ) {
         lla = window.plugins.LowLatencyAudio;
         lla_loaded = true;
@@ -251,6 +249,7 @@ function RestoreGameSettings()
     if (ls_thinktime != undefined && ls_thinktime != "" && ls_thinktime != null) 
         {
             $('#ThinkTimeChoice').val(ls_thinktime);
+            $('#ThinkTimeChoice').slider('refresh');
             SetThinkTime()
         }
 }
@@ -260,7 +259,6 @@ function ResetGameSettings()
     Set_LocalStorageValue("fen", "");
     Set_LocalStorageValue("history", "");
     Set_LocalStorageValue("variant", "");
-    Set_LocalStorageValue("thinktime", "");
 }
 
 
@@ -353,6 +351,9 @@ window.onresize = function(event) {
     screenResize();
 };
 
+
+var spinner_length;
+
 function screenResize()
 {
   var winHeight = document.body.parentNode.clientHeight;
@@ -397,6 +398,10 @@ function screenResize()
     console_container_float = "left";
     
   }
+
+spinner_length = Math.round(board_width / 150);
+spinner_radius = Math.round(board_width / 40);
+
 
 document.getElementById("board_container").style.width = board_container_width + 'px';
 document.getElementById("board_container").style.height = board_container_height + 'px';

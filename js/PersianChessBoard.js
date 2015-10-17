@@ -1894,9 +1894,9 @@ widget.highlight = function() {
 
         var opts = {
               lines: 12 // The number of lines to draw
-            , length: 3 // The length of each line
+            , length: spinner_length // The length of each line
             , width: 2 // The line thickness
-            , radius: 12 // The radius of the inner circle
+            , radius: spinner_radius // The radius of the inner circle
             , scale: 1 // Scales overall size of the spinner
             , corners: 1 // Corner roundness (0..1)
             , color: '#FFFFFF' // #rgb or #rrggbb or array of colors

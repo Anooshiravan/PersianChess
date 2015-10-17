@@ -26,7 +26,6 @@
 <link rel='stylesheet' href='css/persianchess.css' type='text/css' media='all' />
   <script src="js/lib/jquery-2.1.4.min.js"></script>
   <script src="js/lib/jquery.mobile-1.4.5.min.js"></script>
-  <script src='js/lib/fastclick.js' type='application/javascript' ></script>
   <script src="js/lib/jquery.cookie.js" type="text/javascript"></script>
   <script src="js/lib/audio5.js"></script>
   <script src="js/lib/spin.min.js"></script>
@@ -67,6 +66,7 @@
         <b>Anooshiravan Ahmadi</b>
     </div>
     <hr>
+    
     <div class="ui-grid-a flipContain">
       <div class="ui-block-a">
           <label for="engine_switch">Engine:</label>
@@ -77,10 +77,23 @@
               <option selected="selected" value="on">On</option>
           </select>
       </div>
-  </div>
+    </div>
+
+    <div class="ui-grid-a flipContain">
+      <div class="ui-block-a">
+          <label for="engine_switch">Audio:</label>
+      </div>
+      <div class="ui-block-b">
+          <select name="audio_switch" id="audio_switch" data-role="flipswitch" onchange="AudioOnOff();">
+              <option value="off">Off</option>
+              <option value="on">On</option>
+          </select>
+      </div>
+    </div>
 
 
     <div>
+      <label for="Theme">Theme:</label>
       <select data-native-menu="false" id="Theme" onChange="SetTheme(this.value);">
         <option selected="selected" value="green">Caspian</option>
         <option value="brown">Pyramid</option>
@@ -88,21 +101,11 @@
         <option value="oriental">Oriental</option>
       </select>
     </div>
-    <div>
-      <select data-native-menu="false" id="ThinkTimeChoice" onchange="SetThinkTime();">
-        <option selected="selected" value="s|3">3 Sec</option>
-        <option value="s|5">5 Sec</option>
-        <option value="s|15">15 Sec</option>
-        <option value="s|30">30 Sec</option>
-        <option value="s|60">60 Sec</option>
-        <option value="m|.">Enter think time</option>
-        <option value="d|2">Depth:2</option>
-        <option value="d|3">Depth:3</option>
-        <option value="d|4">Depth:4</option>
-        <option value="d|5">Depth:5</option>
-        <option value="d|6">Depth:6</option>
-      </select>
-     </div>
+    
+    <div class="ui-grid-a flipContain">
+      <label for="ThinkTimeChoice">Think time:</label>
+      <input type="range" name="ThinkTimeChoice" id="ThinkTimeChoice" data-highlight="true" min="3" max="100" value="3">
+    </div>
 
   </div>
 
@@ -142,12 +145,17 @@
 <script src="js/PersianChessPlatform.js"></script>
 <script src="js/PersianChess.js"></script>
 
-
 <script>
-  $(function() {
-      FastClick.attach(document.body);
+
+$(document).on("pagecreate", function () {
+  $("#ThinkTimeChoice").on('slidestop', function (event) {
+    SetThinkTime();
   });
+});
+
+
 </script>
+
 
 </body>
 </html>
