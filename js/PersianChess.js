@@ -42,7 +42,7 @@ var version = "1.4.0";
 //  Logging
 // ══════════════════════════
 
-var debug_log_level = 1;
+var debug_log_level = 0;
 var debug_to_console = false;
 
 function debuglog (message, level)
@@ -218,7 +218,7 @@ function ProcessEngineMessage_Pos(message)
     var engine_position = message.split("|")[0];
     setTimeout(function () {
         board.position(engine_position);
-    }, 300);
+    }, 700);
     
     var board_side = message.split("|")[1];
     switch(board_side) {
@@ -656,7 +656,7 @@ function UpdateBoardHighlight()
         board.highlight(engine_move.split("-")[0], engine_move.split("-")[1])
         if (check_square != "") board.highlight_check(check_square);
         if (mate_square != "") board.highlight_mate (mate_square);
-    }, 600);
+    }, 800);
 }
 
 function PlayGGSound(result) {
@@ -727,6 +727,8 @@ var onBoardPieceDrop = function(source, target, piece, newPos, oldPos, orientati
 function boardMoved(source, target)
 {
     move = source + "-" + target;
+    board.move(move);
+
     if (board_active) {
         PersianChessEngine.postMessage("parse::" + move);
         debuglog ("Message sent to Engine to parse move:" + move , 2);
@@ -736,7 +738,7 @@ function boardMoved(source, target)
                 Engine_MakeMove(ParsedMove.split("|")[1]);
                 PlayMoveSound(ParsedMove.split("|")[2]);
             }
-        }, 100);
+        }, 500);
     }
 }
 
@@ -748,7 +750,7 @@ function boardMoved(source, target)
 var cfg = {
     draggable: true,
     dropOffBoard: 'snapback', // this is the default
-    moveSpeed: 300,
+    moveSpeed: 400,
     snapbackSpeed: 250,
     snapSpeed: 100,
     position: 'start',
