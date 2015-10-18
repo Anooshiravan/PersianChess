@@ -418,7 +418,9 @@ function IterativeDeepening(id_depth)
     for (currentDepth = 1; currentDepth <= id_depth; ++currentDepth) {
 
         bestScore = AlphaBeta(-INFINITE, INFINITE, currentDepth, BOOL.TRUE);
-        if (srch_stop == BOOL.TRUE) break;
+        
+
+        if (srch_stop == BOOL.TRUE && currentDepth > 1) break; // Do not break the search until depth 1 is complete
         pvNum = GetPvLine(currentDepth);
 
         bestMove = brd_PvArray[0];
