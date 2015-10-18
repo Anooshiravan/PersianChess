@@ -748,9 +748,9 @@ function boardMoved(source, target)
 var cfg = {
     draggable: true,
     dropOffBoard: 'snapback', // this is the default
-    moveSpeed: 600,
-    snapbackSpeed: 350,
-    snapSpeed: 300,
+    moveSpeed: 300,
+    snapbackSpeed: 250,
+    snapSpeed: 100,
     position: 'start',
     onDrop: onBoardPieceDrop
 };
