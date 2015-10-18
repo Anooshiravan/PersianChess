@@ -497,10 +497,17 @@ function StartNewGame()
         ClearConsole();
         $("#newgame_panel").panel("close");
         timeout = setTimeout(function(){ PlaySound(audio_welcome); }, 500);
-        if ($('#ColorChoice').val() == "Black")
+        
+        if ($('#ColorChoice').val() == "Black" && board.orientation() == "white")
         {
             FlipBoard();
-            Engine_Go();
+        }
+
+        if ($('#ColorChoice').val() == "Black") Engine_Go();
+
+        if ($('#ColorChoice').val() == "White" && board.orientation() == "black")
+        {
+            FlipBoard();
         }
     }
 }
