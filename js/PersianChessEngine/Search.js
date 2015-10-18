@@ -332,7 +332,7 @@ function SearchPosition() {
         srch_thinking = BOOL.FALSE;
         var console_msg = "Book move: " + PrMove(bestMove);
         SendMessageToGui("console", console_msg);
-        SendMessageToGui("bestmove", PrMove(bestMove));
+        SendBestMove(bestMove);
         return;
     }
 
@@ -380,10 +380,9 @@ function SearchPosition() {
     {
         // There is no engine error or errors are recovered, continue.
         srch_best = bestMove;
-        SendMessageToGui("bestmove", PrMove(bestMove));
+        SendBestMove(bestMove);
     }
     srch_thinking = BOOL.FALSE;
-    
     ShowErrorMoves();
     ShowPerformance();
 }
@@ -419,7 +418,6 @@ function IterativeDeepening(id_depth)
 
         bestScore = AlphaBeta(-INFINITE, INFINITE, currentDepth, BOOL.TRUE);
         
-
         if (srch_stop == BOOL.TRUE && currentDepth > 1) break; // Do not break the search until depth 1 is complete
         pvNum = GetPvLine(currentDepth);
 

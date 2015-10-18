@@ -273,15 +273,6 @@ function StartSearch() {
     if (debug_log) PrintBoard();
     var engine_position = BoardToFen().replace(/ .+$/, '');
     SendPosition();
-    
-    // Send move info for move sound
-    var flag = "quite";
-    if((srch_best & MFLAGEP)   != 0)   flag = "|en_passant"
-    if((srch_best & MFLAGCA)   != 0)   flag = "|castle"
-    if((srch_best & MFLAGRZ)   != 0)   flag = "|rendezvous"
-    if((srch_best & MFLAGCAP)  != 0)   flag = "|capture"
-    if((srch_best & MFLAGPROM) != 0)   flag = "|promote"
-    SendMessageToGui("info", flag);
     CheckAndSet();
 }
 
@@ -373,6 +364,18 @@ function SendPosition()
     var moved = PrSq(FROMSQ(srch_best)) + "-" + PrSq(TOSQ(srch_best));
     SendMessageToGui("pos", engine_position + "|" + brd_side);
 }
+
+function SendBestMove(best_move)
+{
+    var flag = "|quite";
+    if((best_move & MFLAGEP)   != 0)   flag = "|en_passant"
+    if((best_move & MFLAGCA)   != 0)   flag = "|castle"
+    if((best_move & MFLAGRZ)   != 0)   flag = "|rendezvous"
+    if((best_move & MFLAGCAP)  != 0)   flag = "|capture"
+    if((best_move & MFLAGPROM) != 0)   flag = "|promote"
+    SendMessageToGui("bestmove", PrMove(best_move) + flag);
+}
+
 
 function SendGameState()
 {

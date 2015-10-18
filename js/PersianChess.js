@@ -248,9 +248,12 @@ function ProcessEngineMessage_History(engine_history)
 }
 
 // Pgn::
-function ProcessEngineMessage_BestMove(best_move)
+function ProcessEngineMessage_BestMove(message)
 {
-    if (vs_engine()) PostMoveToForeignEngine(best_move);
+    var move =  message.split("|")[0];
+    var flag =  message.split("|")[1];
+    if (vs_engine()) PostMoveToForeignEngine(message);
+    PlayMoveSound(flag);
 }
 
 // Fen::
@@ -276,8 +279,6 @@ function ProcessEngineMessage_Info(info)
         check_square = "";
     }
 
-    PlayMoveSound(info);
-    
     if (info == "thinking")
     {
         board.logo("wait");
@@ -734,8 +735,6 @@ var onBoardPieceDrop = function(source, target, piece, newPos, oldPos, orientati
 function boardMoved(source, target)
 {
     move = source + "-" + target;
-    board.move(move);
-
     if (board_active) {
         PersianChessEngine.postMessage("parse::" + move);
         debuglog ("Message sent to Engine to parse move:" + move , 2);
@@ -745,7 +744,7 @@ function boardMoved(source, target)
                 Engine_MakeMove(ParsedMove.split("|")[1]);
                 PlayMoveSound(ParsedMove.split("|")[2]);
             }
-        }, 500);
+        }, 300);
     }
 }
 
@@ -757,7 +756,7 @@ function boardMoved(source, target)
 var cfg = {
     draggable: true,
     dropOffBoard: 'snapback', // this is the default
-    moveSpeed: 400,
+    moveSpeed: 300,
     snapbackSpeed: 250,
     snapSpeed: 100,
     position: 'start',
