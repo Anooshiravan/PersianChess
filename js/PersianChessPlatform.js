@@ -288,7 +288,14 @@ function LoadGameFromLS()
     var game_location = document.getElementById("SaveLoadChoice").value;
     var game_content = Get_LocalStorageValue(game_location);
 
-    if (game_content == undefined || game_content == "" || game_content == null) return;
+    if (game_content == undefined || game_content == "" || game_content == null) 
+    {
+        var game_name = document.getElementById("SaveLoadChoice").options[document.getElementById("SaveLoadChoice").selectedIndex].text;
+        msg = game_name + " not found."
+        $('#gamesaveload_popup').html("<div class='courier_new_big'>" +  msg + "</div>");
+        $('#gamesaveload_popup').popup('open');
+        return;
+    }
     
     var variant = game_content.split("#")[0]
     var fen = game_content.split("#")[1]
