@@ -270,6 +270,43 @@ function ResetGameSettings()
 }
 
 
+function SaveGameToLS()
+{
+    var game_location = document.getElementById("SaveLoadChoice").value;
+    var game_content = Get_LocalStorageValue("variant") + "#" + Get_LocalStorageValue("fen") + "#" + Get_LocalStorageValue("history");
+    Set_LocalStorageValue(game_location, game_content);
+
+    var game_name = document.getElementById("SaveLoadChoice").options[document.getElementById("SaveLoadChoice").selectedIndex].text;
+    msg = "Game is saved as: " + game_name;
+    $('#gamesaveload_popup').html("<div class='courier_new_big'>" +  msg + "</div>");
+    $('#gamesaveload_popup').popup('open');
+}
+
+
+function LoadGameFromLS()
+{
+    var game_location = document.getElementById("SaveLoadChoice").value;
+    var game_content = Get_LocalStorageValue(game_location);
+
+    if (game_content == undefined || game_content == "" || game_content == null) return;
+    
+    var variant = game_content.split("#")[0]
+    var fen = game_content.split("#")[1]
+    var history = game_content.split("#")[2]
+
+    Set_LocalStorageValue("variant", variant);
+    Set_LocalStorageValue("fen", fen);
+    Set_LocalStorageValue("history", history);
+
+    RestoreGameSettings();
+
+    var game_name = document.getElementById("SaveLoadChoice").options[document.getElementById("SaveLoadChoice").selectedIndex].text;
+    msg = game_name + " is loaded."
+    $('#gamesaveload_popup').html("<div class='courier_new_big'>" +  msg + "</div>");
+    $('#gamesaveload_popup').popup('open');
+}
+
+
 // ══════════════════════════
 //  Engine competition
 // ══════════════════════════
