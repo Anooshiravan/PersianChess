@@ -117,7 +117,7 @@ function RestartEngine()
 function FallBackToOlderVersion(){
     var r = confirm("Your device does not support web workers.\r\nDo you want to use an older version?");
     if (r == true) {
-        window.location = "_v_1_3_8/index.html";
+        window.location = "old/index.html";
     } 
 }
 
