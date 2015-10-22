@@ -171,6 +171,7 @@ function ProcessEngineMessage_Init(message)
     switch(message) {
         case "hi":
             debuglog ("Engine connected.", 1);
+            Append ('movelist', "Engine connected.");
             PersianChessEngine.postMessage("init::start_engine");
             break;
         case "engine_started":
