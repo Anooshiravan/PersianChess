@@ -35,7 +35,7 @@ html {
 body {
     margin: 0px;
     padding: 0px;
-    background:url("../img/darkbg.jpg");
+    background:url("../../img/darkbg.jpg");
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -79,39 +79,39 @@ body {
     color: #b58863;
 }
 .wait-53d37 {
-    background-image:url('../img/wait.png');
+    background-image:url('../../img/wait.png');
     background-size: 100%;
 }
 .showsidewhite-53d37 {
-    background-image:url('../img/sidewhite.png');
+    background-image:url('../../img/sidewhite.png');
     background-size: 100%;
 }
 .showsideblack-53d37 {
-    background-image:url('../img/sideblack.png');
+    background-image:url('../../img/sideblack.png');
     background-size: 100%;
 }
 .persian-53d37 {
     background-color: #b58863;
     color: #b58863;
-    background-image:url('../img/persian.png');
+    background-image:url('../../img/persian.png');
     background-size: 100%;
 }
 .ase-53d37 {
     background-color: #b58863;
     color: #b58863;
-    background-image:url('../img/ase.png');
+    background-image:url('../../img/ase.png');
     background-size: 100%;
 }
 .rightdia-53d38 {
     background-color: #b58863;
     color: #b58863;
-    background-image:url('../img/right.png');
+    background-image:url('../../img/right.png');
     background-size: 100%;
 }
 .leftdia-53d39 {
     background-color: #b58863;
     color: #b58863;
-    background-image:url('../img/left.png');
+    background-image:url('../../img/left.png');
     background-size: 100%;
 }
 .white-blue-1e1d7 {
@@ -137,25 +137,25 @@ body {
 .persian-blue-53d37 {
     background-color: #688DBC;
     color: #CCCFD1;
-    background-image:url('../img/persian.png');
+    background-image:url('../../img/persian.png');
     background-size: 100%;
 }
 .ase-blue-53d37 {
     background-color: #688DBC;
     color: #CCCFD1;
-    background-image:url('../img/ase.png');
+    background-image:url('../../img/ase.png');
     background-size: 100%;
 }
 .rightdia-blue-53d38 {
     background-color: #688DBC;
     color: #CCCFD1;
-    background-image:url('../img/right.png');
+    background-image:url('../../img/right.png');
     background-size: 100%;
 }
 .leftdia-blue-53d39 {
     background-color: #688DBC;
     color: #CCCFD1;
-    background-image:url('../img/left.png');
+    background-image:url('../../img/left.png');
     background-size: 100%;
 }
 
@@ -182,25 +182,25 @@ body {
 .persian-green-53d37 {
     background-color: #869E86;
     color: #CCCFD1;
-    background-image:url('../img/persian.png');
+    background-image:url('../../img/persian.png');
     background-size: 100%;
 }
 .ase-green-53d37 {
     background-color: #869E86;
     color: #CCCFD1;
-    background-image:url('../img/ase.png');
+    background-image:url('../../img/ase.png');
     background-size: 100%;
 }
 .rightdia-green-53d38 {
     background-color: #869E86;
     color: #CCCFD1;
-    background-image:url('../img/right.png');
+    background-image:url('../../img/right.png');
     background-size: 100%;
 }
 .leftdia-green-53d39 {
     background-color: #869E86;
     color: #CCCFD1;
-    background-image:url('../img/left.png');
+    background-image:url('../../img/left.png');
     background-size: 100%;
 }
 
@@ -217,22 +217,22 @@ body {
 }
 .persian-debug-53d37 {
     background-color: #FFFFFF;
-    background-image:url('../img/persian.png');
+    background-image:url('../../img/persian.png');
     background-size: 100%;
 }
 .ase-debug-53d37 {
     background-color: #FFFFFF;
-    background-image:url('../img/ase.png');
+    background-image:url('../../img/ase.png');
     background-size: 100%;
 }
 .rightdia-debug-53d38 {
     background-color: #FFFFFF;
-    background-image:url('../img/right.png');
+    background-image:url('../../img/right.png');
     background-size: 100%;
 }
 .leftdia-debug-53d39 {
     background-color: #FFFFFF;
-    background-image:url('../img/left.png');
+    background-image:url('../../img/left.png');
     background-size: 100%;
 }
 
@@ -257,25 +257,25 @@ body {
 .persian-oriental-53d37 {
     background-color: #888888;
     color: #CCCFD1;
-    background-image:url('../img/persian.png');
+    background-image:url('../../img/persian.png');
     background-size: 100%;
 }
 .ase-oriental-53d37 {
     background-color: #888888;
     color: #CCCFD1;
-    background-image:url('../img/ase.png');
+    background-image:url('../../img/ase.png');
     background-size: 100%;
 }
 .rightdia-oriental-53d38 {
     background-color: #888888;
     color: #CCCFD1;
-    background-image:url('../img/right.png');
+    background-image:url('../../img/right.png');
     background-size: 100%;
 }
 .leftdia-oriental-53d39 {
     background-color: #888888;
     color: #CCCFD1;
-    background-image:url('../img/left.png');
+    background-image:url('../../img/left.png');
     background-size: 100%;
 }
 

@@ -35,17 +35,17 @@ var engine_on = true;
 var audio_on = false;
 
 // Audio definitions
-var welcome = 'audio/welcome.mp3';
-var click = 'audio/click.mp3';
-var move = 'audio/move.mp3';
-var end = 'audio/end.mp3';
-var check = 'audio/check.mp3';
-var capture = 'audio/capture.mp3';
-var checkmate= 'audio/checkmate.mp3';
-var whitewins = 'audio/whitewins.mp3';
-var blackwins = 'audio/blackwins.mp3';
-var draw = 'audio/draw.mp3';
-var gg = 'audio/gg.mp3';
+var welcome = '../audio/welcome.mp3';
+var click = '../audio/click.mp3';
+var move = '../audio/move.mp3';
+var end = '../audio/end.mp3';
+var check = '../audio/check.mp3';
+var capture = '../audio/capture.mp3';
+var checkmate= '../audio/checkmate.mp3';
+var whitewins = '../audio/whitewins.mp3';
+var blackwins = '../audio/blackwins.mp3';
+var draw = '../audio/draw.mp3';
+var gg = '../audio/gg.mp3';
 
 var lla;
 var lla_loaded = false;

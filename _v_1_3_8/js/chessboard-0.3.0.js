@@ -799,12 +799,12 @@
             if (cfg.hasOwnProperty('pieceTheme') !== true ||
                 (typeof cfg.pieceTheme !== 'string' &&
                     typeof cfg.pieceTheme !== 'function')) {
-                cfg.pieceTheme = 'img/chesspieces/wikipedia/{piece}.png';
+                cfg.pieceTheme = '../img/chesspieces/wikipedia/{piece}.png';
             }
 
             if (board_debug)
             {
-                cfg.pieceTheme = 'img/chesspieces/debug/{piece}.png';
+                cfg.pieceTheme = '../img/chesspieces/debug/{piece}.png';
             }
 
             // animation speeds
