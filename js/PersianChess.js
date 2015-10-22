@@ -85,7 +85,7 @@ var PersianChessEngine;
 
             PersianChessEngineValid = true;
             try {
-                PersianChessEngine = new bWorker("js/PersianChessEngine/PersianChessEngine.js");
+                PersianChessEngine = new Worker("js/PersianChessEngine/PersianChessEngine.js");
                 PersianChessEngine.onmessage = function (e) {
                     ProcessEngineMessage(e.data)
                 }
