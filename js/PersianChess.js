@@ -180,7 +180,9 @@ function ProcessEngineMessage_Init(message)
     switch(message) {
         case "hi":
             debuglog ("Engine connected.", 1);
-            Append ('movelist', "Engine connected.");
+            var msg = "> Engine connected.";
+            if (lla_loaded == true) msg += "\r\n> LLA loaded.";
+            Append("movelist", msg);
             PersianChessEngine.postMessage("init::start_engine");
             break;
         case "engine_started":
@@ -801,7 +803,6 @@ function onDeviceReady(){
   // Load Audio
   LoadAudio();
 }
-
 
 // Sizing the screen
 window.addEventListener("touchmove", function(e) {
