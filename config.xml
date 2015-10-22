@@ -37,7 +37,7 @@
 
     <access origin="*" browserOnly="true"/>
 
-    <gap:plugin name="com.rjfun.cordova.plugin.lowlatencyaudio"/>
+    <gap:plugin name="com.rjfun.cordova.plugin.lowlatencyaudio" source="npm"/>
     <plugin name="cordova-plugin-whitelist" version="1" />
 
     <preference name="android-minSdkVersion" value="14" />
