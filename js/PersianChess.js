@@ -42,8 +42,8 @@ var version = "1.4.0";
 //  Logging
 // ══════════════════════════
 
-var debug_log_level = 1;
-var debug_to_console = true;
+var debug_log_level = 0;
+var debug_to_console = false;
 
 function debuglog (message, level)
 {
@@ -96,8 +96,8 @@ var PersianChessEngine;
             } catch (error) {
                 PersianChessEngineValid = false;
                     debuglog("Failed to load the WebWorker Engine." + error, 1);
+                    Append("movelist", "Failed to load the WebWorker Engine. " + error);
             }
-            
             return PersianChessEngineValid;
         }
 
