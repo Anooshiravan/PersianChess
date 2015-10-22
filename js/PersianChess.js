@@ -42,13 +42,13 @@ var version = "1.4.0";
 //  Logging
 // ══════════════════════════
 
-var debug_log_level = 0;
-var debug_to_console = false;
+var debug_log_level = 1;
+var debug_to_console = true;
 
 function debuglog (message, level)
 {
     if (level <= debug_log_level) console.log ("> " + message);
-    if (debug_to_console) Append("console", "> " + message);
+    if (debug_to_console) Append("movelist", "> " + message);
 }
 
 // ══════════════════════════
