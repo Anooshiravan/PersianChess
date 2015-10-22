@@ -85,7 +85,7 @@ var PersianChessEngine;
 
             PersianChessEngineValid = true;
             try {
-                PersianChessEngine = new Worker("js/PersianChessEngine/PersianChessEngine.js");
+                PersianChessEngine = new bWorker("js/PersianChessEngine/PersianChessEngine.js");
                 PersianChessEngine.onmessage = function (e) {
                     ProcessEngineMessage(e.data)
                 }
@@ -97,6 +97,7 @@ var PersianChessEngine;
                 PersianChessEngineValid = false;
                     debuglog("Failed to load the WebWorker Engine." + error, 1);
                     Append("movelist", "Failed to load the WebWorker Engine. " + error);
+                    setTimeout(function () { FallBackToOlderVersion(); }, 3000);
             }
             return PersianChessEngineValid;
         }
@@ -112,6 +113,14 @@ function RestartEngine()
     startup = true;
     setTimeout(function () { StartEngine(); }, 700);
 }
+
+function FallBackToOlderVersion(){
+    var r = confirm("Your device does not support web worker engine. Do you want to fall back to an older version?");
+    if (r == true) {
+        window.location = "fall_back_old/v_1_3_8/index.html";
+    } 
+}
+
 
 
 // ══════════════════════════
