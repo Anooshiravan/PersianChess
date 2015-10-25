@@ -546,9 +546,16 @@ function FlipBoard()
 
 function TakeBack()
 {
-    if (engine_thinking) RestartEngine();
+    if (engine_thinking) 
+    {
+        RestartEngine();
+        timeout = setTimeout(function(){ PersianChessEngine.postMessage("do::takeback"); }, 1000);
+    }
+    else
+    {
+        PersianChessEngine.postMessage("do::takeback");
+    }
     PlaySound(audio_click);
-    PersianChessEngine.postMessage("do::takeback");
     mate_square = "";
     check_square = "";
     board.removehighlights();
@@ -825,3 +832,28 @@ window.onresize = function(event) {
 
 //settings
 $.cookie.raw = true;
+
+var theme = Get_LocalStorageValue("theme");
+$('select[name^="Theme"] option[value="' + theme + '"]').attr("selected","selected");
+
+$(document).on("pagecreate", function () {
+  $("#ThinkTimeChoice").on('slidestop', function (event) {
+    SetThinkTime();
+  });
+});
+
+// fastclick.js attach to buttons
+
+var setting_btn = document.getElementById('setting_button');
+var newgame_btn = document.getElementById('newgame_button');
+var takebak_btn = document.getElementById('takebak_button');
+var forward_btn = document.getElementById('forward_button');
+var flip_btn = document.getElementById('flip_button');
+var toggle_btn = document.getElementById('toggle_button');
+
+  FastClick.attach(setting_btn);
+  FastClick.attach(newgame_btn);
+  FastClick.attach(takebak_btn);
+  FastClick.attach(forward_btn);
+  FastClick.attach(flip_btn);
+  FastClick.attach(toggle_btn);

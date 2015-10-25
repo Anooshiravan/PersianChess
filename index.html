@@ -69,8 +69,8 @@
     <hr>
     
     <div>
-      <select data-native-menu="false" data-mini="true" id="Theme" onChange="SetTheme(this.value);">
-        <option selected="selected" value="green">Caspian</option>
+      <select data-native-menu="false" data-mini="true" name="Theme" id="Theme" onChange="SetTheme(this.value);">
+        <option value="green">Caspian</option>
         <option value="brown">Pyramid</option>
         <option value="blue">River</option>
         <option value="oriental">Oriental</option>
@@ -168,33 +168,6 @@
 <script src="js/PersianChessBoard.js"></script>
 <script src="js/PersianChessPlatform.js"></script>
 <script src="js/PersianChess.js"></script>
-
-<script>
-
-$(document).on("pagecreate", function () {
-  $("#ThinkTimeChoice").on('slidestop', function (event) {
-    SetThinkTime();
-  });
-});
-
-// fastclick.js attach to buttons
-
-var setting_btn = document.getElementById('setting_button');
-var newgame_btn = document.getElementById('newgame_button');
-var takebak_btn = document.getElementById('takebak_button');
-var forward_btn = document.getElementById('forward_button');
-var flip_btn = document.getElementById('flip_button');
-var toggle_btn = document.getElementById('toggle_button');
-
-  FastClick.attach(setting_btn);
-  FastClick.attach(newgame_btn);
-  FastClick.attach(takebak_btn);
-  FastClick.attach(forward_btn);
-  FastClick.attach(flip_btn);
-  FastClick.attach(toggle_btn);
-
-</script>
-
 
 </body>
 </html>
