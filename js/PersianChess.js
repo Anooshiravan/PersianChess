@@ -42,7 +42,7 @@ var version = "1.4.0";
 //  Logging
 // ══════════════════════════
 
-var debug_log_level = 1;
+var debug_log_level = 0;
 var debug_to_console = false;
 
 function debuglog (message, level)
@@ -89,8 +89,13 @@ var PersianChessEngine;
                 PersianChessEngine.onmessage = function (e) {
                     ProcessEngineMessage(e.data)
                 }
+                PersianChessEngine.onerror = function (e) {
+                    e.preventDefault();
+                    return false;
+                }
                 PersianChessEngine.error = function (e) {
-                    debuglog("Error from WebWorker Engine:" + e.message, 1);
+                    e.preventDefault();
+                    return false;
                 }
                 PersianChessEngine.postMessage("init::hello");
             } catch (error) {
