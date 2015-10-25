@@ -750,6 +750,7 @@ var onBoardPieceDrop = function(source, target, piece, newPos, oldPos, orientati
 function boardMoved(source, target)
 {
     move = source + "-" + target;
+    borad.move(move);
     if (board_active) {
         PersianChessEngine.postMessage("parse::" + move);
         debuglog ("Message sent to Engine to parse move:" + move , 2);
