@@ -220,7 +220,9 @@ function ProcessEngineMessage_Parsed(message)
     else
     {
         ParsedMove = message;
-        board.move(ParsedMove);
+        setTimeout(function () {
+            board.move(ParsedMove);
+        }, 10);
     }
 }
 
@@ -231,7 +233,7 @@ function ProcessEngineMessage_Pos(message)
     var engine_position = message.split("|")[0];
     setTimeout(function () {
         board.position(engine_position);
-    }, 300);
+    }, 500);
     
     var board_side = message.split("|")[1];
     switch(board_side) {

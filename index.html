@@ -44,10 +44,10 @@
       <div id="controls_container" class="ui-block-b">
         <a id="setting_button" href="#settings_panel" class="ui-btn ui-btn-inline ui-icon-bars ui-btn-icon-notext"></a>
         <a id="newgame_button" href="#newgame_panel" class="ui-btn ui-btn-inline ui-icon-home ui-btn-icon-notext"></a>
-        <a class="ui-btn ui-btn-inline ui-icon-arrow-l ui-btn-icon-notext" onclick="TakeBack();"></a>
-        <a class="ui-btn ui-btn-inline ui-icon-arrow-r ui-btn-icon-notext" onclick="MoveForward();"></a>
-        <a class="ui-btn ui-btn-inline ui-icon-recycle ui-btn-icon-notext" onclick="FlipBoard();"></a>
-        <a class="ui-btn ui-btn-inline ui-icon-grid ui-btn-icon-notext" onclick="ToggleConsole();"></a>
+        <a id="takebak_button" class="ui-btn ui-btn-inline ui-icon-arrow-l ui-btn-icon-notext" onclick="TakeBack();"></a>
+        <a id="forward_button" class="ui-btn ui-btn-inline ui-icon-arrow-r ui-btn-icon-notext" onclick="MoveForward();"></a>
+        <a id="flip_button" class="ui-btn ui-btn-inline ui-icon-recycle ui-btn-icon-notext" onclick="FlipBoard();"></a>
+        <a id="toggle_button" class="ui-btn ui-btn-inline ui-icon-grid ui-btn-icon-notext" onclick="ToggleConsole();"></a>
       </div>
       <div id="console_container" class="ui-block-b">
         <textarea id="movelist" disabled></textarea>
@@ -177,10 +177,21 @@ $(document).on("pagecreate", function () {
   });
 });
 
+// fastclick.js attach to buttons
+
 var setting_btn = document.getElementById('setting_button');
-FastClick.attach(setting_btn);
+var newgame_btn = document.getElementById('newgame_button');
+var takebak_btn = document.getElementById('takebak_button');
+var forward_btn = document.getElementById('forward_button');
+var flip_btn = document.getElementById('flip_button');
+var toggle_btn = document.getElementById('toggle_button');
 
-
+  FastClick.attach(setting_btn);
+  FastClick.attach(newgame_btn);
+  FastClick.attach(takebak_btn);
+  FastClick.attach(forward_btn);
+  FastClick.attach(flip_btn);
+  FastClick.attach(toggle_btn);
 
 </script>
 
