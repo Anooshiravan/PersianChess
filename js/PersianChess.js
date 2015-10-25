@@ -42,7 +42,7 @@ var version = "1.4.0";
 //  Logging
 // ══════════════════════════
 
-var debug_log_level = 0;
+var debug_log_level = 1;
 var debug_to_console = false;
 
 function debuglog (message, level)
@@ -220,6 +220,7 @@ function ProcessEngineMessage_Parsed(message)
     else
     {
         ParsedMove = message;
+        board.move(ParsedMove);
     }
 }
 
@@ -230,7 +231,7 @@ function ProcessEngineMessage_Pos(message)
     var engine_position = message.split("|")[0];
     setTimeout(function () {
         board.position(engine_position);
-    }, 700);
+    }, 300);
     
     var board_side = message.split("|")[1];
     switch(board_side) {
