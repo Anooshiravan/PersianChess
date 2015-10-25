@@ -177,9 +177,8 @@ $(document).on("pagecreate", function () {
   });
 });
 
-$(function() {
-    FastClick.attach(document.body);
-});
+var setting_btn = document.getElementById('setting_button');
+FastClick.attach(setting_btn);
 
 
 

@@ -757,7 +757,7 @@ function boardMoved(source, target)
                 Engine_MakeMove(ParsedMove.split("|")[1]);
                 PlayMoveSound(ParsedMove.split("|")[2]);
             }
-        }, 300);
+        }, 700);
     }
 }
 
