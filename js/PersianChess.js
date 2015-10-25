@@ -549,12 +549,12 @@ function TakeBack()
     if (engine_thinking) 
     {
         RestartEngine();
-        timeout = setTimeout(function(){ PersianChessEngine.postMessage("do::takeback"); }, 1000);
     }
     else
     {
         PersianChessEngine.postMessage("do::takeback");
     }
+
     PlaySound(audio_click);
     mate_square = "";
     check_square = "";
