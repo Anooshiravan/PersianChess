@@ -222,10 +222,6 @@ function Get_LocalStorageValue(name)
 function RestoreGameSettings()
 {
     if (vs_engine()) return;
-    
-    // FEN
-    var ls_fen = Get_LocalStorageValue("fen");
-    if (ls_fen != undefined && ls_fen != "" && ls_fen != null) Engine_SetFen(ls_fen);
 
     // PGN
     var ls_history = Get_LocalStorageValue("history");

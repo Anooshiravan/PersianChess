@@ -54,7 +54,19 @@ function debuglog (message, level)
 // ══════════════════════════
 //  Game state
 // ══════════════════════════
-var START_FEN = "f111111111f/1rnbqksbnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKSBNR1/F111111111F w KQkq - 0 1";
+// FEN
+var START_FEN = "";
+var ls_fen = Get_LocalStorageValue("fen");
+
+if (ls_fen != undefined && ls_fen != "" && ls_fen != null) 
+    {
+        START_FEN = ls_fen;
+    }
+else
+    {
+        START_FEN = "f111111111f/1rnbqksbnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKSBNR1/F111111111F w KQkq - 0 1";
+    }
+
 var variant = "Persian";
 var board_active = true;
 var theme = "green";
@@ -64,7 +76,6 @@ var engine_move = "";
 var check_square = "";
 var mate_square = "";
 var gameover = false;
-var startup = true;
 var engine_thinking = false;
 
 // ══════════════════════════
@@ -112,11 +123,16 @@ StartEngine();
 
 function RestartEngine()
 {
-    PersianChessEngine.terminate();
-    PersianChessEngine = undefined;
-    PersianChessEngineValid = true;
-    startup = true;
-    setTimeout(function () { StartEngine(); }, 700);
+    try 
+    {
+        PersianChessEngine.terminate();
+        PersianChessEngine = undefined;
+        PersianChessEngineValid = true;
+        setTimeout(function () { StartEngine(); }, 700);
+    }
+    catch(error) {
+        Append("movelist", error);
+    }
 }
 
 function FallBackToOlderVersion(){
@@ -192,11 +208,12 @@ function ProcessEngineMessage_Init(message)
             break;
         case "engine_started":
             debuglog("Engine started.", 2);
-            StartNewGame();
+            Engine_SetFen(START_FEN);
+            Engine_TurnOn();
+            RestoreGameSettings();
             break;
         case "new_game_started":
             debuglog ("New game started. Turning the Engine on, set the default thinktime, variant and depth." , 2);
-            RestoreGameSettings();
             Engine_TurnOn();
             break;
         case "engine_is_on":
@@ -307,7 +324,7 @@ function ProcessEngineMessage_Info(info)
     }
     if (info == "invalid_fen")
     {
-        // jAlert("Fen string is invalid.", "Error")
+        Append("movelist", "Fen string is invalid.");
     }
 }
 
@@ -490,47 +507,31 @@ function StartNewGame()
     variant = $('#VariantChoice').val();
     theme = GetVariantTheme(variant);
 
-    if (startup == true) {
-        if (Get_LocalStorageValue("variant") != undefined && Get_LocalStorageValue("variant") != "")
-        {
-            SetVariant(Get_LocalStorageValue("variant"));
-        }
-
-        PersianChessEngine.postMessage("init::new_game");
-        Engine_TurnOn();
-        check_square = "";
-        mate_square = "";
-        board.theme(theme);
-        board.removehighlights();
-        startup = false;
-    }
-    else
+    if (engine_thinking) RestartEngine();
+    SetThinkTime();
+    SetVariant(variant);
+    ResetGameSettings();
+    PersianChessEngine.postMessage("init::new_game");
+    check_square = "";
+    mate_square = "";
+    board.theme(theme);
+    board.removehighlights();
+    ClearConsole();
+    $("#newgame_panel").panel("close");
+    timeout = setTimeout(function(){ PlaySound(audio_welcome); }, 500);
+    
+    if ($('#ColorChoice').val() == "Black" && board.orientation() == "white")
     {
-        if (engine_thinking) RestartEngine();
-        SetThinkTime();
-        SetVariant(variant);
-        ResetGameSettings();
-        PersianChessEngine.postMessage("init::new_game");
-        check_square = "";
-        mate_square = "";
-        board.theme(theme);
-        board.removehighlights();
-        ClearConsole();
-        $("#newgame_panel").panel("close");
-        timeout = setTimeout(function(){ PlaySound(audio_welcome); }, 500);
-        
-        if ($('#ColorChoice').val() == "Black" && board.orientation() == "white")
-        {
-            FlipBoard();
-        }
-
-        if ($('#ColorChoice').val() == "Black") Engine_Go();
-
-        if ($('#ColorChoice').val() == "White" && board.orientation() == "black")
-        {
-            FlipBoard();
-        }
+        FlipBoard();
     }
+
+    if ($('#ColorChoice').val() == "Black") Engine_Go();
+
+    if ($('#ColorChoice').val() == "White" && board.orientation() == "black")
+    {
+        FlipBoard();
+    }
+    
 }
 
 function FlipBoard()
@@ -546,19 +547,25 @@ function FlipBoard()
 
 function TakeBack()
 {
-    if (engine_thinking) 
-    {
-        RestartEngine();
-    }
-    else
-    {
-        PersianChessEngine.postMessage("do::takeback");
-    }
+    try {
+        if (engine_thinking) 
+        {
+            RestartEngine();
+        }
+        else
+        {
+            PersianChessEngine.postMessage("do::takeback");
+        }
 
-    PlaySound(audio_click);
-    mate_square = "";
-    check_square = "";
-    board.removehighlights();
+        PlaySound(audio_click);
+        mate_square = "";
+        check_square = "";
+        board.removehighlights();
+    }
+    catch(error) 
+    {
+        Append("movelist", error);
+    }
 }
 
 function MoveForward()
@@ -587,35 +594,12 @@ function EngineOnOff()
 
 function SetPosition()
 {
-    PlaySound(audio_click);
-    var txt;
-    /*
-    jPrompt("Please enter position FEN:", current_fen, "Insert new FEN", function(r) {
-    if( r ) 
-        {
-            var new_fen = r;
-            Engine_SetFen(new_fen);
-        }
-    });
-    */
+    // Retired
 }
 
 function SendGameByMail()
 {
-    PlaySound(audio_click);
-    var msgsendpgn = "Do you want to send this game as PGN format by email?";
-    jConfirm(msgsendpgn, "Send PGN", function(r) {
-        if (r) 
-            {
-                var emailbody = "";
-                if (document.getElementById('movelist').value != '')
-                {
-                    emailbody = document.getElementById('movelist').value;
-                    emailbody = emailbody.replace(/(?:\r\n|\r|\n)/g, '%0D%0A');
-                    window.open("mailto:?subject=Persian Chess game&body=" + emailbody);
-            }
-        }
-    });
+    // Retired
 }
 
 
