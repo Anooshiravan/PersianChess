@@ -54,19 +54,8 @@ function debuglog (message, level)
 // ══════════════════════════
 //  Game state
 // ══════════════════════════
-// FEN
-var START_FEN = "";
-var ls_fen = Get_LocalStorageValue("fen");
 
-if (ls_fen != undefined && ls_fen != "" && ls_fen != null) 
-    {
-        START_FEN = ls_fen;
-    }
-else
-    {
-        START_FEN = "f111111111f/1rnbqksbnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKSBNR1/F111111111F w KQkq - 0 1";
-    }
-
+var START_FEN = "f111111111f/1rnbqksbnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKSBNR1/F111111111F w KQkq - 0 1";
 var variant = "Persian";
 var board_active = true;
 var theme = "green";
@@ -88,6 +77,13 @@ var PersianChessEngine;
 
         function StartEngine()
         {
+            debuglog("Restoring fen from local storage...", 1)
+            var ls_fen = Get_LocalStorageValue("fen");
+            if (ls_fen != undefined && ls_fen != "" && ls_fen != null) 
+                {
+                    START_FEN = ls_fen;
+                }
+       
             debuglog("Starting WebWorker Engine...", 1)
 
             if (!PersianChessEngineValid) {
