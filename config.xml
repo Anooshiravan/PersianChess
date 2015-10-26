@@ -39,11 +39,9 @@
     <access origin="*" browserOnly="true"/>
 
     <gap:plugin name="com.rjfun.cordova.plugin.lowlatencyaudio" source="npm"/>
-    <plugin name="cordova-plugin-whitelist" version="1" />
 
     <preference name="android-minSdkVersion" value="14" />
     <preference name="android-targetSdkVersion" value="14" />
     <preference name="permissions" value="none"/>
-    <preference name="android-installLocation" value="auto" />
 
 </widget>
