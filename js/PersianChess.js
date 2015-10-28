@@ -185,6 +185,9 @@ function ProcessEngineMessage(message)
     case "debug":
         ProcessEngineMessage_Debug(msg_body);
         break;
+    case "report":
+        ProcessEngineMessage_Report(msg_body);
+        break;
     default:
         debuglog ("Message not recognised: " + message)
         break
@@ -388,6 +391,23 @@ function ProcessEngineMessage_Debug(message)
     debuglog("Eng_DBG: " + message , 1);
 }
 
+function ProcessEngineMessage_Report(message)
+{
+    debuglog("Eng_Report: " + message , 0);
+    
+    $.ajax({
+        type: "POST",
+        url: "http:/www.persianchess.com/error_handler/report.php",
+        dataType: "text",
+        data: {action: 'report_engine_error', gamestate: message},
+        success: function (data) {
+            debuglog("Ajax: " + data , 1);
+        },
+        error: function (textStatus, errorThrown) {
+            debuglog("Ajax Status: " + JSON.stringify(textStatus) + " | Ajax Error:" + errorThrown, 1);
+        }
+    });
+}
 
 
 // ══════════════════════════

@@ -351,9 +351,10 @@ function SearchPosition() {
     if (bestMove == NOMOVE || bestMove == undefined || SanityCheck(bestMove) == BOOL.FALSE) {
         if (GameController.GameOver == BOOL.FALSE)
         {
+            ReportEngineError();
             SendMessageToGui("console", "> Fail safe L1, Depth 3");
             engine_error_L1++;
-            FailSafeResetBoard();
+            FailSafeResetBoard("L1");
             bestMove = IterativeDeepening(3);
         }
     }
@@ -364,7 +365,7 @@ function SearchPosition() {
         {
             SendMessageToGui("console", "> Fail safe L2: Depth 1");
             engine_error_L2++;
-            FailSafeResetBoard();
+            FailSafeResetBoard("L2");
             bestMove = IterativeDeepening(1);
         }
     }
@@ -387,22 +388,36 @@ function SearchPosition() {
     ShowPerformance();
 }
 
-function FailSafeResetBoard()
+function FailSafeResetBoard(level)
 {
-        // Backup board
-        fen = BoardToFen();
-        var brd_hisPly_bak = brd_hisPly;
-        var brd_history_bak = brd_history;
-        var brd_history_notes_bak = brd_history_notes;
-        // Reset all
-        init_engine();
-        ResetBoard();
-        ClearForSearch();
-        // Restore board
-        ParseFen(fen);
-        brd_hisPly = brd_hisPly_bak;
-        brd_history = brd_history_bak;
-        brd_history_notes = brd_history_notes_bak;
+    // Backup board
+    fen = BoardToFen();
+    var brd_hisPly_bak = brd_hisPly;
+    var brd_history_bak = brd_history;
+    var brd_history_notes_bak = brd_history_notes;
+
+    // Reset all
+    init_engine();
+    ResetBoard();
+    ClearForSearch();
+
+    switch(level) {
+        case "L1":
+            // Restore board
+            ParseFen(fen);
+            brd_hisPly = brd_hisPly_bak;
+            brd_history = brd_history_bak;
+            brd_history_notes = brd_history_notes_bak;
+            break;
+
+        case "L2":
+            // Only restore fen
+            ParseFen(fen);
+            break;
+        
+        default:
+            break
+    }
 }
 
 

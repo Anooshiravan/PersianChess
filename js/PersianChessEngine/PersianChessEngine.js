@@ -436,3 +436,11 @@ function SetFen(this_fen)
         SendPosition();
     }
 }
+
+function ReportEngineError()
+{
+    var error = BoardToFen();
+    error += "|";
+    if (BoardToHistory().length > 1) error += BoardToHistory();
+    SendMessageToGui("report", error);
+}
