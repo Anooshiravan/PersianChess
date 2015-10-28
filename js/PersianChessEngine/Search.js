@@ -347,6 +347,8 @@ function SearchPosition() {
     // Iterative deepening in max-depth
     bestMove = IterativeDeepening(srch_depth);
 
+    bestMove = NOMOVE;
+
     // Fail safe level one, search in depth 3
     if (bestMove == NOMOVE || bestMove == undefined || SanityCheck(bestMove) == BOOL.FALSE) {
         if (GameController.GameOver == BOOL.FALSE)
