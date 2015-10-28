@@ -223,6 +223,13 @@ function RestoreGameSettings()
 {
     if (vs_engine()) return;
 
+    // FEN
+    var ls_fen = Get_LocalStorageValue("fen");
+    if (ls_fen != undefined && ls_fen != "" && ls_fen != null && ls_fen != START_FEN) 
+    {
+            Engine_SetFen(ls_fen);
+    }
+
     // PGN
     var ls_history = Get_LocalStorageValue("history");
     if (ls_history != undefined && ls_history != "" && ls_history != null) 
@@ -309,6 +316,18 @@ function LoadGameFromLS()
     $('#gamesaveload_popup').popup('open');
 }
 
+function LoadReport(report)
+{
+    var variant = report.split("|")[0]
+    var fen = report.split("|")[1]
+    var history = report.split("|")[2]
+
+    Set_LocalStorageValue("variant", variant);
+    Set_LocalStorageValue("fen", fen);
+    Set_LocalStorageValue("history", history);
+
+    RestoreGameSettings();
+}
 
 // ══════════════════════════
 //  Engine competition

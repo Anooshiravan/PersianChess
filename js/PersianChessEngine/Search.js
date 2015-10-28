@@ -347,13 +347,10 @@ function SearchPosition() {
     // Iterative deepening in max-depth
     bestMove = IterativeDeepening(srch_depth);
 
-    bestMove = NOMOVE;
-
     // Fail safe level one, search in depth 3
     if (bestMove == NOMOVE || bestMove == undefined || SanityCheck(bestMove) == BOOL.FALSE) {
         if (GameController.GameOver == BOOL.FALSE)
         {
-            ReportEngineError();
             SendMessageToGui("console", "> Fail safe L1, Depth 3");
             engine_error_L1++;
             FailSafeResetBoard("L1");
@@ -361,7 +358,7 @@ function SearchPosition() {
         }
     }
 
-    // Fail safe level two, search in depth 1 (just a good legal move)
+    // Fail safe level two, reset everything and search in depth 1 (just a good legal move)
     if (bestMove == NOMOVE || bestMove == undefined || SanityCheck(bestMove) == BOOL.FALSE) {
         if (GameController.GameOver == BOOL.FALSE)
         {
@@ -369,6 +366,9 @@ function SearchPosition() {
             engine_error_L2++;
             FailSafeResetBoard("L2");
             bestMove = IterativeDeepening(1);
+
+            // Engine is creashed and recovered, send report
+            ReportEngineError();
         }
     }
 

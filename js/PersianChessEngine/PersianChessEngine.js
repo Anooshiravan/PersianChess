@@ -439,7 +439,9 @@ function SetFen(this_fen)
 
 function ReportEngineError()
 {
-    var error = BoardToFen();
+    var error = variant;
+    error += "|";
+    error += BoardToFen();
     error += "|";
     if (BoardToHistory().length > 1) error += BoardToHistory();
     SendMessageToGui("report", error);
