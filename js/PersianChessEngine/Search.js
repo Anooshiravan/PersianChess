@@ -36,7 +36,7 @@ var ABcalled = 0;
 
 
 function CheckUp() {
-    if (((new Date).getTime() - srch_start) > srch_time) srch_stop = BOOL.TRUE;
+    if ((((new Date).getTime() - srch_start) > srch_time) && Treshhold > 1) srch_stop = BOOL.TRUE;
 }
 
 function PickNextMove(moveNum) {
@@ -423,6 +423,8 @@ function FailSafeResetBoard(level)
 }
 
 
+var Treshhold = 0;
+
 function IterativeDeepening(id_depth)
 {
     var bestMove = NOMOVE;
@@ -430,12 +432,14 @@ function IterativeDeepening(id_depth)
     var pvNum = 0;
     var line;
     var currentDepth = 0;
-
+    
     for (currentDepth = 1; currentDepth <= id_depth; ++currentDepth) {
+
+        Treshhold = currentDepth;
 
         bestScore = AlphaBeta(-INFINITE, INFINITE, currentDepth, BOOL.TRUE);
         
-        if (srch_stop == BOOL.TRUE && currentDepth > 1) break; // Do not break the search until depth 1 is complete
+        if (srch_stop == BOOL.TRUE) break; // Do not break the search until depth 1 is complete
         pvNum = GetPvLine(currentDepth);
 
         bestMove = brd_PvArray[0];
