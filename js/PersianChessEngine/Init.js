@@ -134,6 +134,7 @@ function init_engine() {
 }
 
 function NewGame() {
+	init_engine();
     ParseFen(START_FEN);
     if (debug_log) PrintBoard();
     GameController.PlayerSide = brd_side;
