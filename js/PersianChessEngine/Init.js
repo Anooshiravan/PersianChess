@@ -26,6 +26,9 @@ function StartEngine() {
 
 function InitBoardVars() {
 
+	brd_history.splice(0,brd_history.length);
+	brd_PvTable.splice(0,brd_PvTable.length);
+
 	var index = 0;
 	for(index = 0; index < MAXGAMEMOVES; index++) {
 		brd_history.push({
