@@ -353,6 +353,9 @@ function SearchPosition() {
         {
             SendMessageToGui("console", "> Fail safe L1, Depth 3");
             engine_error_L1++;
+           
+            ReportEngineError();
+
             FailSafeResetBoard("L1");
             bestMove = IterativeDeepening(3);
         }
@@ -366,9 +369,6 @@ function SearchPosition() {
             engine_error_L2++;
             FailSafeResetBoard("L2");
             bestMove = IterativeDeepening(1);
-
-            // Engine is creashed and recovered, send report
-            ReportEngineError();
         }
     }
 

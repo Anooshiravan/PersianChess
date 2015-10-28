@@ -85,13 +85,18 @@ function BoardToFen() {
         fenStr += PrSq(brd_enPas) + ' ';
     }
     fenStr += brd_fiftyMove;
-    fenStr += ' ';
-    var tempHalfMove = brd_hisPly;
-    if (brd_side == COLOURS.BLACK) {
-        tempHalfMove--;
+    
+    if (brd_hisPly > 2) 
+    {
+        fenStr += ' ';
+        var tempHalfMove = brd_hisPly;
+        if (brd_side == COLOURS.BLACK) {
+            tempHalfMove--;
+        }
+        var pLy =  tempHalfMove / 2;
+        if (pLy < 1) pLy = 1;
+        fenStr += pLy;
     }
-    fenStr += tempHalfMove / 2;
-
     return fenStr;
 }
 
