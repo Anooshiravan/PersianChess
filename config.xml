@@ -36,8 +36,8 @@
         <uses-feature android:name="android.hardware.wifi" android:required="false"/>
     </gap:config-file>
 
-    <access origin="*" browserOnly="true"/>
-
+    <access origin="*"/>
+    
     <gap:plugin name="com.rjfun.cordova.plugin.lowlatencyaudio" source="npm"/>
     <plugin name="cordova-plugin-whitelist" version="1" />
 
