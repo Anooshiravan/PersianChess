@@ -42,7 +42,7 @@ var version = "1.4.3";
 //  Logging
 // ══════════════════════════
 
-var debug_log_level = 2;
+var debug_log_level = 0;
 var debug_to_console = false;
 
 function debuglog (message, level)
@@ -393,12 +393,13 @@ function ProcessEngineMessage_Debug(message)
 function ProcessEngineMessage_Report(message)
 {
     debuglog("Eng_Report: " + message , 0);
-    
+    var agent = navigator.userAgent;
+    var report = agent + '\r\n----------------\r\n' + message;
     $.ajax({
         type: "POST",
         url: "http:/www.persianchess.com/error_handler/report.php",
         dataType: "text",
-        data: {action: 'report_engine_error', gamestate: message},
+        data: {action: 'report_engine_error', gamestate: report},
         success: function (data) {
             debuglog("Ajax: " + data , 1);
         },
