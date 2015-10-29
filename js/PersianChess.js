@@ -36,13 +36,13 @@
 ════════════════════════════════════════════════════════════════════
 */
 
-var version = "1.4.0";
+var version = "1.4.3";
 
 // ══════════════════════════
 //  Logging
 // ══════════════════════════
 
-var debug_log_level = 0;
+var debug_log_level = 2;
 var debug_to_console = false;
 
 function debuglog (message, level)
@@ -62,8 +62,6 @@ var theme = "green";
 var current_fen = START_FEN;
 var pgn = "";
 var engine_move = "";
-var check_square = "";
-var mate_square = "";
 var gameover = false;
 var engine_thinking = false;
 
@@ -279,7 +277,7 @@ function ProcessEngineMessage_History(engine_history)
 
     HistoryToPGN(engine_history);
 
-    UpdateMoveList();    
+    UpdateMoveList();  
     UpdateBoardHighlight();
 }
 
@@ -307,14 +305,12 @@ function ProcessEngineMessage_Info(info)
     if (info.split("|")[0] == "check")
     {
         var KingSq = info.split("|")[1];
-        check_square = KingSq;
-        timeout = setTimeout(function(){ PlaySound(audio_check); }, 500);
+        timeout = setTimeout(function(){ 
+            PlaySound(audio_check); 
+            board.removehighlights();
+            board.highlight_check(KingSq);
+        }, 500);
     }
-    else
-    {
-        check_square = "";
-    }
-
     if (info == "thinking")
     {
         board.logo("wait");
@@ -334,7 +330,10 @@ function ProcessEngineMessage_Gameover(message)
     var Rule = message.split("|")[1];
     var KingSq = message.split("|")[2];
     debuglog ("Gameover: Result:" + Result + " Rule:" + Rule + " KingSq:" + KingSq , 1);
-    mate_square = KingSq;
+    timeout = setTimeout(function(){ 
+            board.removehighlights();
+            board.highlight_mate(KingSq);
+    }, 500);
     board.is_active(false);
     var msg;
     var end_game = Result + "|" + Rule;
@@ -528,8 +527,6 @@ function StartNewGame()
     SetVariant(variant);
     ResetGameSettings();
     PersianChessEngine.postMessage("init::new_game");
-    check_square = "";
-    mate_square = "";
     board.theme(theme);
     board.removehighlights();
     ClearConsole();
@@ -574,8 +571,6 @@ function TakeBack()
         }
 
         PlaySound(audio_click);
-        mate_square = "";
-        check_square = "";
         board.removehighlights();
     }
     catch(error) 
@@ -689,8 +684,6 @@ function UpdateBoardHighlight()
 {
     setTimeout(function () {
         board.highlight(engine_move.split("-")[0], engine_move.split("-")[1])
-        if (check_square != "") board.highlight_check(check_square);
-        if (mate_square != "") board.highlight_mate (mate_square);
     }, 800);
 }
 

@@ -1879,7 +1879,6 @@ widget.highlight = function() {
 
 
         widget.highlight = function (from, to) {
-            removeSquareHighlights();
             $('#' + SQUARE_ELS_IDS[from]).addClass(CSS.highlight2)
             $('#' + SQUARE_ELS_IDS[to]).addClass(CSS.highlight2)
         };

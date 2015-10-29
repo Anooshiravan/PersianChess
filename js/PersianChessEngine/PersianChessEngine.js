@@ -45,7 +45,7 @@ var engine_on = false;
 //  Logging
 // ══════════════════════════
 
-var debug_log = false;
+var debug_log = true;
 
 function debuglog (message)
 {
@@ -176,7 +176,13 @@ function ProcessGuiMessage_Move(parsed_move)
     MakeMove(parsed_move);
     if (debug_log) PrintBoard();
     SendPosition();
-    if (engine_on) MoveNow();
+    CheckAndSet();
+    if (engine_on && GameController.GameOver == BOOL.FALSE) 
+    {
+        setTimeout(function () {
+            MoveNow();
+        }, 100);
+    }
 }
 
 function ProcessGuiMessage_Set(message)
@@ -228,6 +234,7 @@ function ProcessGuiMessage_Do(command)
             TakeMove();
             brd_ply = 0;
             if (debug_log) PrintBoard();
+            GameController.GameOver = BOOL.FALSE;
             SendGameState();
             SendPosition();
         }  
@@ -277,6 +284,7 @@ function StartSearch() {
 }
 
 function CheckAndSet() {
+
     var KingSq = SQUARES.OFFBOARD;
     if (SqAttacked(brd_pList[PCEINDEX(Kings[brd_side], 0)], brd_side ^ 1) == BOOL.TRUE) {
         KingSq = PrSq(brd_pList[PCEINDEX(Kings[brd_side], 0)]);
