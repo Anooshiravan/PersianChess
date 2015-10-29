@@ -74,6 +74,8 @@ function AudioOnOff()
         audio5js = new Audio5js;
         audio_on = true;
     }
+
+    Set_LocalStorageValue("audio", document.getElementById("audio_switch").value);
 }
 
 function LoadAudio()
@@ -82,9 +84,11 @@ function LoadAudio()
     if (is_Android())
     {
         audio_on = true;
-        document.getElementById("audio_switch").value == "on";
+        if (ls_audio == undefined || ls_audio == "" || ls_audio != null)
+        {
+            $("#audio_switch").val('on').flipswitch().flipswitch('refresh');
+        }
     }
-
 
     if( window.plugins && window.plugins.LowLatencyAudio ) {
         lla = window.plugins.LowLatencyAudio;
@@ -263,6 +267,40 @@ function RestoreGameSettings()
             $('#ThinkTimeChoice').slider('refresh');
             SetThinkTime()
         }
+
+    // Audio
+    var ls_audio = Get_LocalStorageValue("audio");
+    if (ls_audio != undefined && ls_audio != "" && ls_audio != null) 
+    {
+        if (ls_audio == 'on') 
+        {
+            audio_on = true;
+            $("#audio_switch").val('on').flipswitch().flipswitch('refresh');
+        }
+        else 
+        {
+            audio_on = false;
+            $("#audio_switch").val('off').flipswitch().flipswitch('refresh');
+        }
+    }
+
+    // Engine
+    var ls_engine = Get_LocalStorageValue("engine");
+    if (ls_engine != undefined && ls_engine != "" && ls_engine != null) 
+    {
+        if (ls_engine == 'on') 
+        {
+            Engine_TurnOn();
+            $("#engine_switch").val('on').flipswitch().flipswitch('refresh');
+        }
+        else 
+        {
+            Engine_TurnOff();
+            $("#engine_switch").val('off').flipswitch().flipswitch('refresh');
+        }
+    }
+
+
 }
 
 function ResetGameSettings()

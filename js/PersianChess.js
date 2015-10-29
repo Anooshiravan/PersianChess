@@ -602,6 +602,8 @@ function EngineOnOff()
             Engine_TurnOff();
             PersianChessEngineOn = false;
         }
+
+    Set_LocalStorageValue("engine", document.getElementById("engine_switch").value);
 }
 
 function SetPosition()
@@ -859,3 +861,4 @@ var toggle_btn = document.getElementById('toggle_button');
   FastClick.attach(forward_btn);
   FastClick.attach(flip_btn);
   FastClick.attach(toggle_btn);
+
