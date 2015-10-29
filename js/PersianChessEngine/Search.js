@@ -341,7 +341,7 @@ function SearchPosition() {
     if (srch_time != 2147483647) srch_start_msg =  "Engine time: " + srch_time / 1000 + " seconds";
     else srch_start_msg = "Engine depth: " + srch_depth;
     debuglog (srch_start_msg);
-    SendMessageToGui("console", "———————————————————");
+    SendMessageToGui("console", " ");
     SendMessageToGui("console", srch_start_msg);
     
     // Iterative deepening in max-depth
@@ -450,7 +450,7 @@ function IterativeDeepening(id_depth)
         }
 
         // Print PV line
-        var pvline = ("Depth " + currentDepth + ": ");
+        var pvline = (currentDepth + "[" + (-bestScore) + "]");
             for (i = 0; i < currentDepth; i++) { 
             if (brd_PvArray[i] != undefined) pvline += " " + PrMove(brd_PvArray[i]);
         }

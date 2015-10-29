@@ -281,6 +281,10 @@ function StartSearch() {
     var engine_position = BoardToFen().replace(/ .+$/, '');
     SendPosition();
     CheckAndSet();
+    if (CapturedPieces() != "")
+    {
+        SendMessageToGui("console", CapturedPieces());
+    }
 }
 
 function CheckAndSet() {
@@ -298,6 +302,10 @@ function CheckAndSet() {
     }
     ClearHistory();
     SendGameState();
+    if (CapturedPieces() != "" && engine_on == false)
+    {
+        SendMessageToGui("console", CapturedPieces());
+    }
 }
 
 function GameOver() {

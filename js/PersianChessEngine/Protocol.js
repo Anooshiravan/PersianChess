@@ -50,6 +50,38 @@ function DrawMaterial() {
     return BOOL.TRUE;
 }
 
+function CapturedPieces()
+{
+    var cwP = 9 - brd_pceNum[PIECES.wP];
+    var cwN = 2 - brd_pceNum[PIECES.wN];
+    var cwB = 2 - brd_pceNum[PIECES.wB];
+    var cwR = 2 - brd_pceNum[PIECES.wR];
+    var cwS = 1 - brd_pceNum[PIECES.wS];
+    var cwF = 2 - brd_pceNum[PIECES.wF];
+    var cwQ = 1 - brd_pceNum[PIECES.wQ];
+    var cbP = 9 - brd_pceNum[PIECES.bP];
+    var cbN = 2 - brd_pceNum[PIECES.bN];
+    var cbB = 2 - brd_pceNum[PIECES.bB];
+    var cbR = 2 - brd_pceNum[PIECES.bR];
+    var cbS = 1 - brd_pceNum[PIECES.bS];
+    var cbF = 2 - brd_pceNum[PIECES.bF];
+    var cbQ = 1 - brd_pceNum[PIECES.bQ];
+    var white_captured_pieces = "White P["+ cwP + "]N[" + cwN + "]B[" + cwB + "]R[" + cwR + "]S[" + cwS + "]F[" + cwF + "]Q[" + cwQ + "]";
+    var black_captured_pieces = "Black p["+ cbP + "]n[" + cbN + "]b[" + cbB + "]r[" + cbR + "]s[" + cbS + "]f[" + cbF + "]q[" + cbQ + "]";
+
+    var is_piece_captured = cwP + cwN + cwB + cwR + cwS + cwF + cwQ + cbP + cbN + cbB + cbR + cbS + cbF + cbQ;
+
+    if (is_piece_captured > 0)
+    {
+        return "Captured Pieces: \r\n" + white_captured_pieces + "\r\n" + black_captured_pieces;
+    }
+    else
+    {
+        return "";
+    }
+}
+
+
 
 // ════════════════════════════════════════════════════
 debuglog ("Protocol.js is loaded.")

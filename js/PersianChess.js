@@ -746,8 +746,12 @@ var onBoardPieceDrop = function(source, target, piece, newPos, oldPos, orientati
         setTimeout(function () {
             if (ParsedMove.split("|")[0] == move) 
             {
-                Engine_MakeMove(ParsedMove.split("|")[1]);
-                PlayMoveSound(ParsedMove.split("|")[2]);
+                Engine_MakeMove(ParsedMove.split("|")[1]);  
+                PlayMoveSound(ParsedMove.split("|")[2]);              
+                if (PersianChessEngineOn == false)
+                {
+                    setTimeout(function () { FlipBoard(); }, 700);
+                }
             }
         }, 100);
     }
@@ -763,8 +767,12 @@ function boardMoved(source, target)
         setTimeout(function () {
             if (ParsedMove.split("|")[0] == move) 
             {
-                Engine_MakeMove(ParsedMove.split("|")[1]);
-                PlayMoveSound(ParsedMove.split("|")[2]);
+                Engine_MakeMove(ParsedMove.split("|")[1]);  
+                PlayMoveSound(ParsedMove.split("|")[2]);              
+                if (PersianChessEngineOn == false)
+                {
+                    setTimeout(function () { FlipBoard(); }, 1500);
+                }
             }
         }, 700);
     }
