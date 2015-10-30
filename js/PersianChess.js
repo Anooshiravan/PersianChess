@@ -775,10 +775,10 @@ function boardMoved(source, target)
                 PlayMoveSound(ParsedMove.split("|")[2]);              
                 if (PersianChessEngineOn == false)
                 {
-                    setTimeout(function () { FlipBoard(); }, 1500);
+                    setTimeout(function () { FlipBoard(); }, 400);
                 }
             }
-        }, 700);
+        }, 600);
     }
 }
 
