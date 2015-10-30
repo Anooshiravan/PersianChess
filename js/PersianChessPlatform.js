@@ -66,12 +66,12 @@ function AudioOnOff()
     PlaySound(audio_click);
     if (document.getElementById("audio_switch").value == "off")
     {
-        audio5js = null;
+        if (!is_Android()) audio5js = null;
         audio_on = false;
     }
     else
     {
-        audio5js = new Audio5js;
+        if (!is_Android()) audio5js = new Audio5js;
         audio_on = true;
     }
 
@@ -80,26 +80,7 @@ function AudioOnOff()
 
 function LoadAudio()
 {
-
-    alert ("audio 1");
-
-    // Turn on audio for Android, it remains off for browsers until user choose to turn audio on
-    /*
-    if (is_Android())
-    {
-        audio_on = true;
-        if (ls_audio == undefined || ls_audio == "" || ls_audio != null)
-        {
-            // $("#audio_switch").val('on').flipswitch().flipswitch('refresh');
-            alert ("audio 2");
-        }
-    }
-*/
-    alert ("audio 3");
-
     if( window.plugins && window.plugins.LowLatencyAudio ) {
-
-        alert ("audio 4");
         
         lla = window.plugins.LowLatencyAudio;
         lla_loaded = true;
@@ -293,6 +274,16 @@ function RestoreGameSettings()
             $("#audio_switch").val('off').flipswitch().flipswitch('refresh');
         }
     }
+    else
+    {
+        // Turn on audio for Android on first app start
+        if (is_Android())
+        {
+            audio_on = true;
+            $("#audio_switch").val('on').flipswitch().flipswitch('refresh');
+        }
+    }
+
 
     // Engine
     var ls_engine = Get_LocalStorageValue("engine");
