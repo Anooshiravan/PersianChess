@@ -36,7 +36,7 @@
 ════════════════════════════════════════════════════════════════════
 */
 
-var version = "1.4.3";
+var version = "1.4.4";
 
 // ══════════════════════════
 //  Logging
@@ -685,9 +685,11 @@ function HistoryToPGN(history)
 
 function UpdateBoardHighlight()
 {
-    setTimeout(function () {
+    if (PersianChessEngineOn){
+        setTimeout(function () {
         board.highlight(engine_move.split("-")[0], engine_move.split("-")[1])
-    }, 800);
+        }, 700);
+    }
 }
 
 function PlayGGSound(result) {
