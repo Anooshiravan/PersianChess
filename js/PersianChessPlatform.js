@@ -81,11 +81,6 @@ function AudioOnOff()
 function LoadAudio()
 {
 
-    var msg = "\r\n> Trying to load LLA.";
-    Append("movelist", msg);
-    alert ("audio");
-
-
     // Turn on audio for Android, it remains off for browsers until user choose to turn audio on
     if (is_Android())
     {
@@ -93,10 +88,15 @@ function LoadAudio()
         if (ls_audio == undefined || ls_audio == "" || ls_audio != null)
         {
             $("#audio_switch").val('on').flipswitch().flipswitch('refresh');
+            alert ("audio 1");
         }
     }
 
+    alert ("audio 2");
+
     if( window.plugins && window.plugins.LowLatencyAudio ) {
+
+        alert ("audio 3");
         
         lla = window.plugins.LowLatencyAudio;
         lla_loaded = true;
