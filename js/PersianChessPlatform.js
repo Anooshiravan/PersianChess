@@ -84,6 +84,7 @@ function LoadAudio()
     alert ("audio 1");
 
     // Turn on audio for Android, it remains off for browsers until user choose to turn audio on
+    /*
     if (is_Android())
     {
         audio_on = true;
@@ -93,7 +94,7 @@ function LoadAudio()
             alert ("audio 2");
         }
     }
-
+*/
     alert ("audio 3");
 
     if( window.plugins && window.plugins.LowLatencyAudio ) {
