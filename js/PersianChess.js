@@ -466,9 +466,17 @@ function ProcessEngineMessage_Report(message)
 
     function Engine_StartDemo()
     {
-        debuglog ("Start Engine Demo");
-        PersianChessEngine.postMessage("do::start_demo");
-
+        if (PersianChessEngineOn) 
+        {
+            debuglog ("Start Engine Demo");
+            PersianChessEngine.postMessage("do::start_demo");
+        }
+        else
+        {
+            msg = "No AutoPlay when Engine is off.";
+            $('#startengine_popup').html("<div class='courier_new_big'>" +  msg + "</div>");
+            $('#startengine_popup').popup('open');
+        }
     }
 
     function Engine_StopDemo()
@@ -575,7 +583,7 @@ function FlipBoard()
 function TakeBack()
 {
     try {
-        
+
         Engine_StopDemo();
         if (engine_thinking) 
         {
@@ -615,6 +623,7 @@ function EngineOnOff()
         else
         {
             Engine_TurnOff();
+            Engine_StopDemo();
             PersianChessEngineOn = false;
         }
 
