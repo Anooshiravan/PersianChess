@@ -211,7 +211,7 @@ function ProcessEngineMessage_Init(message)
             break;
         case "new_game_started":
             debuglog ("New game started. Turning the Engine on, set the default thinktime, variant and depth." , 2);
-            Engine_TurnOn();
+            if (PersianChessEngineOn) Engine_TurnOn();
             break;
         case "engine_is_on":
             debuglog ("Engine is on.", 1);
