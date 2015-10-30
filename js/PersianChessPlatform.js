@@ -314,6 +314,7 @@ function ResetGameSettings()
 
 function SaveGameToLS()
 {
+    Engine_StopDemo();
     var game_location = document.getElementById("SaveLoadChoice").value;
     var game_content = Get_LocalStorageValue("variant") + "#" + Get_LocalStorageValue("fen") + "#" + Get_LocalStorageValue("history");
     Set_LocalStorageValue(game_location, game_content);
@@ -327,6 +328,7 @@ function SaveGameToLS()
 
 function LoadGameFromLS()
 {
+    Engine_StopDemo();
     var game_location = document.getElementById("SaveLoadChoice").value;
     var game_content = Get_LocalStorageValue(game_location);
 

@@ -536,6 +536,7 @@ function StartNewGame()
     theme = GetVariantTheme(variant);
 
     if (engine_thinking) RestartEngine();
+    Engine_StopDemo();
     SetThinkTime();
     SetVariant(variant);
     ResetGameSettings();
@@ -574,6 +575,8 @@ function FlipBoard()
 function TakeBack()
 {
     try {
+        
+        Engine_StopDemo();
         if (engine_thinking) 
         {
             RestartEngine();
