@@ -697,6 +697,7 @@ function HistoryToPGN(history)
 
 function UpdateBoardHighlight()
 {
+    board.removehighlights();
     if (PersianChessEngineOn){
         setTimeout(function () {
         board.highlight(engine_move.split("-")[0], engine_move.split("-")[1])
