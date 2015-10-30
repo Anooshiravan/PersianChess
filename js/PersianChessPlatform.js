@@ -91,7 +91,7 @@ function LoadAudio()
     }
 
     if( window.plugins && window.plugins.LowLatencyAudio ) {
-        var msg += "\r\n> Trying to load LLA.";
+        var msg = "\r\n> Trying to load LLA.";
         Append("movelist", msg);
 
         lla = window.plugins.LowLatencyAudio;
