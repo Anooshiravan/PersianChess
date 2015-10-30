@@ -81,22 +81,24 @@ function AudioOnOff()
 function LoadAudio()
 {
 
+    alert ("audio 1");
+
     // Turn on audio for Android, it remains off for browsers until user choose to turn audio on
     if (is_Android())
     {
         audio_on = true;
         if (ls_audio == undefined || ls_audio == "" || ls_audio != null)
         {
-            $("#audio_switch").val('on').flipswitch().flipswitch('refresh');
-            alert ("audio 1");
+            // $("#audio_switch").val('on').flipswitch().flipswitch('refresh');
+            alert ("audio 2");
         }
     }
 
-    alert ("audio 2");
+    alert ("audio 3");
 
     if( window.plugins && window.plugins.LowLatencyAudio ) {
 
-        alert ("audio 3");
+        alert ("audio 4");
         
         lla = window.plugins.LowLatencyAudio;
         lla_loaded = true;
