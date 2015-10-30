@@ -464,6 +464,18 @@ function ProcessEngineMessage_Report(message)
         PersianChessEngine.postMessage("set::history|" + history);
     }
 
+    function Engine_StartDemo()
+    {
+        debuglog ("Start Engine Demo");
+        PersianChessEngine.postMessage("do::start_demo");
+
+    }
+
+    function Engine_StopDemo()
+    {
+        debuglog ("Stop Engine Demo");
+        PersianChessEngine.postMessage("do::stop_demo");        
+    }
 
 // ══════════════════════════
 //  GUI Functions

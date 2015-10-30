@@ -251,6 +251,12 @@ function ProcessGuiMessage_Do(command)
             if (engine_on == true) MoveNow();
         }
         break
+    case "start_demo":
+        StartEngineDemo();
+        break;
+    case "stop_demo":
+        StopEngineDemo();
+        break;
     default:
         debuglog ("Do::message not recognised.")
         break
@@ -459,4 +465,20 @@ function ReportEngineError()
     error += "|";
     if (BoardToHistory().length > 1) error += BoardToHistory();
     SendMessageToGui("report", error);
+}
+
+// ══════════════════════════
+//  Engine utilities
+// ══════════════════════════
+
+var EngineDemoTimer;
+function StartEngineDemo() {
+    var cycletime = parseInt(srch_time) + 1000;
+    StartSearch();
+    EngineDemoTimer = setTimeout(arguments.callee, cycletime);
+    if (GameController.GameOver == BOOL.TRUE) clearTimeout(EngineDemoTimer);
+}
+
+function StopEngineDemo() {
+    clearTimeout(EngineDemoTimer); 
 }

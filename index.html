@@ -22,6 +22,7 @@
 <head>
 <meta charset="UTF-8" />
 <title>Play Persian Chess</title>
+<link rel='stylesheet' href='css/jqm-icon-pack-fa.css' type='text/css' media='all' />
 <link rel="stylesheet" href="css/jquery.mobile-1.4.5.css" type="text/css" media="all" />
 <link rel='stylesheet' href='css/persianchess.css' type='text/css' media='all' />
   <script src="js/lib/jquery-2.1.4.min.js"></script>
@@ -140,6 +141,10 @@
     <div align="center" class="courier_new_big">Save/Load game</div>
     <div class="ui-grid-a">
       <div class="ui-block-a">
+          <a class="ui-btn ui-btn-inline ui-icon-edit ui-btn-icon-notext" onclick="SaveGameToLS();"></a>
+          <a class="ui-btn ui-btn-inline ui-icon-action ui-btn-icon-notext" onclick="LoadGameFromLS();"></a>
+      </div>
+      <div class="ui-block-b">
         <select data-native-menu="false" data-mini="true" id="SaveLoadChoice">
           <option value="g1">Game 1</option>
           <option value="g2">Game 2</option>
@@ -150,9 +155,13 @@
           <option value="g7">Game 7</option>
        </select>
       </div>
-      <div class="ui-block-b">
-          <a class="ui-btn ui-btn-inline ui-icon-edit ui-btn-icon-notext" onclick="SaveGameToLS();"></a>
-          <a class="ui-btn ui-btn-inline ui-icon-action ui-btn-icon-notext" onclick="LoadGameFromLS();"></a>
+    </div>
+    <br>
+    <div align="center" class="courier_new_big">Engine AutoPlay</div>
+    <div class="ui-grid-a" class="courier_new_small">
+      <div class="ui-block-a">
+          <a class="ui-btn ui-btn-inline ui-icon-play-circle ui-btn-icon-notext" onclick="Engine_StartDemo();"></a>
+          <a class="ui-btn ui-btn-inline ui-icon-times-circle ui-btn-icon-notext" onclick="Engine_StopDemo();"></a>
       </div>
     </div>
 
