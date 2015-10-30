@@ -234,7 +234,7 @@ function RestoreGameSettings()
             Engine_SetFen(ls_fen);
     }
 
-    // PGN
+    // History
     var ls_history = Get_LocalStorageValue("history");
     if (ls_history != undefined && ls_history != "" && ls_history != null) 
     {

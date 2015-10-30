@@ -410,8 +410,7 @@ function BoardToHistory()
         history += brd_history[index].fiftyMove + "/";
         history += brd_history[index].enPas + "/";
         history += brd_history[index].castlePerm + "/";
-        history += brd_hisPly + "/";
-        history += brd_ply;
+        history += brd_hisPly;
         history += " ";
     }
     return history;
@@ -430,7 +429,6 @@ function SetHistory(this_history)
         brd_history[index].enPas = h_array[4];
         brd_history[index].castlePerm = h_array[5];
         brd_hisPly = h_array[6];
-        brd_ply = h_array[7];
     }
 }
 
