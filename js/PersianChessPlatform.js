@@ -83,6 +83,7 @@ function LoadAudio()
 
     var msg = "\r\n> Trying to load LLA.";
     Append("movelist", msg);
+    alert ("audio");
 
 
     // Turn on audio for Android, it remains off for browsers until user choose to turn audio on
