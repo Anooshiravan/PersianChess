@@ -80,6 +80,11 @@ function AudioOnOff()
 
 function LoadAudio()
 {
+
+    var msg = "\r\n> Trying to load LLA.";
+    Append("movelist", msg);
+
+
     // Turn on audio for Android, it remains off for browsers until user choose to turn audio on
     if (is_Android())
     {
@@ -91,9 +96,7 @@ function LoadAudio()
     }
 
     if( window.plugins && window.plugins.LowLatencyAudio ) {
-        var msg = "\r\n> Trying to load LLA.";
-        Append("movelist", msg);
-
+        
         lla = window.plugins.LowLatencyAudio;
         lla_loaded = true;
 
