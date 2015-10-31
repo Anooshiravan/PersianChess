@@ -36,7 +36,7 @@
 ════════════════════════════════════════════════════════════════════
 */
 
-var version = "1.4.5";
+var version = "1.4.6";
 
 // ══════════════════════════
 //  Logging
@@ -528,10 +528,9 @@ function SetTrainingPosition()
     {
         var tp = "TP_FEN_" + tp_number + "_" + variant;
         Engine_SetTP(tp);
-        msg = "Training Position " + tp_number + ": " + tp_name + " for \"" + GetVariantName(variant) + "\"";
+        msg = "Training Position " + tp_number + ": \"" + tp_name + "\" for \"" + GetVariantName(variant) + "\"";
         $('#do_popup').html("<div class='courier_new_big'>" +  msg + "</div>");
         $('#do_popup').popup('open');
-        PlaySound(audio_supermario);
     }
 }
 

@@ -59,7 +59,6 @@ var audio_checkmate= 'audio/checkmate.mp3';
 var audio_whitewins = 'audio/whitewins.mp3';
 var audio_blackwins = 'audio/blackwins.mp3';
 var audio_draw = 'audio/draw.mp3';
-var audio_supermario = 'audio/supermario.mp3';
 var audio_gg = 'audio/gg.mp3';
 
 function AudioOnOff()
@@ -124,10 +123,6 @@ function LoadAudio()
             debuglog( 'error: ' + msg , 3 );
         });
         lla.preloadFX(audio_draw, audio_draw, function(msg){
-        }, function(msg){
-            debuglog( 'error: ' + msg , 3 );
-        });
-        lla.preloadFX(audio_supermario, audio_supermario, function(msg){
         }, function(msg){
             debuglog( 'error: ' + msg , 3 );
         });
