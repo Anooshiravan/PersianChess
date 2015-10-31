@@ -520,7 +520,7 @@ function SetTrainingPosition()
     if (tp_number == "0")
     {
         StartNewGame();
-        msg = "Standard Position for \"" + GetVariantName(variant) + "\". Good luck.";
+        msg = "Standard Position for \"" + GetVariantName(variant) + "\"";
         $('#do_popup').html("<div class='courier_new_big'>" +  msg + "</div>");
         $('#do_popup').popup('open');
     }
