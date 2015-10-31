@@ -223,6 +223,15 @@ function RestoreGameSettings()
 {
     if (vs_engine()) return;
 
+    // Variant
+    var ls_variant = Get_LocalStorageValue("variant");
+    if (ls_variant != undefined && ls_variant != "" && ls_variant != null) 
+        {
+            Engine_SetVariant(ls_variant);
+            board.set_variant(ls_variant);
+            board.theme(GetVariantTheme(ls_variant));
+        }
+
     // FEN
     var ls_fen = Get_LocalStorageValue("fen");
     if (ls_fen != undefined && ls_fen != "" && ls_fen != null && ls_fen != START_FEN) 
@@ -238,15 +247,6 @@ function RestoreGameSettings()
             HistoryToPGN(ls_history);
             UpdateMoveList();
     }
-
-    // Variant
-    var ls_variant = Get_LocalStorageValue("variant");
-    if (ls_variant != undefined && ls_variant != "" && ls_variant != null) 
-        {
-            Engine_SetVariant(ls_variant);
-            board.set_variant(ls_variant);
-            board.theme(GetVariantTheme(ls_variant));
-        }
 
     // Theme
     var ls_theme = Get_LocalStorageValue("theme");
