@@ -59,6 +59,7 @@ var audio_checkmate= 'audio/checkmate.mp3';
 var audio_whitewins = 'audio/whitewins.mp3';
 var audio_blackwins = 'audio/blackwins.mp3';
 var audio_draw = 'audio/draw.mp3';
+var audio_supermario = 'audio/supermario.mp3';
 var audio_gg = 'audio/gg.mp3';
 
 function AudioOnOff()
@@ -123,6 +124,10 @@ function LoadAudio()
             debuglog( 'error: ' + msg , 3 );
         });
         lla.preloadFX(audio_draw, audio_draw, function(msg){
+        }, function(msg){
+            debuglog( 'error: ' + msg , 3 );
+        });
+        lla.preloadFX(audio_supermario, audio_supermario, function(msg){
         }, function(msg){
             debuglog( 'error: ' + msg , 3 );
         });
@@ -314,21 +319,21 @@ function ResetGameSettings()
 
 function SaveGameToLS()
 {
-    Engine_StopDemo();
+    PersianChessEngine.postMessage("do::stop_demo");
     var game_location = document.getElementById("SaveLoadChoice").value;
     var game_content = Get_LocalStorageValue("variant") + "#" + Get_LocalStorageValue("fen") + "#" + Get_LocalStorageValue("history");
     Set_LocalStorageValue(game_location, game_content);
 
     var game_name = document.getElementById("SaveLoadChoice").options[document.getElementById("SaveLoadChoice").selectedIndex].text;
     msg = "Game is saved as: " + game_name;
-    $('#gamesaveload_popup').html("<div class='courier_new_big'>" +  msg + "</div>");
-    $('#gamesaveload_popup').popup('open');
+    $('#do_popup').html("<div class='courier_new_big'>" +  msg + "</div>");
+    $('#do_popup').popup('open');
 }
 
 
 function LoadGameFromLS()
 {
-    Engine_StopDemo();
+    PersianChessEngine.postMessage("do::stop_demo");
     var game_location = document.getElementById("SaveLoadChoice").value;
     var game_content = Get_LocalStorageValue(game_location);
 
@@ -336,8 +341,8 @@ function LoadGameFromLS()
     {
         var game_name = document.getElementById("SaveLoadChoice").options[document.getElementById("SaveLoadChoice").selectedIndex].text;
         msg = game_name + " not found."
-        $('#gamesaveload_popup').html("<div class='courier_new_big'>" +  msg + "</div>");
-        $('#gamesaveload_popup').popup('open');
+        $('#do_popup').html("<div class='courier_new_big'>" +  msg + "</div>");
+        $('#do_popup').popup('open');
         return;
     }
     
@@ -353,8 +358,8 @@ function LoadGameFromLS()
 
     var game_name = document.getElementById("SaveLoadChoice").options[document.getElementById("SaveLoadChoice").selectedIndex].text;
     msg = game_name + " is loaded."
-    $('#gamesaveload_popup').html("<div class='courier_new_big'>" +  msg + "</div>");
-    $('#gamesaveload_popup').popup('open');
+    $('#do_popup').html("<div class='courier_new_big'>" +  msg + "</div>");
+    $('#do_popup').popup('open');
 }
 
 function LoadReport(report)

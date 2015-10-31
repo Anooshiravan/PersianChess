@@ -473,9 +473,9 @@ function ReportEngineError()
 
 var EngineDemoTimer;
 function StartEngineDemo() {
-    var cycletime = parseInt(srch_time) + 1000;
+    // var cycletime = parseInt(srch_time) + 1000;
     StartSearch();
-    EngineDemoTimer = setTimeout(arguments.callee, cycletime);
+    EngineDemoTimer = setTimeout(arguments.callee, 1000);
     if (GameController.GameOver == BOOL.TRUE) clearTimeout(EngineDemoTimer);
 }
 

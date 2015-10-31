@@ -107,6 +107,18 @@
       </div>
     </div>
 
+    <hr>
+    <br>
+    <div align="center" class="courier_new_big">Engine AutoPlay</div>
+    <div class="ui-grid-a" class="courier_new_small">
+      <div class="ui-block-a">
+        <a data-role="button" data-icon="arrow-r" data-iconpos="right" data-theme="b" data-mini="true" onclick="Engine_StartDemo();">Start</a>
+      </div>
+      <div class="ui-block-b">
+          <a data-role="button" data-icon="delete" data-iconpos="right" data-theme="b" data-mini="true" onclick="Engine_StopDemo();">Stop</a>
+      </div>
+    </div>
+
   </div>
 
 
@@ -133,49 +145,57 @@
        </select>
     </div>
     <div>
-      <a data-role="button" data-icon="arrow-r" data-iconpos="right" data-theme="a" data-mini="true" onclick="StartNewGame(); return false" rel="external">Start</a>
+      <a data-role="button" data-icon="arrow-r" data-iconpos="right" data-theme="a" data-mini="true" onclick="StartNewGame();">Start</a>
     </div>
 
     <br><hr>
 
-    <div align="center" class="courier_new_big">Save/Load game</div>
+    <div align="center" class="courier_new_big">PGN Viewer</div>
     <div class="ui-grid-a">
-      <div class="ui-block-a">
-          <a class="ui-btn ui-btn-inline ui-icon-edit ui-btn-icon-notext" onclick="SaveGameToLS();"></a>
-          <a class="ui-btn ui-btn-inline ui-icon-action ui-btn-icon-notext" onclick="LoadGameFromLS();"></a>
+
+      <div class="ui-block-a" style="width:45%; margin-right: 3px;">
+          <select data-native-menu="false" data-mini="true" id="SaveLoadChoice">
+            <option value="g1">Game 1</option>
+            <option value="g2">Game 2</option>
+            <option value="g3">Game 3</option>
+            <option value="g4">Game 4</option>
+            <option value="g5">Game 5</option>
+            <option value="g6">Game 6</option>
+            <option value="g7">Game 7</option>
+          </select>
       </div>
-      <div class="ui-block-b">
-        <select data-native-menu="false" data-mini="true" id="SaveLoadChoice">
-          <option value="g1">Game 1</option>
-          <option value="g2">Game 2</option>
-          <option value="g3">Game 3</option>
-          <option value="g4">Game 4</option>
-          <option value="g5">Game 5</option>
-          <option value="g6">Game 6</option>
-          <option value="g7">Game 7</option>
-       </select>
+      <div class="ui-block-b" style="width:25%; margin-right: 3px;">
+          <a data-role="button" data-theme="b" data-mini="true" data-inline="true" onclick="LoadGameFromLS();">Load</a>
+      </div>
+      <div class="ui-block-c" style="width:25%; margin-right: 3px;">
+          <a data-role="button" data-theme="b" data-mini="true" data-inline="true" onclick="SaveGameToLS();">Save</a>
       </div>
     </div>
+
     <br>
-    <div align="center" class="courier_new_big">Engine AutoPlay</div>
-    <div class="ui-grid-a" class="courier_new_small">
-      <div class="ui-block-a">
-          <a class="ui-btn ui-btn-inline ui-icon-play-circle ui-btn-icon-notext" onclick="Engine_StartDemo();"></a>
-          <a class="ui-btn ui-btn-inline ui-icon-times-circle ui-btn-icon-notext" onclick="Engine_StopDemo();"></a>
+    <div align="center" class="courier_new_big">Training Positions</div>
+    <div class="ui-grid-a">
+
+      <div class="ui-block-a" style="width:65%; margin-right: 3px;">
+          <select data-native-menu="false" data-mini="true" id="TPChoice">
+            <option value="0">Standard</option>
+            <option value="1">Baby Luma</option>
+            <option value="2">Toad</option>
+            <option value="3">Yoshi</option>
+            <option value="4">Birdo</option>
+            <option value="5">Princess Peach</option>
+            <option value="6">Luigi</option>
+            <option value="7">Mario</option>
+          </select>
+      </div>
+      <div class="ui-block-b" style="width:30%; margin-right: 3px;">
+          <a data-role="button" data-theme="b" data-mini="true" data-inline="true" onclick="SetTrainingPosition();">Set</a>
       </div>
     </div>
 
 
-  </div>
-
-  <!-- Game over pupup -->
-  <div data-role="popup" id="gameover_popup" class="ui-content" data-position-to="#console_container"></div>
-
-  <!-- Game save/load pupup -->
-  <div data-role="popup" id="gamesaveload_popup" class="ui-content" data-position-to="#console_container"></div>
-
-  <!-- Start Engine pupup -->
-  <div data-role="popup" id="startengine_popup" class="ui-content" data-position-to="#console_container"></div>
+  <!-- Pupup -->
+  <div data-role="popup" id="do_popup" class="ui-content" data-position-to="#console_container"></div>
 
 <script src="js/PersianChessBoard.js"></script>
 <script src="js/PersianChessPlatform.js"></script>

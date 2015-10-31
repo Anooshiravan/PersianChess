@@ -372,9 +372,9 @@ function ProcessEngineMessage_Gameover(message)
     Append ("movelist", msg);
     gameover = true;
 
-    $('#gameover_popup').html("<div align=\"center\"><b>Game over</b></div><div>" + msg + "</div>");
+    $('#do_popup').html("<div align=\"center\"><b>Game over</b></div><div>" + msg + "</div>");
     timeout = setTimeout(function(){ 
-        $('#gameover_popup').popup('open');
+        $('#do_popup').popup('open');
     }, 300);
 }
 
@@ -470,19 +470,25 @@ function ProcessEngineMessage_Report(message)
         {
             debuglog ("Start Engine Demo");
             PersianChessEngine.postMessage("do::start_demo");
+            msg = "Engine AutoPlay is started.";
+            $('#do_popup').html("<div class='courier_new_big'>" +  msg + "</div>");
+            $('#do_popup').popup('open');
         }
         else
         {
             msg = "No AutoPlay when Engine is off.";
-            $('#startengine_popup').html("<div class='courier_new_big'>" +  msg + "</div>");
-            $('#startengine_popup').popup('open');
+            $('#do_popup').html("<div class='courier_new_big'>" +  msg + "</div>");
+            $('#do_popup').popup('open');
         }
     }
 
     function Engine_StopDemo()
     {
         debuglog ("Stop Engine Demo");
-        PersianChessEngine.postMessage("do::stop_demo");        
+        PersianChessEngine.postMessage("do::stop_demo"); 
+        msg = "Engine AutoPlay is stopped.";
+        $('#do_popup').html("<div class='courier_new_big'>" +  msg + "</div>");
+        $('#do_popup').popup('open');       
     }
 
 // ══════════════════════════
@@ -507,7 +513,26 @@ function SetVariant(variant)
 
 function SetTrainingPosition()
 {
-    
+    var tp_number = document.getElementById("TPChoice").value;
+    var tp_choice = document.getElementById("TPChoice");
+    var tp_name = tp_choice.options[tp_choice.selectedIndex].text;
+
+    if (tp_number == "0")
+    {
+        StartNewGame();
+        msg = "Standard Position for \"" + GetVariantName(variant) + "\". Good luck.";
+        $('#do_popup').html("<div class='courier_new_big'>" +  msg + "</div>");
+        $('#do_popup').popup('open');
+    }
+    else
+    {
+        var tp = "TP_FEN_" + tp_number + "_" + variant;
+        Engine_SetTP(tp);
+        msg = "Training Position " + tp_number + ": " + tp_name + " for \"" + GetVariantName(variant) + "\"";
+        $('#do_popup').html("<div class='courier_new_big'>" +  msg + "</div>");
+        $('#do_popup').popup('open');
+        PlaySound(audio_supermario);
+    }
 }
 
 function SetTheme(theme)
@@ -537,6 +562,27 @@ function GetVariantTheme(variant)
     }
 }
 
+function GetVariantName(variant)
+{
+    switch(variant) {
+        case "Persian":
+            return "Persian Princess";
+            break;
+        case "ASE":
+            return "Egyptian Eye";
+            break;
+        case "Citadel":
+            return "Celtic Citadel";
+            break;
+        case "Oriental":
+            return "Oriental Omega";
+            break;
+        default:
+            break;
+    }
+}
+
+
 function StartNewGame()
 {
     PlaySound(audio_click);
@@ -544,7 +590,7 @@ function StartNewGame()
     theme = GetVariantTheme(variant);
 
     if (engine_thinking) RestartEngine();
-    Engine_StopDemo();
+    PersianChessEngine.postMessage("do::stop_demo");
     SetThinkTime();
     SetVariant(variant);
     ResetGameSettings();
@@ -584,7 +630,7 @@ function TakeBack()
 {
     try {
 
-        Engine_StopDemo();
+        PersianChessEngine.postMessage("do::stop_demo");
         if (engine_thinking) 
         {
             RestartEngine();
@@ -623,7 +669,7 @@ function EngineOnOff()
         else
         {
             Engine_TurnOff();
-            Engine_StopDemo();
+            PersianChessEngine.postMessage("do::stop_demo");
             PersianChessEngineOn = false;
         }
 
