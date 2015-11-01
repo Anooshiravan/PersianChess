@@ -604,6 +604,7 @@ function StartNewGame()
 
     if (engine_thinking) RestartEngine();
     PersianChessEngine.postMessage("do::stop_demo");
+    engine_autoplay = false;
     SetThinkTime();
     SetVariant(variant);
     ResetGameSettings();
@@ -644,6 +645,7 @@ function TakeBack()
     try {
 
         PersianChessEngine.postMessage("do::stop_demo");
+        engine_autoplay = false;
         if (engine_thinking) 
         {
             RestartEngine();
