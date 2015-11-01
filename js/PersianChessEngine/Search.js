@@ -384,6 +384,7 @@ function SearchPosition() {
         // There is no engine error or errors are recovered, continue.
         srch_best = bestMove;
         SendBestMove(bestMove);
+        SendMessageToGui("info", "hint|" + hint);
     }
     srch_thinking = BOOL.FALSE;
     ShowErrorMoves();
@@ -424,6 +425,7 @@ function FailSafeResetBoard(level)
 
 
 var Treshhold = 0;
+var hint = NOMOVE;
 
 function IterativeDeepening(id_depth)
 {
@@ -450,10 +452,16 @@ function IterativeDeepening(id_depth)
         }
 
         // Print PV line
-        var pvline = (currentDepth + "[" + (-bestScore) + "]");
-            for (i = 0; i < currentDepth; i++) { 
+        var currentScore = 0;
+        if (brd_side == COLOURS.WHITE) currentScore = bestScore;
+        else currentScore = -bestScore
+
+        var pvline = (currentDepth + "[" + (currentScore) + "]");
+        for (i = 0; i < currentDepth; i++) { 
             if (brd_PvArray[i] != undefined) pvline += " " + PrMove(brd_PvArray[i]);
+                 
         }
+        hint = PrMove(brd_PvArray[1]);
         debuglog (line);
         SendMessageToGui("console", pvline);
     }

@@ -64,6 +64,7 @@ var pgn = "";
 var engine_move = "";
 var gameover = false;
 var engine_thinking = false;
+var engine_autoplay = false;
 
 // ══════════════════════════
 //  Init engine
@@ -311,6 +312,17 @@ function ProcessEngineMessage_Info(info)
             board.highlight_check(KingSq);
         }, 500);
     }
+    if (info.split("|")[0] == "hint")
+    {
+        var hint = info.split("|")[1].replace("-", " > ");
+        if (document.getElementById("hint_switch").value == "on" && engine_autoplay == false)
+        {
+            $('#do_popup').html("<div align=\"center\"><div><img src='img/hint.png' border=0>&nbsp" + hint+ "</div>");
+            timeout = setTimeout(function(){ 
+                $('#do_popup').popup('open');
+            }, 300);
+        }
+    }
     if (info == "thinking")
     {
         board.logo("wait");
@@ -470,6 +482,7 @@ function ProcessEngineMessage_Report(message)
         {
             debuglog ("Start Engine Demo");
             PersianChessEngine.postMessage("do::start_demo");
+            engine_autoplay = true;
             msg = "Engine AutoPlay is started.";
             $('#do_popup').html("<div class='courier_new_big'>" +  msg + "</div>");
             $('#do_popup').popup('open');
@@ -486,6 +499,7 @@ function ProcessEngineMessage_Report(message)
     {
         debuglog ("Stop Engine Demo");
         PersianChessEngine.postMessage("do::stop_demo"); 
+        engine_autoplay = false;
         msg = "Engine AutoPlay is stopped.";
         $('#do_popup').html("<div class='courier_new_big'>" +  msg + "</div>");
         $('#do_popup').popup('open');       

@@ -30,7 +30,7 @@
     $(document).bind("mobileinit", function () {
       $.mobile.defaultPageTransition   = 'none';
       $.mobile.defaultDialogTransition = 'none';
-    }
+    });
   </script>
   <script src="js/lib/jquery.mobile-1.4.5.min.js"></script>
   <script src="js/lib/fastclick.js"></script>
@@ -103,10 +103,22 @@
 
     <div class="ui-grid-a flipContain">
       <div class="ui-block-a">
-          <label for="engine_switch" class="courier_new_big">Audio:</label>
+          <label for="audio_switch" class="courier_new_big">Audio:</label>
       </div>
       <div class="ui-block-b">
           <select name="audio_switch" id="audio_switch" data-role="flipswitch" data-mini="true" onchange="AudioOnOff();">
+              <option value="off">Off</option>
+              <option value="on">On</option>
+          </select>
+      </div>
+    </div>
+
+    <div class="ui-grid-a flipContain">
+      <div class="ui-block-a">
+          <label for="hint_switch" class="courier_new_big">Hint:</label>
+      </div>
+      <div class="ui-block-b">
+          <select name="audio_switch" id="hint_switch" data-role="flipswitch" data-mini="true">
               <option value="off">Off</option>
               <option value="on">On</option>
           </select>
@@ -179,11 +191,10 @@
     </div>
 
     <br>
-    <div align="center" class="courier_new_big">Training Positions</div>
-    <div class="ui-grid-a">
 
-      <div class="ui-block-a" style="width:65%; margin-right: 3px;">
-          <select data-native-menu="false" data-mini="true" id="TPChoice">
+    <div align="center" class="courier_new_big">Training Positions</div>
+    <div>
+       <select data-native-menu="false" data-mini="true" id="TPChoice" onChange="SetTrainingPosition();">
             <option value="0">Standard</option>
             <option value="7">Ashavan</option>
             <option value="6">Byarshan</option>
@@ -193,15 +204,11 @@
             <option value="2">Frayazenta</option>
             <option value="1">Garshta</option>
           </select>
-      </div>
-      <div class="ui-block-b" style="width:30%; margin-right: 3px;">
-          <a data-role="button" data-theme="b" data-mini="true" data-inline="true" onclick="SetTrainingPosition();">Set</a>
-      </div>
     </div>
+</div>
 
-
-  <!-- Pupup -->
-  <div data-role="popup" id="do_popup" class="ui-content" data-position-to="#console_container"></div>
+<!-- Pupup -->
+<div data-role="popup" id="do_popup" class="ui-content" data-position-to="#console_container"></div>
 
 <script src="js/PersianChessBoard.js"></script>
 <script src="js/PersianChessPlatform.js"></script>

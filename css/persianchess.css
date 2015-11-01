@@ -349,60 +349,6 @@ body {
     margin-bottom: 10px;
 }
 
-#toggle_console {
-    background: #121212;
-    color: #ffffff;
-    padding: 1px;
-    font-size: 12px;
-    font-family: "Courier New";
-    border: 1px solid #777;
-    margin-bottom: 10px;
-    width: 20px;
-}
-
-#ThinkTimeChoice {
-    background: #121212;
-    color: #ffffff;
-    padding: 1px;
-    font-size: 12px;
-    font-family: "Courier New";
-    border: 1px solid #777;
-    margin-bottom: 10px;
-    max-width: 65px;
-}
-
-#VariantChoice {
-    background: #121212;
-    color: #ffffff;
-    padding: 1px;
-    font-size: 12px;
-    font-family: "Courier New";
-    border: 1px solid #777;
-    margin-bottom: 10px;
-    max-width: 140px;
-}
-
-#AltFen {
-    background: #121212;
-    color: #ffffff;
-    padding: 1px;
-    font-size: 12px;
-    font-family: "Courier New";
-    border: 1px solid #777;
-    margin-bottom: 10px;
-    max-width: 60px;  
-}
-
-#Settings {
-    background: #121212;
-    color: #ffffff;
-    padding: 1px;
-    font-size: 12px;
-    font-family: "Courier New";
-    border: 1px solid #777;
-    margin-bottom: 10px;
-    max-width: 60px;  
-}
 
 #movelist, #console {
     background: transparent;
@@ -410,7 +356,7 @@ body {
     padding: 1px;
     padding-left: 5px;
     padding-top: 5px;
-    font-size: 13px;
+    font-size: 0.8em !important;
     font-family: "Courier New";
     border: 2px solid #777;
     margin-bottom: 10px;
@@ -471,3 +417,13 @@ body {
     font-family: "Courier New" !important;
     font-size: 1em !important;
 }
+
+.ui-btn-up-a,.ui-btn-hover-a,.ui-btn-down-a,.ui-bar-a,.ui-body-a,.ui-btn-up-a,.ui-btn-hover-a,.ui-btn-down-a,.ui-body-a input,.ui-body-a select,.ui-body-a textarea,.ui-body-a
+{
+    font-family: "Courier New" !important;
+    font-size: 0.7em !important;
+}
+
+body  * {
+    font-family: "Courier New" !important;
+  }
