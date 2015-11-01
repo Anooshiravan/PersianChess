@@ -34,17 +34,27 @@ function LineMatch(BookLine, gameline) {
     return BOOL.TRUE;
 }
 
-function BookMove() {
+function BookMove(return_hint) {
     var gameLine = printGameLine();
     var bookMoves = [];
     var lengthOfLineHack = gameLine.length;
+    var hint = NOMOVE;
 
     if (gameLine.length == 0) lengthOfLineHack--;
     for (var bookLineNum = 0; bookLineNum < brd_bookLines.length; ++bookLineNum) {
 
         if (LineMatch(brd_bookLines[bookLineNum], gameLine) == BOOL.TRUE) {
             var move = brd_bookLines[bookLineNum].substr(lengthOfLineHack + 1);
-            if (move.indexOf(' ') != -1) move = move.substr(0, move.indexOf(' '));
+            if (move.indexOf(' ') != -1) 
+                {
+                    var hintLine = move.substr(move.indexOf(' ')+1);
+                    move = move.substr(0, move.indexOf(' '));
+                    if (hintLine.indexOf(' ') != -1) 
+                    {
+                        hint = hintLine.substr(0, hintLine.indexOf(' '));
+                    }
+
+                }
             if (move.length > 4 && move.length < 8) {
                 var from = SqFromAlg(move.split('-')[0]);
                 var to = SqFromAlg(move.split('-')[1]);
@@ -55,8 +65,15 @@ function BookMove() {
     }
     if (bookMoves.length == 0) return NOMOVE;
     var num = Math.floor(Math.random() * bookMoves.length);
-    return bookMoves[num];
 
+    if (return_hint) 
+    {
+        return hint;
+    }
+    else 
+    {
+        return bookMoves[num];
+    }
 }
 
 

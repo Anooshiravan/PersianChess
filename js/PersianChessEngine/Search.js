@@ -319,6 +319,9 @@ function AlphaBeta(alpha, beta, depth, DoNull) {
     return alpha;
 }
 
+
+var hint = NOMOVE;
+
 function SearchPosition() {
           
     var bestMove = NOMOVE;
@@ -326,13 +329,22 @@ function SearchPosition() {
     ClearForSearch();
 
     // Book move
-    bestMove = BookMove();
+    bestMove = BookMove(false);
     if (bestMove != NOMOVE) {
         srch_best = bestMove;
         srch_thinking = BOOL.FALSE;
         var console_msg = "Book move: " + PrMove(bestMove);
         SendMessageToGui("console", console_msg);
         SendBestMove(bestMove);
+        hint = BookMove(true);
+        if (hint != NOMOVE && hint != "") 
+            {
+                SendMessageToGui("info", "hint|" + hint);
+            }
+            else
+            {
+                SendMessageToGui("info", "hint|End of opening line.");
+            }
         return;
     }
 
@@ -425,7 +437,6 @@ function FailSafeResetBoard(level)
 
 
 var Treshhold = 0;
-var hint = NOMOVE;
 
 function IterativeDeepening(id_depth)
 {
