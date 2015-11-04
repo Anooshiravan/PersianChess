@@ -45,33 +45,28 @@ function BookMove(return_hint) {
 
         if (LineMatch(brd_bookLines[bookLineNum], gameLine) == BOOL.TRUE) {
             var move = brd_bookLines[bookLineNum].substr(lengthOfLineHack + 1);
-            if (move.indexOf(' ') != -1) 
-                {
-                    var hintLine = move.substr(move.indexOf(' ')+1);
-                    move = move.substr(0, move.indexOf(' '));
-                    if (hintLine.indexOf(' ') != -1) 
-                    {
-                        hint = hintLine.substr(0, hintLine.indexOf(' '));
-                    }
-
+            if (move.indexOf(' ') != -1) {
+                var hintLine = move.substr(move.indexOf(' ') + 1);
+                move = move.substr(0, move.indexOf(' '));
+                if (hintLine.indexOf(' ') != -1) {
+                    hint = hintLine.substr(0, hintLine.indexOf(' '));
                 }
+
+            }
             if (move.length > 4 && move.length < 8) {
                 var from = SqFromAlg(move.split('-')[0]);
                 var to = SqFromAlg(move.split('-')[1]);
                 varInternalMove = ParseMove(from, to);
                 bookMoves.push(varInternalMove);
             }
-         }
+        }
     }
     if (bookMoves.length == 0) return NOMOVE;
     var num = Math.floor(Math.random() * bookMoves.length);
 
-    if (return_hint) 
-    {
+    if (return_hint) {
         return hint;
-    }
-    else 
-    {
+    } else {
         return bookMoves[num];
     }
 }
@@ -127,4 +122,4 @@ var brd_bookLines = [
 
 
 // ════════════════════════════════════════════════════
-debuglog ("Book.js is loaded.")
+debuglog("Book.js is loaded.");
