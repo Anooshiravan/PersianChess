@@ -47,8 +47,7 @@ var engine_on = false;
 
 var debug_log = false;
 
-function debuglog (message)
-{
+function debuglog(message) {
     if (debug_log == true) postMessage("debug::" + message);
 }
 
@@ -57,209 +56,195 @@ function debuglog (message)
 // ══════════════════════════
 
 importScripts(
-  "Defs.js",
-  "Variants.js",
-  "Competitor.js",
-  "InputOutput.js",
-  "Board.js",
-  "Book.js",
-  "MoveGenerator.js",
-  "MoveHandler.js",
-  "Evaluator.js",
-  "PvTable.js",
-  "Search.js",
-  "Protocol.js",
-  "Init.js"
+    "Defs.js",
+    "Variants.js",
+    "Competitor.js",
+    "InputOutput.js",
+    "Board.js",
+    "Book.js",
+    "MoveGenerator.js",
+    "MoveHandler.js",
+    "Evaluator.js",
+    "PvTable.js",
+    "Search.js",
+    "Protocol.js",
+    "Init.js"
 );
 
 // ══════════════════════════
 //  Messaging
 // ══════════════════════════
 
-self.onmessage = function (e) {
+self.onmessage = function(e) {
     ProcessGuiMessage(e.data);
 };
 
-function SendMessageToGui(title, message)
-{
-  postMessage(title + "::" + message);
+function SendMessageToGui(title, message) {
+    postMessage(title + "::" + message);
 }
 
-function ProcessGuiMessage(message)
-{
-	debuglog("Message received: " + message);
-	var msg_title = message.substr(0, message.indexOf('::'));
-	var msg_body = message.substr(message.indexOf('::') + 2);
+function ProcessGuiMessage(message) {
+    debuglog("Message received: " + message);
+    var msg_title = message.substr(0, message.indexOf('::'));
+    var msg_body = message.substr(message.indexOf('::') + 2);
 
-	switch(msg_title) {
-    case "init":
-        ProcessGuiMessage_Init(msg_body);
-        break;
-    case "parse":
-        ProcessGuiMessage_Parse(msg_body);
-        break;
-    case "move":
-        ProcessGuiMessage_Move(msg_body);
-        break;
-    case "set":
-        ProcessGuiMessage_Set(msg_body);
-        break;
-    case "do":
-        ProcessGuiMessage_Do(msg_body);
-        break;
-    default:
-        debuglog ("Message not recognised.");
-        break;
-	}
-}
-
-function ProcessGuiMessage_Init(message)
-{
-    switch(message) {
-    case "hello":
-        SendMessageToGui ("init", "hi");
-        break;
-    case "start_engine":
-        StartEngine();
-        break;
-    case "new_game":
-        NewGame();
-        var engine_position = BoardToFen().replace(/ .+$/, '');
-        SendPosition();
-        break;
-    case "turn_on":
-        engine_on = true;
-        SendMessageToGui("init", "engine_is_on");
-        break;
-    case "turn_off":
-        engine_on = false;
-        SendMessageToGui("init", "engine_is_off");
-        break;
-    case "go":
-        if (engine_on) MoveNow();
-        break;
-    default:
-        debuglog ("Init::message not recognised.");
-        break;
+    switch (msg_title) {
+        case "init":
+            ProcessGuiMessage_Init(msg_body);
+            break;
+        case "parse":
+            ProcessGuiMessage_Parse(msg_body);
+            break;
+        case "move":
+            ProcessGuiMessage_Move(msg_body);
+            break;
+        case "set":
+            ProcessGuiMessage_Set(msg_body);
+            break;
+        case "do":
+            ProcessGuiMessage_Do(msg_body);
+            break;
+        default:
+            debuglog("Message not recognised.");
+            break;
     }
 }
 
-function ProcessGuiMessage_Parse(move)
-{
-    debuglog ("Begin parsing move: " + move + " in variant " + variant);
+function ProcessGuiMessage_Init(message) {
+    switch (message) {
+        case "hello":
+            SendMessageToGui("init", "hi");
+            break;
+        case "start_engine":
+            StartEngine();
+            break;
+        case "new_game":
+            NewGame();
+            var engine_position = BoardToFen().replace(/ .+$/, '');
+            SendPosition();
+            break;
+        case "turn_on":
+            engine_on = true;
+            SendMessageToGui("init", "engine_is_on");
+            break;
+        case "turn_off":
+            engine_on = false;
+            SendMessageToGui("init", "engine_is_off");
+            break;
+        case "go":
+            if (engine_on) MoveNow();
+            break;
+        default:
+            debuglog("Init::message not recognised.");
+            break;
+    }
+}
+
+function ProcessGuiMessage_Parse(move) {
+    debuglog("Begin parsing move: " + move + " in variant " + variant);
     var src = CBSQ2SQ(move.split("-")[0]);
     var dst = CBSQ2SQ(move.split("-")[1]);
     var parsed = ParseMove(src, dst);
-    
-    if (parsed != NOMOVE)
-    {
+
+    if (parsed != NOMOVE) {
         var msg = move + "|" + parsed;
         var flag = "|quite";
-        if((parsed & MFLAGEP)   != 0)   flag = "|en_passant";
-        if((parsed & MFLAGCA)   != 0)   flag = "|castle";
-        if((parsed & MFLAGRZ)   != 0)   flag = "|rendezvous";
-        if((parsed & MFLAGCAP)  != 0)   flag = "|capture";
-        if((parsed & MFLAGPROM) != 0)   flag = "|promote";
+        if ((parsed & MFLAGEP) != 0) flag = "|en_passant";
+        if ((parsed & MFLAGCA) != 0) flag = "|castle";
+        if ((parsed & MFLAGRZ) != 0) flag = "|rendezvous";
+        if ((parsed & MFLAGCAP) != 0) flag = "|capture";
+        if ((parsed & MFLAGPROM) != 0) flag = "|promote";
         msg += flag;
         SendMessageToGui("parsed", msg);
-    }
-    else
-    {
+    } else {
         SendMessageToGui("parsed", "NOMOVE");
         SendPosition();
     }
 }
 
-function ProcessGuiMessage_Move(parsed_move)
-{
+function ProcessGuiMessage_Move(parsed_move) {
     debuglog("Making move: " + parsed_move);
     MakeMove(parsed_move);
     if (debug_log) PrintBoard();
     SendPosition();
     CheckAndSet();
-    if (engine_on && GameController.GameOver == BOOL.FALSE)
-    {
-        setTimeout(function () {
+    if (engine_on && GameController.GameOver == BOOL.FALSE) {
+        setTimeout(function() {
             MoveNow();
         }, 100);
     }
 }
 
-function ProcessGuiMessage_Set(message)
-{
+function ProcessGuiMessage_Set(message) {
     var set = message.split("|")[0];
     var value = message.split("|")[1];
 
-    switch(set) {
-    case "thinktime":
-        debuglog ("Set srch_time: " + value);
-        srch_time = value;
-        break;
-    case "depth":
-        debuglog ("Set srch_depth: " + value);
-        srch_depth = value;
-        break;
-    case "variant":
-        debuglog ("Set variant: " + value);
-        setVariantDefs(value);
-        break;
-    case "fen":
-        debuglog ("Set FEN: " + value);
-        SetFen(value);
-        break;
-    case "history":
-        debuglog ("Set History: " + value);
-        SetHistory(value);
-        SendPosition();
-        break;
-    case "tp":
-        debuglog ("Set TP: " + value);
-        SetFen(Get_TP_Fen(value));
-        break;
-    default:
-        debuglog ("Set::message not recognised.");
-        break;
+    switch (set) {
+        case "thinktime":
+            debuglog("Set srch_time: " + value);
+            srch_time = value;
+            break;
+        case "depth":
+            debuglog("Set srch_depth: " + value);
+            srch_depth = value;
+            break;
+        case "variant":
+            debuglog("Set variant: " + value);
+            setVariantDefs(value);
+            break;
+        case "fen":
+            debuglog("Set FEN: " + value);
+            SetFen(value);
+            break;
+        case "history":
+            debuglog("Set History: " + value);
+            SetHistory(value);
+            SendPosition();
+            break;
+        case "tp":
+            debuglog("Set TP: " + value);
+            SetFen(Get_TP_Fen(value));
+            break;
+        default:
+            debuglog("Set::message not recognised.");
+            break;
     }
 }
 
-function ProcessGuiMessage_Do(command)
-{
-    switch(command) {
-    case "flip":
-        GameController.BoardFlipped ^= 1;
-        SendPosition();
-        break;
-    case "takeback":
-        if (brd_hisPly > 0) {
-            TakeMove();
-            brd_ply = 0;
-            if (debug_log) PrintBoard();
-            GameController.GameOver = BOOL.FALSE;
-            SendGameState();
+function ProcessGuiMessage_Do(command) {
+    switch (command) {
+        case "flip":
+            GameController.BoardFlipped ^= 1;
             SendPosition();
-        }
-        break;
-    case "forward":
-        var move = brd_history[brd_hisPly].move;
-        if (move != 0 && move != undefined && ParseMove(FROMSQ(move), TOSQ(move)))
-        {
-            MakeMove(move);
-            SendPosition();
-        }
-        else
-        {
-            if (engine_on == true) MoveNow();
-        }
-        break;
-    case "start_demo":
-        StartEngineDemo();
-        break;
-    case "stop_demo":
-        StopEngineDemo();
-        break;
-    default:
-        debuglog ("Do::message not recognised.");
-        break;
+            break;
+        case "takeback":
+            if (brd_hisPly > 0) {
+                TakeMove();
+                brd_ply = 0;
+                if (debug_log) PrintBoard();
+                GameController.GameOver = BOOL.FALSE;
+                SendGameState();
+                SendPosition();
+            }
+            break;
+        case "forward":
+            var move = brd_history[brd_hisPly].move;
+            if (move != 0 && move != undefined && ParseMove(FROMSQ(move), TOSQ(move))) {
+                MakeMove(move);
+                SendPosition();
+            } else {
+                if (engine_on == true) MoveNow();
+            }
+            break;
+        case "start_demo":
+            StartEngineDemo();
+            break;
+        case "stop_demo":
+            StopEngineDemo();
+            break;
+        default:
+            debuglog("Do::message not recognised.");
+            break;
     }
 }
 
@@ -267,28 +252,26 @@ function ProcessGuiMessage_Do(command)
 //  Engine functions
 // ══════════════════════════
 
-function MoveNow()
-{
+function MoveNow() {
     debuglog("Starting to think.");
     SendMessageToGui("info", "thinking");
     GameController.PlayerSide = brd_side ^ 1;
-    setTimeout(function () {
-            StartSearch();
+    setTimeout(function() {
+        StartSearch();
     }, 100);
 }
 
 function StartSearch() {
     if (srch_time == undefined || srch_time <= 0) srch_time = 3000;
     if (srch_depth == 0 || srch_depth == undefined) srch_depth = MAXDEPTH;
-    debuglog ("Starting search: srch_depth: " + srch_depth + " srch_time: " + srch_time);
+    debuglog("Starting search: srch_depth: " + srch_depth + " srch_time: " + srch_time);
     SearchPosition();
     MakeMove(srch_best);
     if (debug_log) PrintBoard();
     var engine_position = BoardToFen().replace(/ .+$/, '');
     SendPosition();
     CheckAndSet();
-    if (CapturedPieces() != "")
-    {
+    if (CapturedPieces() != "") {
         SendMessageToGui("console", CapturedPieces());
     }
 }
@@ -308,8 +291,7 @@ function CheckAndSet() {
     }
     ClearHistory();
     SendGameState();
-    if (CapturedPieces() != "" && engine_on == false)
-    {
+    if (CapturedPieces() != "" && engine_on == false) {
         SendMessageToGui("console", CapturedPieces());
     }
 }
@@ -330,8 +312,7 @@ function GameOver() {
         SendMessageToGui("gameover", "draw|insufficient_material|" + SQUARES.NO_SQ);
         return BOOL.TRUE;
     }
-    if (CitadelDraw() == BOOL.TRUE)
-    {
+    if (CitadelDraw() == BOOL.TRUE) {
         SendMessageToGui("gameover", "draw|citadel_rule|" + SQUARES.NO_SQ);
         return BOOL.TRUE;
     }
@@ -370,9 +351,8 @@ function GameOver() {
     return BOOL.FALSE;
 }
 
-function ClearHistory()
-{
-    for(index = brd_hisPly; index < MAXGAMEMOVES; index++) {
+function ClearHistory() {
+    for (index = brd_hisPly; index < MAXGAMEMOVES; index++) {
         brd_history[index].move = NOMOVE;
         brd_history[index].fiftyMove = 0;
         brd_history[index].enPas = 0;
@@ -380,37 +360,33 @@ function ClearHistory()
     }
 }
 
-function SendPosition()
-{
+function SendPosition() {
     var engine_position = BoardToFen().replace(/ .+$/, '');
     var moved = PrSq(FROMSQ(srch_best)) + "-" + PrSq(TOSQ(srch_best));
     SendMessageToGui("pos", engine_position + "|" + brd_side);
 }
 
-function SendBestMove(best_move)
-{
+function SendBestMove(best_move) {
     var flag = "|quite";
-    if((best_move & MFLAGEP)   != 0)   flag = "|en_passant";
-    if((best_move & MFLAGCA)   != 0)   flag = "|castle";
-    if((best_move & MFLAGRZ)   != 0)   flag = "|rendezvous";
-    if((best_move & MFLAGCAP)  != 0)   flag = "|capture";
-    if((best_move & MFLAGPROM) != 0)   flag = "|promote";
+    if ((best_move & MFLAGEP) != 0) flag = "|en_passant";
+    if ((best_move & MFLAGCA) != 0) flag = "|castle";
+    if ((best_move & MFLAGRZ) != 0) flag = "|rendezvous";
+    if ((best_move & MFLAGCAP) != 0) flag = "|capture";
+    if ((best_move & MFLAGPROM) != 0) flag = "|promote";
     SendMessageToGui("bestmove", PrMove(best_move) + flag);
 }
 
 
-function SendGameState()
-{
+function SendGameState() {
     SendMessageToGui("fen", BoardToFen());
     if (BoardToHistory().length > 1) SendMessageToGui("history", BoardToHistory());
 }
 
-function BoardToHistory()
-{
+function BoardToHistory() {
     var history = "";
     var index;
     for (index = 0; index < brd_hisPly; ++index) {
-        history += PrSq(FROMSQ(brd_history[index].move)) + "-" + PrSq(TOSQ(brd_history[index].move)) + "/" ;
+        history += PrSq(FROMSQ(brd_history[index].move)) + "-" + PrSq(TOSQ(brd_history[index].move)) + "/";
         history += brd_history[index].move + "/";
         history += brd_history[index].posKey + "/";
         history += brd_history[index].fiftyMove + "/";
@@ -422,12 +398,11 @@ function BoardToHistory()
     return history;
 }
 
-function SetHistory(this_history)
-{
+function SetHistory(this_history) {
     page = this_history.split(" ");
     if (page.length < 2) return;
 
-    for (index = 0; index < page.length - 1 ; ++index) {
+    for (index = 0; index < page.length - 1; ++index) {
         var h_array = page[index].split("/");
         brd_history[index].move = h_array[1];
         brd_history[index].posKey = h_array[2];
@@ -439,26 +414,21 @@ function SetHistory(this_history)
 }
 
 
-function SetFen(this_fen)
-{
+function SetFen(this_fen) {
     var current_fen = BoardToFen();
-    if (ParseFen(this_fen))
-    {
+    if (ParseFen(this_fen)) {
         GameController.PlayerSide = brd_side;
         CheckAndSet();
         EvalPosition();
         SendPosition();
-    }
-    else
-    {
+    } else {
         SendMessageToGui("info", "invalid_fen");
         ParseFen(current_fen);
         SendPosition();
     }
 }
 
-function ReportEngineError()
-{
+function ReportEngineError() {
     var error = variant;
     error += "|";
     error += BoardToFen();
@@ -472,6 +442,7 @@ function ReportEngineError()
 // ══════════════════════════
 
 var EngineDemoTimer;
+
 function StartEngineDemo() {
     // var cycletime = parseInt(srch_time) + 1000;
     StartSearch();
