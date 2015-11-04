@@ -61,7 +61,7 @@ function BoardToFen() {
         }
 
         if (rank != RANKS.RANK_1) {
-            fenStr += '/'
+            fenStr += '/';
         } else {
             fenStr += ' ';
         }
@@ -70,7 +70,7 @@ function BoardToFen() {
     fenStr += SideChar[brd_side] + ' ';
 
     if (brd_castlePerm == 0) {
-        fenStr += '- '
+        fenStr += '- ';
     } else {
         if (brd_castlePerm & CASTLEBIT.WKCA) fenStr += 'K';
         if (brd_castlePerm & CASTLEBIT.WQCA) fenStr += 'Q';
@@ -80,13 +80,13 @@ function BoardToFen() {
     }
 
     if (brd_enPas == SQUARES.NO_SQ) {
-        fenStr += '- '
+        fenStr += '- ';
     } else {
         fenStr += PrSq(brd_enPas) + ' ';
     }
     fenStr += brd_fiftyMove;
     
-    if (brd_hisPly > 2) 
+    if (brd_hisPly > 2)
     {
         fenStr += ' ';
         var tempHalfMove = brd_hisPly;
@@ -219,12 +219,12 @@ function GeneratePosKey() {
 
 function PrintBoard() {
 
-    var sq, file, rank, piece;
+    var sq, file, rank, piece, line;
 
     debuglog("\nGame Board:\n");
 
     for (rank = RANKS.RANK_11; rank >= RANKS.RANK_1; rank--) {
-        var line = "";
+        line = "";
         if (rank + 1 > 9) line = ((rank + 1) + "|");
         else line = ((rank + 1) + " |");
         for (file = FILES.FILE_A; file <= FILES.FILE_K; file++) {
@@ -237,7 +237,7 @@ function PrintBoard() {
     }
 
     debuglog("");
-    var line = "   ";
+    line = "   ";
     for (file = FILES.FILE_A; file <= FILES.FILE_K; file++) {
         line += (' ' + FileChar.charAt(file) + ' ');
     }
@@ -441,7 +441,7 @@ function SqAttacked(sq, side) {
     var t_sq;
     var index;
     
-    if (brd_pieces[sq] == SQUARES.OFFBOARD) return BOOL.FALSE;    
+    if (brd_pieces[sq] == SQUARES.OFFBOARD) return BOOL.FALSE;
 
     if (variant == "ASE" && ASEDIA.indexOf(sq) > -1) return BOOL.TRUE;
      
@@ -533,16 +533,16 @@ function SqAttacked(sq, side) {
 
 function PrintSqAttacked() {
 
-    var sq, file, rank, piece;
+    var sq, file, rank, piece, line;
 
     debuglog("\nAttacked by Black:\n");
 
     for (rank = RANKS.RANK_11; rank >= RANKS.RANK_1; rank--) {
-        var line = ((rank + 1) + "  ");
+        line = ((rank + 1) + "  ");
         for (file = FILES.FILE_A; file <= FILES.FILE_K; file++) {
             sq = FR2SQ(file, rank);
             if (SqAttacked(sq, COLOURS.BLACK) == BOOL.TRUE) piece = "X";
-            else if (brd_pieces[sq] == SQUARES.OFFBOARD) piece = "*"; 
+            else if (brd_pieces[sq] == SQUARES.OFFBOARD) piece = "*";
             else piece = "-";
             line += (" " + piece + " ");
         }
@@ -552,11 +552,11 @@ function PrintSqAttacked() {
     debuglog("\nAttacked by White:\n");
 
     for (rank = RANKS.RANK_11; rank >= RANKS.RANK_1; rank--) {
-        var line = ((rank + 1) + "  ");
+        line = ((rank + 1) + "  ");
         for (file = FILES.FILE_A; file <= FILES.FILE_K; file++) {
             sq = FR2SQ(file, rank);
             if (SqAttacked(sq, COLOURS.WHITE) == BOOL.TRUE) piece = "X";
-            else if (brd_pieces[sq] == SQUARES.OFFBOARD) piece = "*"; 
+            else if (brd_pieces[sq] == SQUARES.OFFBOARD) piece = "*";
             else piece = "-";
             line += (" " + piece + " ");
         }
@@ -582,4 +582,4 @@ function EvaluateSqAttacked()
 }
 
 // ════════════════════════════════════════════════════
-debuglog ("Board.js is loaded.")
+debuglog ("Board.js is loaded.");

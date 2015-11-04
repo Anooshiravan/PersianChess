@@ -77,8 +77,8 @@ importScripts(
 // ══════════════════════════
 
 self.onmessage = function (e) {
-    ProcessGuiMessage(e.data)
-}
+    ProcessGuiMessage(e.data);
+};
 
 function SendMessageToGui(title, message)
 {
@@ -108,8 +108,8 @@ function ProcessGuiMessage(message)
         ProcessGuiMessage_Do(msg_body);
         break;
     default:
-        debuglog ("Message not recognised.")
-        break
+        debuglog ("Message not recognised.");
+        break;
 	}
 }
 
@@ -118,19 +118,19 @@ function ProcessGuiMessage_Init(message)
     switch(message) {
     case "hello":
         SendMessageToGui ("init", "hi");
-        break;    
+        break;
     case "start_engine":
         StartEngine();
-        break; 
+        break;
     case "new_game":
         NewGame();
         var engine_position = BoardToFen().replace(/ .+$/, '');
         SendPosition();
-        break;   
+        break;
     case "turn_on":
         engine_on = true;
         SendMessageToGui("init", "engine_is_on");
-        break; 
+        break;
     case "turn_off":
         engine_on = false;
         SendMessageToGui("init", "engine_is_off");
@@ -139,8 +139,8 @@ function ProcessGuiMessage_Init(message)
         if (engine_on) MoveNow();
         break;
     default:
-        debuglog ("Init::message not recognised.")
-        break
+        debuglog ("Init::message not recognised.");
+        break;
     }
 }
 
@@ -151,15 +151,15 @@ function ProcessGuiMessage_Parse(move)
     var dst = CBSQ2SQ(move.split("-")[1]);
     var parsed = ParseMove(src, dst);
     
-    if (parsed != NOMOVE) 
+    if (parsed != NOMOVE)
     {
         var msg = move + "|" + parsed;
         var flag = "|quite";
-        if((parsed & MFLAGEP)   != 0)   flag = "|en_passant"
-        if((parsed & MFLAGCA)   != 0)   flag = "|castle"
-        if((parsed & MFLAGRZ)   != 0)   flag = "|rendezvous"
-        if((parsed & MFLAGCAP)  != 0)   flag = "|capture"
-        if((parsed & MFLAGPROM) != 0)   flag = "|promote"
+        if((parsed & MFLAGEP)   != 0)   flag = "|en_passant";
+        if((parsed & MFLAGCA)   != 0)   flag = "|castle";
+        if((parsed & MFLAGRZ)   != 0)   flag = "|rendezvous";
+        if((parsed & MFLAGCAP)  != 0)   flag = "|capture";
+        if((parsed & MFLAGPROM) != 0)   flag = "|promote";
         msg += flag;
         SendMessageToGui("parsed", msg);
     }
@@ -177,7 +177,7 @@ function ProcessGuiMessage_Move(parsed_move)
     if (debug_log) PrintBoard();
     SendPosition();
     CheckAndSet();
-    if (engine_on && GameController.GameOver == BOOL.FALSE) 
+    if (engine_on && GameController.GameOver == BOOL.FALSE)
     {
         setTimeout(function () {
             MoveNow();
@@ -194,15 +194,15 @@ function ProcessGuiMessage_Set(message)
     case "thinktime":
         debuglog ("Set srch_time: " + value);
         srch_time = value;
-        break;    
+        break;
     case "depth":
         debuglog ("Set srch_depth: " + value);
         srch_depth = value;
-        break; 
+        break;
     case "variant":
         debuglog ("Set variant: " + value);
         setVariantDefs(value);
-        break; 
+        break;
     case "fen":
         debuglog ("Set FEN: " + value);
         SetFen(value);
@@ -214,11 +214,11 @@ function ProcessGuiMessage_Set(message)
         break;
     case "tp":
         debuglog ("Set TP: " + value);
-        SetFen(Get_TP_Fen(value));        
-        break; 
+        SetFen(Get_TP_Fen(value));
+        break;
     default:
-        debuglog ("Set::message not recognised.")
-        break
+        debuglog ("Set::message not recognised.");
+        break;
     }
 }
 
@@ -237,8 +237,8 @@ function ProcessGuiMessage_Do(command)
             GameController.GameOver = BOOL.FALSE;
             SendGameState();
             SendPosition();
-        }  
-        break; 
+        }
+        break;
     case "forward":
         var move = brd_history[brd_hisPly].move;
         if (move != 0 && move != undefined && ParseMove(FROMSQ(move), TOSQ(move)))
@@ -250,7 +250,7 @@ function ProcessGuiMessage_Do(command)
         {
             if (engine_on == true) MoveNow();
         }
-        break
+        break;
     case "start_demo":
         StartEngineDemo();
         break;
@@ -258,8 +258,8 @@ function ProcessGuiMessage_Do(command)
         StopEngineDemo();
         break;
     default:
-        debuglog ("Do::message not recognised.")
-        break
+        debuglog ("Do::message not recognised.");
+        break;
     }
 }
 
@@ -330,7 +330,7 @@ function GameOver() {
         SendMessageToGui("gameover", "draw|insufficient_material|" + SQUARES.NO_SQ);
         return BOOL.TRUE;
     }
-    if (CitadelDraw() == BOOL.TRUE) 
+    if (CitadelDraw() == BOOL.TRUE)
     {
         SendMessageToGui("gameover", "draw|citadel_rule|" + SQUARES.NO_SQ);
         return BOOL.TRUE;
@@ -390,11 +390,11 @@ function SendPosition()
 function SendBestMove(best_move)
 {
     var flag = "|quite";
-    if((best_move & MFLAGEP)   != 0)   flag = "|en_passant"
-    if((best_move & MFLAGCA)   != 0)   flag = "|castle"
-    if((best_move & MFLAGRZ)   != 0)   flag = "|rendezvous"
-    if((best_move & MFLAGCAP)  != 0)   flag = "|capture"
-    if((best_move & MFLAGPROM) != 0)   flag = "|promote"
+    if((best_move & MFLAGEP)   != 0)   flag = "|en_passant";
+    if((best_move & MFLAGCA)   != 0)   flag = "|castle";
+    if((best_move & MFLAGRZ)   != 0)   flag = "|rendezvous";
+    if((best_move & MFLAGCAP)  != 0)   flag = "|capture";
+    if((best_move & MFLAGPROM) != 0)   flag = "|promote";
     SendMessageToGui("bestmove", PrMove(best_move) + flag);
 }
 
@@ -480,5 +480,5 @@ function StartEngineDemo() {
 }
 
 function StopEngineDemo() {
-    clearTimeout(EngineDemoTimer); 
+    clearTimeout(EngineDemoTimer);
 }
