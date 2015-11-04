@@ -76,14 +76,14 @@ var PersianChessEngine;
 
         function StartEngine()
         {
-            debuglog("Restoring fen from local storage...", 1)
+            debuglog("Restoring fen from local storage...", 1);
             var ls_fen = Get_LocalStorageValue("fen");
-            if (ls_fen != undefined && ls_fen != "" && ls_fen != null) 
+            if (ls_fen != undefined && ls_fen != "" && ls_fen != null)
                 {
                     START_FEN = ls_fen;
                 }
        
-            debuglog("Starting WebWorker Engine...", 1)
+            debuglog("Starting WebWorker Engine...", 1);
 
             if (!PersianChessEngineValid) {
                 return false;
@@ -93,16 +93,16 @@ var PersianChessEngine;
             try {
                 PersianChessEngine = new Worker("js/PersianChessEngine/PersianChessEngine.js");
                 PersianChessEngine.onmessage = function (e) {
-                    ProcessEngineMessage(e.data)
-                }
+                    ProcessEngineMessage(e.data);
+                };
                 PersianChessEngine.onerror = function (e) {
                     e.preventDefault();
                     return false;
-                }
+                };
                 PersianChessEngine.error = function (e) {
                     e.preventDefault();
                     return false;
-                }
+                };
                 PersianChessEngine.postMessage("init::hello");
             } catch (error) {
                 PersianChessEngineValid = false;
@@ -118,7 +118,7 @@ StartEngine();
 
 function RestartEngine()
 {
-    try 
+    try
     {
         PersianChessEngine.terminate();
         PersianChessEngine = undefined;
@@ -134,7 +134,7 @@ function FallBackToOlderVersion(){
     var r = confirm("Your device does not support web workers.\r\nDo you want to use an older version?");
     if (r == true) {
         window.location = "old/index.html";
-    } 
+    }
 }
 
 
@@ -188,8 +188,8 @@ function ProcessEngineMessage(message)
         ProcessEngineMessage_Report(msg_body);
         break;
     default:
-        debuglog ("Message not recognised: " + message)
-        break
+        debuglog ("Message not recognised: " + message);
+        break;
     }
 }
 
@@ -224,7 +224,7 @@ function ProcessEngineMessage_Init(message)
             break;
         default:
             debuglog ("Message not recognised.", 1);
-            break
+            break;
     }
 }
 
@@ -249,7 +249,7 @@ function ProcessEngineMessage_Parsed(message)
 // Pos::
 function ProcessEngineMessage_Pos(message)
 {
-    debuglog ("Engine Position received: " + message, 1)
+    debuglog ("Engine Position received: " + message, 1);
     var engine_position = message.split("|")[0];
     setTimeout(function () {
         board.position(engine_position);
@@ -264,7 +264,7 @@ function ProcessEngineMessage_Pos(message)
             board.logo ("black_to_move");
             break;
         default:
-            break
+            break;
     }
     board.is_active(true);
     engine_thinking = false;
@@ -278,7 +278,7 @@ function ProcessEngineMessage_History(engine_history)
 
     HistoryToPGN(engine_history);
 
-    UpdateMoveList();  
+    UpdateMoveList();
     UpdateBoardHighlight();
 }
 
@@ -306,8 +306,8 @@ function ProcessEngineMessage_Info(info)
     if (info.split("|")[0] == "check")
     {
         var KingSq = info.split("|")[1];
-        timeout = setTimeout(function(){ 
-            PlaySound(audio_check); 
+        timeout = setTimeout(function(){
+            PlaySound(audio_check);
             board.removehighlights();
             board.highlight_check(KingSq);
         }, 500);
@@ -318,7 +318,7 @@ function ProcessEngineMessage_Info(info)
         if (document.getElementById("hint_switch").value == "on" && engine_autoplay == false)
         {
             $('#do_popup').html("<div align=\"center\"><div><img src='img/hint.png' border=0>&nbsp" + hint+ "</div>");
-            timeout = setTimeout(function(){ 
+            timeout = setTimeout(function(){
                 $('#do_popup').popup('open');
             }, 300);
         }
@@ -342,7 +342,7 @@ function ProcessEngineMessage_Gameover(message)
     var Rule = message.split("|")[1];
     var KingSq = message.split("|")[2];
     debuglog ("Gameover: Result:" + Result + " Rule:" + Rule + " KingSq:" + KingSq , 1);
-    timeout = setTimeout(function(){ 
+    timeout = setTimeout(function(){
             board.removehighlights();
             board.highlight_mate(KingSq);
     }, 500);
@@ -371,7 +371,7 @@ function ProcessEngineMessage_Gameover(message)
             PlayGGSound("draw");
             break;
         case "blackwins|checkmate":
-            msg = "Checkmate! Black wins."
+            msg = "Checkmate! Black wins.";
             PlayGGSound("blackwins");
             break;
         case "whitewins|checkmate":
@@ -385,7 +385,7 @@ function ProcessEngineMessage_Gameover(message)
     gameover = true;
 
     $('#do_popup').html("<div align=\"center\"><b>Game over</b></div><div>" + msg + "</div>");
-    timeout = setTimeout(function(){ 
+    timeout = setTimeout(function(){
         $('#do_popup').popup('open');
     }, 300);
 }
@@ -478,7 +478,7 @@ function ProcessEngineMessage_Report(message)
 
     function Engine_StartDemo()
     {
-        if (PersianChessEngineOn) 
+        if (PersianChessEngineOn)
         {
             debuglog ("Start Engine Demo");
             PersianChessEngine.postMessage("do::start_demo");
@@ -498,11 +498,11 @@ function ProcessEngineMessage_Report(message)
     function Engine_StopDemo()
     {
         debuglog ("Stop Engine Demo");
-        PersianChessEngine.postMessage("do::stop_demo"); 
+        PersianChessEngine.postMessage("do::stop_demo");
         engine_autoplay = false;
         msg = "Engine AutoPlay is stopped.";
         $('#do_popup').html("<div class='courier_new_big'>" +  msg + "</div>");
-        $('#do_popup').popup('open');       
+        $('#do_popup').popup('open');
     }
 
 // ══════════════════════════
@@ -560,16 +560,12 @@ function GetVariantTheme(variant)
     switch(variant) {
         case "Persian":
             return "green";
-            break;
         case "ASE":
             return "brown";
-            break;
         case "Citadel":
             return "blue";
-            break;
         case "Oriental":
             return "oriental";
-            break;
         default:
             break;
     }
@@ -580,16 +576,12 @@ function GetVariantName(variant)
     switch(variant) {
         case "Persian":
             return "Persian Princess";
-            break;
         case "ASE":
             return "Egyptian Eye";
-            break;
         case "Citadel":
             return "Celtic Citadel";
-            break;
         case "Oriental":
             return "Oriental Omega";
-            break;
         default:
             break;
     }
@@ -646,7 +638,7 @@ function TakeBack()
 
         PersianChessEngine.postMessage("do::stop_demo");
         engine_autoplay = false;
-        if (engine_thinking) 
+        if (engine_thinking)
         {
             RestartEngine();
         }
@@ -658,7 +650,7 @@ function TakeBack()
         PlaySound(audio_click);
         board.removehighlights();
     }
-    catch(error) 
+    catch(error)
     {
         Append("movelist", error);
     }
@@ -708,8 +700,7 @@ function SendGameByMail()
 // ══════════════════════════════
 
 function isEven(n) {
-    n = Number(n);
-    return n === 0 || !! (n && !(n % 2));
+    return (n % 2 == 0);
 }
 
 function Append(id, line)
@@ -721,7 +712,7 @@ function Append(id, line)
             $("#movelist").scrollTop($("#movelist")[0].scrollHeight);
             break;
         case "console":
-            if (document.getElementById("console").value.startsWith("If")) 
+            if (document.getElementById("console").value.startsWith("If"))
             {
                 document.getElementById("console").value = line;
             }
@@ -733,7 +724,7 @@ function Append(id, line)
             $("#console").scrollTop($("#console")[0].scrollHeight);
             break;
         default:
-            debuglog ("ID is not recognised." , 2)
+            debuglog ("ID is not recognised." , 2);
             break;
     }
 }
@@ -773,7 +764,7 @@ function UpdateBoardHighlight()
     board.removehighlights();
     if (PersianChessEngineOn){
         setTimeout(function () {
-        board.highlight(engine_move.split("-")[0], engine_move.split("-")[1])
+        board.highlight(engine_move.split("-")[0], engine_move.split("-")[1]);
         }, 700);
     }
 }
@@ -834,10 +825,10 @@ var onBoardPieceDrop = function(source, target, piece, newPos, oldPos, orientati
         PersianChessEngine.postMessage("parse::" + move);
         debuglog ("Message sent to Engine to parse move:" + move , 2);
         setTimeout(function () {
-            if (ParsedMove.split("|")[0] == move) 
+            if (ParsedMove.split("|")[0] == move)
             {
-                Engine_MakeMove(ParsedMove.split("|")[1]);  
-                PlayMoveSound(ParsedMove.split("|")[2]);              
+                Engine_MakeMove(ParsedMove.split("|")[1]);
+                PlayMoveSound(ParsedMove.split("|")[2]);
                 if (PersianChessEngineOn == false)
                 {
                     setTimeout(function () { FlipBoard(); }, 700);
@@ -855,10 +846,10 @@ function boardMoved(source, target)
         PersianChessEngine.postMessage("parse::" + move);
         debuglog ("Message sent to Engine to parse move:" + move , 2);
         setTimeout(function () {
-            if (ParsedMove.split("|")[0] == move) 
+            if (ParsedMove.split("|")[0] == move)
             {
-                Engine_MakeMove(ParsedMove.split("|")[1]);  
-                PlayMoveSound(ParsedMove.split("|")[2]);              
+                Engine_MakeMove(ParsedMove.split("|")[1]);
+                PlayMoveSound(ParsedMove.split("|")[2]);
                 if (PersianChessEngineOn == false)
                 {
                     setTimeout(function () { FlipBoard(); }, 400);
@@ -882,7 +873,7 @@ var cfg = {
     position: 'start',
     onDrop: onBoardPieceDrop
 };
-var board = new ChessBoard(document.getElementById("board"), cfg);  
+var board = new ChessBoard(document.getElementById("board"), cfg);
 
 
 // ══════════════════════════
