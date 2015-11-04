@@ -85,15 +85,14 @@ function BoardToFen() {
         fenStr += PrSq(brd_enPas) + ' ';
     }
     fenStr += brd_fiftyMove;
-    
-    if (brd_hisPly > 2)
-    {
+
+    if (brd_hisPly > 2) {
         fenStr += ' ';
         var tempHalfMove = brd_hisPly;
         if (brd_side == COLOURS.BLACK) {
             tempHalfMove--;
         }
-        var pLy =  tempHalfMove / 2;
+        var pLy = tempHalfMove / 2;
         if (pLy < 1) pLy = 1;
         fenStr += pLy;
     }
@@ -118,7 +117,7 @@ function CheckBoard() {
         }
     }
 
-    // check piece count and other counters	
+    // check piece count and other counters 
     for (sq121 = 0; sq121 < 121; ++sq121) {
         sq195 = SQ195(sq121);
         t_piece = brd_pieces[sq195];
@@ -265,7 +264,7 @@ function ResetBoard() {
     }
 
     for (index = 0; index < 121; ++index) {
-   
+
         if (FrameSQ.indexOf(SQ195(index)) > -1) brd_pieces[SQ195(index)] = SQUARES.OFFBOARD;
         else brd_pieces[SQ195(index)] = PIECES.EMPTY;
     }
@@ -309,80 +308,80 @@ function ParseFen(fen) {
     while ((rank >= RANKS.RANK_1) && fenCnt < fen.length) {
         count = 1;
         switch (fen[fenCnt]) {
-        case 'p':
-            piece = PIECES.bP;
-            break;
-        case 'r':
-            piece = PIECES.bR;
-            break;
-        case 'n':
-            piece = PIECES.bN;
-            break;
-        case 'w':
-            piece = PIECES.bW;
-            break;
-        case 'c':
-            piece = PIECES.bC;
-            break;
-        case 'b':
-            piece = PIECES.bB;
-            break;
-        case 's':
-            piece = PIECES.bS;
-            break;
-        case 'f':
-            piece = PIECES.bF;
-            break;
-        case 'k':
-            piece = PIECES.bK;
-            break;
-        case 'q':
-            piece = PIECES.bQ;
-            break;
-        case 'P':
-            piece = PIECES.wP;
-            break;
-        case 'R':
-            piece = PIECES.wR;
-            break;
-        case 'N':
-            piece = PIECES.wN;
-            break;
-        case 'W':
-            piece = PIECES.wW;
-            break;
-        case 'C':
-            piece = PIECES.wC;
-            break;
-        case 'B':
-            piece = PIECES.wB;
-            break;
-        case 'S':
-            piece = PIECES.wS;
-            break;
-        case 'F':
-            piece = PIECES.wF;
-            break;
-        case 'K':
-            piece = PIECES.wK;
-            break;
-        case 'Q':
-            piece = PIECES.wQ;
-            break;
-        case '1':
-            piece = PIECES.EMPTY;
-            break;
+            case 'p':
+                piece = PIECES.bP;
+                break;
+            case 'r':
+                piece = PIECES.bR;
+                break;
+            case 'n':
+                piece = PIECES.bN;
+                break;
+            case 'w':
+                piece = PIECES.bW;
+                break;
+            case 'c':
+                piece = PIECES.bC;
+                break;
+            case 'b':
+                piece = PIECES.bB;
+                break;
+            case 's':
+                piece = PIECES.bS;
+                break;
+            case 'f':
+                piece = PIECES.bF;
+                break;
+            case 'k':
+                piece = PIECES.bK;
+                break;
+            case 'q':
+                piece = PIECES.bQ;
+                break;
+            case 'P':
+                piece = PIECES.wP;
+                break;
+            case 'R':
+                piece = PIECES.wR;
+                break;
+            case 'N':
+                piece = PIECES.wN;
+                break;
+            case 'W':
+                piece = PIECES.wW;
+                break;
+            case 'C':
+                piece = PIECES.wC;
+                break;
+            case 'B':
+                piece = PIECES.wB;
+                break;
+            case 'S':
+                piece = PIECES.wS;
+                break;
+            case 'F':
+                piece = PIECES.wF;
+                break;
+            case 'K':
+                piece = PIECES.wK;
+                break;
+            case 'Q':
+                piece = PIECES.wQ;
+                break;
+            case '1':
+                piece = PIECES.EMPTY;
+                break;
 
-        case '/':
-        case ' ':
-            rank--;
-            file = FILES.FILE_A;
-            fenCnt++;
-            continue;
+            case '/':
+            case ' ':
+                rank--;
+                file = FILES.FILE_A;
+                fenCnt++;
+                continue;
 
-        default:
-            debuglog("FEN error \n");
-            return false;
+            default:
+                debuglog("FEN error \n");
+                return false;
         }
 
         for (i = 0; i < count; i++) {
@@ -405,26 +404,26 @@ function ParseFen(fen) {
         }
         switch (fen[fenCnt]) {
 
-        case 'K':
-            brd_castlePerm |= CASTLEBIT.WKCA;
-            break;
-        case 'Q':
-            brd_castlePerm |= CASTLEBIT.WQCA;
-            break;
-        case 'k':
-            brd_castlePerm |= CASTLEBIT.BKCA;
-            break;
-        case 'q':
-            brd_castlePerm |= CASTLEBIT.BQCA;
-            break;
-        default:
-            break;
+            case 'K':
+                brd_castlePerm |= CASTLEBIT.WKCA;
+                break;
+            case 'Q':
+                brd_castlePerm |= CASTLEBIT.WQCA;
+                break;
+            case 'k':
+                brd_castlePerm |= CASTLEBIT.BKCA;
+                break;
+            case 'q':
+                brd_castlePerm |= CASTLEBIT.BQCA;
+                break;
+            default:
+                break;
         }
         fenCnt++;
     }
     fenCnt++;
 
-    if (fen[fenCnt] != '-'  && fen[fenCnt] != undefined) {
+    if (fen[fenCnt] != '-' && fen[fenCnt] != undefined) {
         file = fen[fenCnt].charCodeAt() - 'a'.charCodeAt();
         rank = fen[fenCnt + 1].charCodeAt() - '1'.charCodeAt();
         debuglog("fen[fenCnt]:" + fen[fenCnt] + " File:" + file + " Rank:" + rank);
@@ -440,11 +439,11 @@ function SqAttacked(sq, side) {
     var pce;
     var t_sq;
     var index;
-    
+
     if (brd_pieces[sq] == SQUARES.OFFBOARD) return BOOL.FALSE;
 
     if (variant == "ASE" && ASEDIA.indexOf(sq) > -1) return BOOL.TRUE;
-     
+
     if (side == COLOURS.WHITE) {
         if (brd_pieces[sq - 14] == PIECES.wP || brd_pieces[sq - 12] == PIECES.wP) {
             return BOOL.TRUE;
@@ -502,8 +501,7 @@ function SqAttacked(sq, side) {
 
     // Wizard and Champion
 
-    if (variant == "Oriental")
-    {
+    if (variant == "Oriental") {
         for (index = 0; index < 12; ++index) {
             pce = brd_pieces[sq + WzDir[index]];
             if (pce != SQUARES.OFFBOARD && PieceWizard[pce] == BOOL.TRUE && PieceCol[pce] == side) {
@@ -518,7 +516,7 @@ function SqAttacked(sq, side) {
             }
         }
     }
-    
+
     // King
 
     for (index = 0; index < 8; ++index) {
@@ -564,8 +562,7 @@ function PrintSqAttacked() {
     }
 }
 
-function EvaluateSqAttacked()
-{
+function EvaluateSqAttacked() {
     // This function is not used in the evaluation yet, it is very slow
     var SqAttackedByWhite = 0;
     var SqAttackedByBlack = 0;
@@ -582,4 +579,4 @@ function EvaluateSqAttacked()
 }
 
 // ════════════════════════════════════════════════════
-debuglog ("Board.js is loaded.");
+debuglog("Board.js is loaded.");
