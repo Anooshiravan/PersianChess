@@ -51,37 +51,34 @@ var er_7 = 0;
 var er_8 = 0;
 var er_9 = 0;
 
-function ShowErrorMoves()
-{
-    if (move_sanity_check)
-    {
-        debuglog ("------------- Move debugging ------------");
-        debuglog ("MOVE: " + gen_m);
-        if (er_0 > 0) debuglog ("Error 0: " + er_0);
-        if (er_1 > 0) debuglog ("Error 1: " + er_1);
-        if (er_2 > 0) debuglog ("Error 2: " + er_2);
-        if (er_3 > 0) debuglog ("Error 3: " + er_3);
-        if (er_4 > 0) debuglog ("Error 4: " + er_4);
-        if (er_5 > 0) debuglog ("Error 5: " + er_5);
-        if (er_6 > 0) debuglog ("Error 6: " + er_6);
-        if (er_7 > 0) debuglog ("Error 7: " + er_7);
-        if (er_8 > 0) debuglog ("Error 8: " + er_8);
-        if (er_9 > 0) debuglog ("Error 9: " + er_9);
+function ShowErrorMoves() {
+    if (move_sanity_check) {
+        debuglog("------------- Move debugging ------------");
+        debuglog("MOVE: " + gen_m);
+        if (er_0 > 0) debuglog("Error 0: " + er_0);
+        if (er_1 > 0) debuglog("Error 1: " + er_1);
+        if (er_2 > 0) debuglog("Error 2: " + er_2);
+        if (er_3 > 0) debuglog("Error 3: " + er_3);
+        if (er_4 > 0) debuglog("Error 4: " + er_4);
+        if (er_5 > 0) debuglog("Error 5: " + er_5);
+        if (er_6 > 0) debuglog("Error 6: " + er_6);
+        if (er_7 > 0) debuglog("Error 7: " + er_7);
+        if (er_8 > 0) debuglog("Error 8: " + er_8);
+        if (er_9 > 0) debuglog("Error 9: " + er_9);
     }
 }
 
 var consolespam = 0;
 
 function MOVE(from, to, captured, promoted, flag) {
-    
+
     gen_m++;
 
     // Sanity check
-    if (move_sanity_check) 
-    {
-        
+    if (move_sanity_check) {
+
         // Error 0: out of bound to and from sq
-        if (from < 0 || from > 254 || to < 0 || to > 254 ) {
+        if (from < 0 || from > 254 || to < 0 || to > 254) {
             er_0++;
             return NOMOVE;
         }
@@ -158,8 +155,7 @@ function LsbExist(side) {
 }
 
 function isEven(n) {
-    n = Number(n);
-    return n === 0 || !! (n && !(n % 2));
+    return (n % 2 == 0);
 }
 
 function MoveExists(move) {
@@ -553,7 +549,7 @@ function Mobility() {
     var sq;
     var tsq;
     var index;
-    
+
     // White Mobility
     pceIndex = LoopSlideIndex[COLOURS.WHITE];
     pce = LoopSlidePce[pceIndex++];
@@ -582,8 +578,8 @@ function Mobility() {
         }
         pce = LoopSlidePce[pceIndex++];
     }
-    
-    
+
+
     pceIndex = LoopNonSlideIndex[COLOURS.WHITE];
     pce = LoopNonSlidePce[pceIndex++];
 
@@ -613,7 +609,7 @@ function Mobility() {
         pce = LoopNonSlidePce[pceIndex++];
     }
 
-    
+
     // Black Mobility
     pceIndex = LoopSlideIndex[COLOURS.BLACK];
     pce = LoopSlidePce[pceIndex++];
@@ -643,7 +639,7 @@ function Mobility() {
         }
         pce = LoopSlidePce[pceIndex++];
     }
-    
+
     pceIndex = LoopNonSlideIndex[COLOURS.BLACK];
     pce = LoopNonSlidePce[pceIndex++];
 
@@ -677,4 +673,4 @@ function Mobility() {
 
 
 // ════════════════════════════════════════════════════
-debuglog ("MoveGenerator.js is loaded.")
+debuglog("MoveGenerator.js is loaded.");
