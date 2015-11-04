@@ -27,7 +27,7 @@ var engine = '';
 var engine_error_L1 = 0;
 var engine_error_L2 = 0;
 
-var variant = "Persian"; 
+var variant = "Persian";
 var BRD_SQ_NUM = 195;
 
 var MAXGAMEMOVES = 2048;
@@ -37,22 +37,80 @@ var MAXDEPTH = 16;
 var INFINITE = 30000;
 var MATE = 29000;
 
-var FILES =  { FILE_A:0, FILE_B:1, FILE_C:2, FILE_D:3, FILE_E:4, FILE_F:5, FILE_G:6, FILE_H:7, FILE_I:8, FILE_J:9, FILE_K:10, FILE_NONE:11 };
-var RANKS =  { RANK_1:0, RANK_2:1, RANK_3:2, RANK_4:3, RANK_5:4, RANK_6:5, RANK_7:6, RANK_8:7, RANK_9:8, RANK_10:9, RANK_11:10,  RANK_NONE:11 };
-
-var COLOURS = { WHITE:0, BLACK:1, BOTH:2 };
-
-var SQUARES = {
-  A1:27, K1:37,
-  B2:41, C2:42, D2:43, E2:44, F2:45, G2:46, H2:47, I2:48, J2:49,  
-  B10:145, C10:146, D10:147, E10:148, F10:149, G10:150, H10:151, I10:152, J10:153,
-  A11:157, K11:167,
-  NO_SQ:168, OFFBOARD:169, ASE_SQ:97
+var FILES = {
+    FILE_A: 0,
+    FILE_B: 1,
+    FILE_C: 2,
+    FILE_D: 3,
+    FILE_E: 4,
+    FILE_F: 5,
+    FILE_G: 6,
+    FILE_H: 7,
+    FILE_I: 8,
+    FILE_J: 9,
+    FILE_K: 10,
+    FILE_NONE: 11
+};
+var RANKS = {
+    RANK_1: 0,
+    RANK_2: 1,
+    RANK_3: 2,
+    RANK_4: 3,
+    RANK_5: 4,
+    RANK_6: 5,
+    RANK_7: 6,
+    RANK_8: 7,
+    RANK_9: 8,
+    RANK_10: 9,
+    RANK_11: 10,
+    RANK_NONE: 11
 };
 
-var BOOL = { FALSE:0, TRUE:1 };
+var COLOURS = {
+    WHITE: 0,
+    BLACK: 1,
+    BOTH: 2
+};
 
-var CASTLEBIT = { WKCA : 1, WQCA : 2, BKCA : 4, BQCA : 8 };
+var SQUARES = {
+    A1: 27,
+    K1: 37,
+    B2: 41,
+    C2: 42,
+    D2: 43,
+    E2: 44,
+    F2: 45,
+    G2: 46,
+    H2: 47,
+    I2: 48,
+    J2: 49,
+    B10: 145,
+    C10: 146,
+    D10: 147,
+    E10: 148,
+    F10: 149,
+    G10: 150,
+    H10: 151,
+    I10: 152,
+    J10: 153,
+    A11: 157,
+    K11: 167,
+    NO_SQ: 168,
+    OFFBOARD: 169,
+    ASE_SQ: 97
+};
+
+var BOOL = {
+    FALSE: 0,
+    TRUE: 1
+};
+
+var CASTLEBIT = {
+    WKCA: 1,
+    WQCA: 2,
+    BKCA: 4,
+    BQCA: 8
+};
 
 var FilesBrd = new Array(BRD_SQ_NUM);
 var RanksBrd = new Array(BRD_SQ_NUM);
@@ -65,30 +123,33 @@ var SideChar = "wb-";
 var RankChar = "123456789";
 var FileChar = "abcdefghijk";
 
-var PIECES =  { 
-    EMPTY : 0, 
 
-    wP : 1, 
-    wN : 2, 
-    wW : 3, 
-    wC : 4, 
-    wB : 5, 
-    wR : 6, 
-    wS : 7, 
-    wF : 8, 
-    wQ : 9, 
-    wK : 10, 
+/* beautify preserve:start */
 
-    bP : 11, 
-    bN : 12, 
-    bW : 13, 
-    bC : 14, 
-    bB : 15, 
-    bR : 16, 
-    bS : 17, 
-    bF : 18, 
-    bQ : 19, 
-    bK : 20 
+var PIECES =  {
+    EMPTY : 0,
+
+    wP : 1,
+    wN : 2,
+    wW : 3,
+    wC : 4,
+    wB : 5,
+    wR : 6,
+    wS : 7,
+    wF : 8,
+    wQ : 9,
+    wK : 10,
+
+    bP : 11,
+    bN : 12,
+    bW : 13,
+    bC : 14,
+    bB : 15,
+    bR : 16,
+    bS : 17,
+    bF : 18,
+    bQ : 19,
+    bK : 20
 };
 
 var PIECE_NAMES = ['EMPTY', 'wP', 'wN', 'wW', 'wC', 'wB', 'wR', 'wS', 'wF', 'wQ', 'wK', 'bP', 'bN', 'bW', 'bC', 'bB', 'bR', 'bS', 'bF', 'bQ', 'bK'];
@@ -106,7 +167,7 @@ var PieceMaj =      [ 0, 0,0,0,0,0,1,1,1,1,1, 0,0,0,0,0,1,1,1,1,1 ];
 var PieceMin =      [ 0, 0,1,1,1,1,0,0,0,0,0, 0,1,1,1,1,0,0,0,0,0 ];
 
 // 0 1000000000 1000000000
-var PiecePawn =     [ 0, 1,0,0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0,0,0 ];    
+var PiecePawn =     [ 0, 1,0,0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0,0,0 ];
 
 // 0 0100000000 0100000000
 var PieceKnight =   [ 0, 0,1,0,0,0,0,0,0,0,0, 0,1,0,0,0,0,0,0,0,0 ];
@@ -156,64 +217,28 @@ var PieceKeys = new Array(22 * 195);
 var SideKey;
 var CastleKeys = new Array(16);
 
-var FrameSQ = new Array();
-
-    FrameSQ[0] = 28;
-    FrameSQ[1] = 29;
-    FrameSQ[2] = 30;
-    FrameSQ[3] = 31;
-    FrameSQ[4] = 32;
-    FrameSQ[5] = 33;
-    FrameSQ[6] = 34;
-    FrameSQ[7] = 35;
-    FrameSQ[8] = 36;
-    FrameSQ[9] = 40;
-    FrameSQ[10] = 50;
-    FrameSQ[11] = 53;
-    FrameSQ[12] = 63;
-    FrameSQ[13] = 66;
-    FrameSQ[14] = 76;
-    FrameSQ[15] = 79;
-    FrameSQ[16] = 89;
-    FrameSQ[17] = 92;
-    FrameSQ[18] = 102;
-    FrameSQ[19] = 105;
-    FrameSQ[20] = 115;
-    FrameSQ[21] = 118;
-    FrameSQ[22] = 128;
-    FrameSQ[23] = 131;
-    FrameSQ[24] = 141;
-    FrameSQ[25] = 144;
-    FrameSQ[26] = 154;
-    FrameSQ[27] = 158;
-    FrameSQ[28] = 159;
-    FrameSQ[29] = 160;
-    FrameSQ[30] = 161;
-    FrameSQ[31] = 162;
-    FrameSQ[32] = 163;
-    FrameSQ[33] = 164;
-    FrameSQ[34] = 165;
-    FrameSQ[35] = 166;
+var FrameSQ = [
+28, 29, 30, 31, 32, 33, 34, 35, 36, 40, 50, 53, 63, 66, 76, 79, 89, 92, 102, 105, 115, 118, 128, 131, 141, 144, 154, 158, 159, 160, 161, 162, 163, 164, 165, 166
+];
 
 var ASEDIA = [27, 37, 41, 49, 55, 61, 69, 73, 83, 85, 109, 111, 121, 125, 133, 139, 145, 153, 157, 167];
 
-
 var Mirror121 = [
-110	,	111	,	112	,	113	,	114	,	115	,	116	,	117	,	118	,	119	,	120	,
-99	,	100	,	101	,	102	,	103	,	104	,	105	,	106	,	107	,	108	,	109	,
-88	,	89	,	90	,	91	,	92	,	93	,	94	,	95	,	96	,	97	,	98	,
-77	,	78	,	79	,	80	,	81	,	82	,	83	,	84	,	85	,	86	,	87	,
-66	,	67	,	68	,	69	,	70	,	71	,	72	,	73	,	74	,	75	,	76	,
-55	,	56	,	57	,	58	,	59	,	60	,	61	,	62	,	63	,	64	,	65	,
-44	,	45	,	46	,	47	,	48	,	49	,	50	,	51	,	52	,	53	,	54	,
-33	,	34	,	35	,	36	,	37	,	38	,	39	,	40	,	41	,	42	,	43	,
-22	,	23	,	24	,	25	,	26	,	27	,	28	,	29	,	30	,	31	,	32	,
-11	,	12	,	13	,	14	,	15	,	16	,	17	,	18	,	19	,	20	,	21	,
-0	,	1	,	2	,	3	,	4	,	5	,	6	,	7   ,   8   ,   9   ,   10
+110 ,   111 ,   112 ,   113 ,   114 ,   115 ,   116 ,   117 ,   118 ,   119 ,   120 ,
+99  ,   100 ,   101 ,   102 ,   103 ,   104 ,   105 ,   106 ,   107 ,   108 ,   109 ,
+88  ,   89  ,   90  ,   91  ,   92  ,   93  ,   94  ,   95  ,   96  ,   97  ,   98  ,
+77  ,   78  ,   79  ,   80  ,   81  ,   82  ,   83  ,   84  ,   85  ,   86  ,   87  ,
+66  ,   67  ,   68  ,   69  ,   70  ,   71  ,   72  ,   73  ,   74  ,   75  ,   76  ,
+55  ,   56  ,   57  ,   58  ,   59  ,   60  ,   61  ,   62  ,   63  ,   64  ,   65  ,
+44  ,   45  ,   46  ,   47  ,   48  ,   49  ,   50  ,   51  ,   52  ,   53  ,   54  ,
+33  ,   34  ,   35  ,   36  ,   37  ,   38  ,   39  ,   40  ,   41  ,   42  ,   43  ,
+22  ,   23  ,   24  ,   25  ,   26  ,   27  ,   28  ,   29  ,   30  ,   31  ,   32  ,
+11  ,   12  ,   13  ,   14  ,   15  ,   16  ,   17  ,   18  ,   19  ,   20  ,   21  ,
+0   ,   1   ,   2   ,   3   ,   4   ,   5   ,   6   ,   7   ,   8   ,   9   ,   10
 ];
 
 var CastlePerm = [
-    15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 
+    15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15,
     15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15,
     15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15,
     15, 15, 13, 15, 15, 15, 12, 15, 15, 15, 14, 15, 15,
@@ -244,87 +269,106 @@ var CastlePerm = [
 1000 0000 0000 0000 0000 0000 0000 0000 -> Unused
 */
 
-function FROMSQ(m) { return (m & 0xFF); }
-function TOSQ(m)  { return (((m)>>8) & 0xFF); }
-function CAPTURED(m)  { return (((m)>>16) & 0x1F); }
-function PROMOTED(m)  { return (((m)>>23) & 0x1F); }
+var MFLAGEP     = 0x200000;     // En passant
+var MFLAGPS     = 0x400000;     // Pawn Start
+var MFLAGCA     = 0x10000000;   // Castle 
+var MFLAGRZ     = 0x20000000;   // Rendezvous
+var MFLAGCAP    = 0x1F0000;     // Captured
+var MFLAGPROM   = 0xF800000;    // Promoted
 
-var MFLAGEP = 0x200000      // En passant
-var MFLAGPS = 0x400000      // Pawn Start
-var MFLAGCA = 0x10000000    // Castle 
-var MFLAGRZ = 0x20000000    // Rendezvous
-var MFLAGCAP = 0x1F0000     // Captured
-var MFLAGPROM = 0xF800000   // Promoted
 
-var NOMOVE = 0
+/* beautify preserve:end */
 
+function FROMSQ(m) {
+    return (m & 0xFF);
+}
+
+function TOSQ(m) {
+    return (((m) >> 8) & 0xFF);
+}
+
+function CAPTURED(m) {
+    return (((m) >> 16) & 0x1F);
+}
+
+function PROMOTED(m) {
+    return (((m) >> 23) & 0x1F);
+}
+
+var NOMOVE = 0;
 
 var PVENTRIES = 10000;
 
 function PCEINDEX(pce, pceNum) {
-	return (pce * 11 + pceNum);
+    return (pce * 11 + pceNum);
 }
 
-function FR2SQ(f,r) {
- 	return ( (27 + (f) ) + ( (r) * 13 ) );
+function FR2SQ(f, r) {
+    return ((27 + (f)) + ((r) * 13));
 }
 
 function CBSQ2SQ(CBSQ) {
- 	COLUMNS = "abcdefghijk";
-	f = parseInt(COLUMNS.indexOf(CBSQ.substring(0,1)));
-	r = parseInt(CBSQ.substring(1,CBSQ.length));
-	return (( f + 1 ) + ( (r + 1) * 13 ) );
+    COLUMNS = "abcdefghijk";
+    f = parseInt(COLUMNS.indexOf(CBSQ.substring(0, 1)), 10);
+    r = parseInt(CBSQ.substring(1, CBSQ.length), 10);
+    return ((f + 1) + ((r + 1) * 13));
 }
 
-function SQ121(sq195) { 
-	return Sq195ToSq121[(sq195)];
+function SQ121(sq195) {
+    return Sq195ToSq121[(sq195)];
 }
 
 function SQ195(sq121) {
-	return Sq121ToSq195[(sq121)];
+    return Sq121ToSq195[(sq121)];
 }
 
 function MIRROR121(sq) {
-	return Mirror121[sq];
+    return Mirror121[sq];
 }
 
 function RAND_32() {
 
-	return (Math.floor((Math.random()*255)+1) << 23) | (Math.floor((Math.random()*255)+1) << 16)
-		 | (Math.floor((Math.random()*255)+1) << 8) | Math.floor((Math.random()*255)+1);
+    return (Math.floor((Math.random() * 255) + 1) << 23) | (Math.floor((Math.random() * 255) + 1) << 16) | (Math.floor((Math.random() * 255) + 1) << 8) | Math.floor((Math.random() * 255) + 1);
 
 }
 
-function SQASE(sq)
-{
+function SQASE(sq) {
     if (sq == 97 && variant == "ASE") return BOOL.TRUE;
     return BOOL.FALSE;
 }
 
-function SQPERS(from, to)
-{
+function SQPERS(from, to) {
     if (
-        to == 97 && 
-        variant == "Persian" && 
-        brd_pieces[from] != PIECES.wS && 
+        to == 97 &&
+        variant == "Persian" &&
+        brd_pieces[from] != PIECES.wS &&
         brd_pieces[from] != PIECES.wP &&
         brd_pieces[from] != PIECES.bS &&
         brd_pieces[from] != PIECES.bP
-        ) return BOOL.TRUE;
+    ) return BOOL.TRUE;
     return BOOL.FALSE;
 }
 
 function SQOFFBOARD(sq) {
-	if(FilesBrd[sq]==SQUARES.OFFBOARD) return BOOL.TRUE;
-	return BOOL.FALSE;	
+    if (FilesBrd[sq] == SQUARES.OFFBOARD) return BOOL.TRUE;
+    return BOOL.FALSE;
 }
 
-function HASH_PCE(pce,sq) { 
-	brd_posKey ^= PieceKeys[pce*195 + sq]; 
+function HASH_PCE(pce, sq) {
+    brd_posKey ^= PieceKeys[pce * 195 + sq];
 }
-function HASH_CA() { brd_posKey ^= CastleKeys[brd_castlePerm]; }
-function HASH_SIDE() { brd_posKey ^= SideKey; }
-function HASH_EP() { brd_posKey ^= PieceKeys[brd_enPas]; }
+
+function HASH_CA() {
+    brd_posKey ^= CastleKeys[brd_castlePerm];
+}
+
+function HASH_SIDE() {
+    brd_posKey ^= SideKey;
+}
+
+function HASH_EP() {
+    brd_posKey ^= PieceKeys[brd_enPas];
+}
 
 var GameController = {};
 GameController.EngineSide = COLOURS.BOTH;
@@ -335,6 +379,4 @@ GameController.GameSaved = BOOL.TRUE;
 
 
 // ════════════════════════════════════════════════════
-debuglog ("Defs.js is loaded.")
-
-
+debuglog("Defs.js is loaded.");

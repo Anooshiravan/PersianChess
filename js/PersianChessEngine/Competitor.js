@@ -20,17 +20,16 @@
 // ══════════════════════════
 
 
-function inIframe () {
+function inIframe() {
     try {
         return window.self !== window.top;
     } catch (e) {
         return true;
     }
 }
-function startVsEngine()
-{
-    if (inIframe() == true)
-    {
+
+function startVsEngine() {
+    if (inIframe() == true) {
         vs_engine = true;
     }
 }
@@ -94,4 +93,4 @@ window.onmessage = function(e){
 */
 
 // ════════════════════════════════════════════════════
-debuglog ("Competitor.js is loaded.")
+debuglog("Competitor.js is loaded.");
