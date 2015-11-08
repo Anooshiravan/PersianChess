@@ -17,6 +17,8 @@
 ----------------------------------------------------------------
 */
 
+// This chessboard is a modified version of chessboard.js to support a 9x11 Persian Chess Board
+
 /*!
  * chessboard.js v0.3.0
  *
@@ -27,9 +29,8 @@
  * Date: 10 Aug 2013
  */
 
-
 // start anonymous scope
-;
+
 (function () {
     'use strict';
     //------------------------------------------------------------------------------
