@@ -1,0 +1,1 @@
+This is an export of the Persian Chess engine to Go language. It is an incomplete project and is put in Github only for keeping track of progress, DO NOT USE.
