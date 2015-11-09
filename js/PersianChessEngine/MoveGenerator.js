@@ -25,7 +25,7 @@ var GenerateMovesNum = 0;
 var WhiteMobility = 0;
 var BlackMobility = 0;
 
-var VictimScore = [0, 100, 200, 300, 400, 500, 600, 700, 800, 100, 200, 300, 400, 500, 600, 700, 800];
+var VictimScore = [0, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000];
 var MvvLvaScores = new Array(22 * 22);
 
 function InitMvvLva() {
