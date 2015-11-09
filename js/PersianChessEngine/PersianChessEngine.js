@@ -58,7 +58,6 @@ function debuglog(message) {
 importScripts(
     "Defs.js",
     "Variants.js",
-    "Competitor.js",
     "InputOutput.js",
     "Board.js",
     "Book.js",
