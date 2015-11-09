@@ -172,7 +172,10 @@ function Get_LocalStorageValue(name) {
 }
 
 function RestoreGameSettings() {
-    if (vs_engine()) return;
+    if (vs_engine()) {
+        StartNewGame();
+        return;
+    }
 
     // Variant
     var ls_variant = Get_LocalStorageValue("variant");
@@ -309,7 +312,6 @@ function LoadReport(report) {
 // ══════════════════════════
 //  Engine competition
 // ══════════════════════════
-var this_engine = '';
 
 function vs_engine() {
     try {
@@ -328,45 +330,39 @@ function vs_engine() {
     }
 }
 
-function PlayForeignEngine(message) {
-    if (gameover) return;
-
-    if (vs_engine()) {
-        if (message == "request") {
-            window.top.postMessage("fen-" + current_fen, '*');
-            engine = "engine1";
-            return;
-        }
-
-        if (message.startsWith('fen')) {
-            this_fen = message.split('-')[1];
-            Engine_SetFen(this_fen);
-            engine = "engine2";
-            board.theme("blue");
-            return;
-        }
-
-        move = message;
-        if (board_active) {
-            PersianChessEngine.postMessage("parse::" + move);
-            setTimeout(function() {
-                if (ParsedMove.split("|")[0] == move) {
-                    Engine_MakeMove(ParsedMove.split("|")[1]);
-                    PlayMoveSound(ParsedMove.split("|")[2]);
-                } else {
-                    window.top.postMessage("request", '*');
-                }
-            }, 300);
-        }
-    }
-}
+var first_move = true;
+var engine = 'engine1';
 
 function PostMoveToForeignEngine(this_move) {
-    if (this_engine == '') {
-        window.top.postMessage("engine1-" + this_move, '*');
+    if (first_move == true) {
+        first_move = false;
+        window.top.postMessage("fen-" + current_fen, '*');
+        setTimeout(function() {
+            window.top.postMessage(engine + "-" + this_move, '*');
+        }, 1000);
     } else {
         window.top.postMessage(engine + "-" + this_move, '*');
     }
+}
+
+function PlayForeignEngine(message) {
+    if (gameover) return;
+
+    if (message.startsWith('fen')) {
+        this_fen = message.split('-')[1];
+        Engine_SetFen(this_fen);
+        engine = "engine2";
+        board.theme("blue");
+        first_move = false;
+    }
+    move = message.split("|")[0];
+    PersianChessEngine.postMessage("parse::" + move);
+    setTimeout(function() {
+        if (move == ParsedMove.split("|")[0]) {
+            Engine_MakeMove(ParsedMove.split("|")[1]);
+            PlayMoveSound(ParsedMove.split("|")[2]);
+        }
+    }, 300);
 }
 
 // ══════════════════════════

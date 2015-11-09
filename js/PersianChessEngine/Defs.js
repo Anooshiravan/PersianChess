@@ -23,7 +23,6 @@ var debug = false;
 var board_debug = false;
 var move_sanity_check = false;
 var vs_engine = false;
-var engine = '';
 var engine_error_L1 = 0;
 var engine_error_L2 = 0;
 

@@ -65,6 +65,7 @@ var gameover = false;
 var engine_thinking = false;
 var engine_autoplay = false;
 
+
 // ══════════════════════════
 //  Init engine
 // ══════════════════════════
@@ -277,7 +278,7 @@ function ProcessEngineMessage_History(engine_history) {
 function ProcessEngineMessage_BestMove(message) {
     var move = message.split("|")[0];
     var flag = message.split("|")[1];
-    if (vs_engine()) PostMoveToForeignEngine(message);
+    PostMoveToForeignEngine(message);
     PlayMoveSound(flag);
 }
 
