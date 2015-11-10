@@ -85,7 +85,7 @@ function ClearForSearch() {
 
     var index = 0;
     var index2 = 0;
-    
+
     for (index = 0; index < BRD_PCE_NUM * BRD_SQ_NUM; ++index) {
         brd_searchHistory[index] = 0;
     }
@@ -104,7 +104,7 @@ function ClearForSearch() {
     srch_start = (new Date).getTime();
     srch_stop = BOOL.FALSE;
     srch_best = NOMOVE;
-    
+
     // Debug and performance
     GenerateCapturesNum = 0;
     GenerateMovesNum = 0;
@@ -131,7 +131,7 @@ function Quiescence(alpha, beta) {
     if ((srch_nodes & 8192) == 0) CheckUp();
 
     srch_nodes++;
-    
+
     if (IsRepetition() || brd_fiftyMove >= 100) {
         return 0;
     }
@@ -212,13 +212,13 @@ function AlphaBeta(alpha, beta, depth, DoNull) {
     if ((srch_nodes & 8192) == 0) CheckUp();
 
     srch_nodes++;
-    
+
     if ((IsRepetition() || brd_fiftyMove >= 100) && brd_ply != 0) {
         return 0;
     }
 
     if (brd_ply > MAXDEPTH - 1) {
-                return EvalPosition();
+        return EvalPosition();
     }
 
     var InCheck = SqAttacked(brd_pList[PCEINDEX(Kings[brd_side], 0)], brd_side ^ 1);
@@ -323,7 +323,7 @@ function AlphaBeta(alpha, beta, depth, DoNull) {
 var hint = NOMOVE;
 
 function SearchPosition() {
-          
+
     var bestMove = NOMOVE;
     var iterativeDepth = srch_depth;
     ClearForSearch();
@@ -337,35 +337,31 @@ function SearchPosition() {
         SendMessageToGui("console", console_msg);
         SendBestMove(bestMove);
         hint = BookMove(true);
-        if (hint != NOMOVE && hint != "") 
-            {
-                SendMessageToGui("info", "hint|" + hint);
-            }
-            else
-            {
-                SendMessageToGui("info", "hint|End of opening line.");
-            }
+        if (hint != NOMOVE && hint != "") {
+            SendMessageToGui("info", "hint|" + hint);
+        } else {
+            SendMessageToGui("info", "hint|End of opening line.");
+        }
         return;
     }
 
     // Start search
     var srch_start_msg;
-    if (srch_time != 2147483647) srch_start_msg =  "Engine time: " + srch_time / 1000 + " seconds";
+    if (srch_time != 2147483647) srch_start_msg = "Engine time: " + srch_time / 1000 + " seconds";
     else srch_start_msg = "Engine depth: " + srch_depth;
-    debuglog (srch_start_msg);
+    debuglog(srch_start_msg);
     SendMessageToGui("console", " ");
     SendMessageToGui("console", srch_start_msg);
-    
+
     // Iterative deepening in max-depth
     bestMove = IterativeDeepening(srch_depth);
 
     // Fail safe level one, search in depth 3
     if (bestMove == NOMOVE || bestMove == undefined || SanityCheck(bestMove) == BOOL.FALSE) {
-        if (GameController.GameOver == BOOL.FALSE)
-        {
+        if (GameController.GameOver == BOOL.FALSE) {
             SendMessageToGui("console", "> Fail safe L1, Depth 3");
             engine_error_L1++;
-           
+
             ReportEngineError();
 
             FailSafeResetBoard("L1");
@@ -375,8 +371,7 @@ function SearchPosition() {
 
     // Fail safe level two, reset everything and search in depth 1 (just a good legal move)
     if (bestMove == NOMOVE || bestMove == undefined || SanityCheck(bestMove) == BOOL.FALSE) {
-        if (GameController.GameOver == BOOL.FALSE)
-        {
+        if (GameController.GameOver == BOOL.FALSE) {
             SendMessageToGui("console", "> Fail safe L2: Depth 1");
             engine_error_L2++;
             FailSafeResetBoard("L2");
@@ -385,14 +380,11 @@ function SearchPosition() {
     }
 
     if (bestMove == NOMOVE || bestMove == undefined || SanityCheck(bestMove) == BOOL.FALSE) {
-        if (GameController.GameOver == BOOL.FALSE)
-        {
+        if (GameController.GameOver == BOOL.FALSE) {
             SendMessageToGui("init", "engine_error");
             return;
         }
-    }
-    else 
-    {
+    } else {
         // There is no engine error or errors are recovered, continue.
         srch_best = bestMove;
         SendBestMove(bestMove);
@@ -403,8 +395,7 @@ function SearchPosition() {
     ShowPerformance();
 }
 
-function FailSafeResetBoard(level)
-{
+function FailSafeResetBoard(level) {
     // Backup board
     fen = BoardToFen();
     var brd_hisPly_bak = brd_hisPly;
@@ -416,7 +407,7 @@ function FailSafeResetBoard(level)
     ResetBoard();
     ClearForSearch();
 
-    switch(level) {
+    switch (level) {
         case "L1":
             // Restore board
             ParseFen(fen);
@@ -429,29 +420,28 @@ function FailSafeResetBoard(level)
             // Only restore fen
             ParseFen(fen);
             break;
-        
+
         default:
-            break
+            break;
     }
 }
 
 
 var Treshhold = 0;
 
-function IterativeDeepening(id_depth)
-{
+function IterativeDeepening(id_depth) {
     var bestMove = NOMOVE;
     var bestScore = -INFINITE;
     var pvNum = 0;
     var line;
     var currentDepth = 0;
-    
+
     for (currentDepth = 1; currentDepth <= id_depth; ++currentDepth) {
 
         Treshhold = currentDepth;
 
         bestScore = AlphaBeta(-INFINITE, INFINITE, currentDepth, BOOL.TRUE);
-        
+
         if (srch_stop == BOOL.TRUE) break; // Do not break the search until depth 1 is complete
         pvNum = GetPvLine(currentDepth);
 
@@ -460,37 +450,37 @@ function IterativeDeepening(id_depth)
 
         if (currentDepth != 1) {
             line += (" Ordering:" + ((srch_fhf / srch_fh) * 100).toFixed(2) + "%");
+            pvline += " <" + ((srch_fhf / srch_fh) * 100).toFixed(2) + "%>";
         }
 
         // Print PV line
         var currentScore = 0;
         if (brd_side == COLOURS.WHITE) currentScore = bestScore;
-        else currentScore = -bestScore
+        else currentScore = -bestScore;
 
         var pvline = (currentDepth + "[" + (currentScore) + "]");
-        for (i = 0; i < currentDepth; i++) { 
+        for (i = 0; i < currentDepth; i++) {
             if (brd_PvArray[i] != undefined) pvline += " " + PrMove(brd_PvArray[i]);
-                 
+
         }
         hint = PrMove(brd_PvArray[1]);
-        debuglog (line);
+        debuglog(line);
         SendMessageToGui("console", pvline);
     }
     return bestMove;
 }
 
 
-function ShowPerformance()
-{
-    debuglog ("-------- Performance Counters ----------");
-    debuglog ("AlphaBeta: " + ABcalled);
-    debuglog ("Quiescence: " + Qcalled);
-    debuglog ("MoveGen: " + GenerateMovesNum);
-    debuglog ("CapGen: " + GenerateCapturesNum);
-    debuglog ("Node: " + srch_nodes);
-    debuglog ("MOVE: " + gen_m);
+function ShowPerformance() {
+    debuglog("-------- Performance Counters ----------");
+    debuglog("AlphaBeta: " + ABcalled);
+    debuglog("Quiescence: " + Qcalled);
+    debuglog("MoveGen: " + GenerateMovesNum);
+    debuglog("CapGen: " + GenerateCapturesNum);
+    debuglog("Node: " + srch_nodes);
+    debuglog("MOVE: " + gen_m);
 }
 
 
 // ════════════════════════════════════════════════════
-debuglog ("Search.js is loaded.")
+debuglog("Search.js is loaded.");
