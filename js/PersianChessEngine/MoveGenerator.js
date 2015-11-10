@@ -183,7 +183,7 @@ function MoveExists(move) {
 function AddCaptureMove(move) {
     if (move == NOMOVE) return;
     brd_moveList[brd_moveListStart[brd_ply + 1]] = move;
-    brd_moveScores[brd_moveListStart[brd_ply + 1]++] = MvvLvaScores[CAPTURED(move) * 18 + brd_pieces[FROMSQ(move)]] + 1000000;
+    brd_moveScores[brd_moveListStart[brd_ply + 1]++] = MvvLvaScores[CAPTURED(move) * BRD_PCE_NUM + brd_pieces[FROMSQ(move)]] + 1000000;
 }
 
 function AddQuietMove(move) {

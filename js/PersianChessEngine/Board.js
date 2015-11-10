@@ -29,7 +29,7 @@ var brd_castlePerm;
 var brd_posKey;
 var brd_pceNum = new Array(21);
 var brd_material = new Array(2);
-var brd_pList = new Array(22 * 11);
+var brd_pList = new Array(BRD_PCE_NUM * 11);
 
 var brd_history = [];
 var brd_history_notes = new Array(255);
@@ -40,7 +40,7 @@ var brd_moveListStart = new Array(MAXDEPTH);
 
 var brd_PvTable = [PVENTRIES];
 var brd_PvArray = new Array(MAXDEPTH);
-var brd_searchHistory = new Array(22 * BRD_SQ_NUM);
+var brd_searchHistory = new Array(BRD_PCE_NUM * BRD_SQ_NUM);
 var brd_searchKillers = new Array(3 * MAXDEPTH);
 
 // board functions

@@ -86,7 +86,7 @@ function ClearForSearch() {
     var index = 0;
     var index2 = 0;
     
-    for (index = 0; index < 22 * BRD_SQ_NUM; ++index) {
+    for (index = 0; index < BRD_PCE_NUM * BRD_SQ_NUM; ++index) {
         brd_searchHistory[index] = 0;
     }
 

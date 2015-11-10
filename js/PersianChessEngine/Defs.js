@@ -28,6 +28,7 @@ var engine_error_L2 = 0;
 
 var variant = "Persian";
 var BRD_SQ_NUM = 195;
+var BRD_PCE_NUM = 22;
 
 var MAXGAMEMOVES = 2048;
 var MAXPOSITIONMOVES = 256;
@@ -212,7 +213,7 @@ var LoopNonSlideIndex = [ 0, 7 ];
 
 var Kings = [PIECES.wK, PIECES.bK];
 
-var PieceKeys = new Array(22 * 195);
+var PieceKeys = new Array(BRD_PCE_NUM * BRD_SQ_NUM);
 var SideKey;
 var CastleKeys = new Array(16);
 
