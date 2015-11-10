@@ -450,7 +450,6 @@ function IterativeDeepening(id_depth) {
 
         if (currentDepth != 1) {
             line += (" Ordering:" + ((srch_fhf / srch_fh) * 100).toFixed(2) + "%");
-            pvline += " <" + ((srch_fhf / srch_fh) * 100).toFixed(2) + "%>";
         }
 
         // Print PV line
@@ -462,6 +461,9 @@ function IterativeDeepening(id_depth) {
         for (i = 0; i < currentDepth; i++) {
             if (brd_PvArray[i] != undefined) pvline += " " + PrMove(brd_PvArray[i]);
 
+        }
+        if (currentDepth != 1) {
+            pvline += " <" + Math.round((srch_fhf / srch_fh) * 100) + "%>";
         }
         hint = PrMove(brd_PvArray[1]);
         debuglog(line);
