@@ -21,13 +21,14 @@
 
 
 function ThreeFoldRep() {
-	var i = 0, r = 0;
-	for (i = 0; i < brd_hisPly; ++i)	{
-	    if (brd_history[i].posKey == brd_posKey) {
-		    r++;
-		}
-	}
-	return r;
+    var i = 0,
+        r = 0;
+    for (i = 0; i < brd_hisPly; ++i) {
+        if (brd_history[i].posKey == brd_posKey) {
+            r++;
+        }
+    }
+    return r;
 }
 
 function CitadelDraw() {
@@ -39,19 +40,26 @@ function CitadelDraw() {
 
 function DrawMaterial() {
 
-    if (brd_pceNum[PIECES.wP]!=0 || brd_pceNum[PIECES.bP]!=0) return BOOL.FALSE;
-    if (brd_pceNum[PIECES.wQ]!=0 || brd_pceNum[PIECES.bQ]!=0 || brd_pceNum[PIECES.wR]!=0 || brd_pceNum[PIECES.bR]!=0) return BOOL.FALSE;
-    if (brd_pceNum[PIECES.wS]!=0 || brd_pceNum[PIECES.bS]!=0 || brd_pceNum[PIECES.wF]!=0 || brd_pceNum[PIECES.bF]!=0) return BOOL.FALSE;
-    if (brd_pceNum[PIECES.wB] > 1 || brd_pceNum[PIECES.bB] > 1) {return BOOL.FALSE;}
-    if (brd_pceNum[PIECES.wN] > 1 || brd_pceNum[PIECES.bN] > 1) {return BOOL.FALSE;}
-    if (brd_pceNum[PIECES.wN]!=0 && brd_pceNum[PIECES.wB]!=0) {return BOOL.FALSE;}
-    if (brd_pceNum[PIECES.bN]!=0 && brd_pceNum[PIECES.bB]!=0) {return BOOL.FALSE;}
-	
+    if (brd_pceNum[PIECES.wP] != 0 || brd_pceNum[PIECES.bP] != 0) return BOOL.FALSE;
+    if (brd_pceNum[PIECES.wQ] != 0 || brd_pceNum[PIECES.bQ] != 0 || brd_pceNum[PIECES.wR] != 0 || brd_pceNum[PIECES.bR] != 0) return BOOL.FALSE;
+    if (brd_pceNum[PIECES.wS] != 0 || brd_pceNum[PIECES.bS] != 0 || brd_pceNum[PIECES.wF] != 0 || brd_pceNum[PIECES.bF] != 0) return BOOL.FALSE;
+    if (brd_pceNum[PIECES.wB] > 1 || brd_pceNum[PIECES.bB] > 1) {
+        return BOOL.FALSE;
+    }
+    if (brd_pceNum[PIECES.wN] > 1 || brd_pceNum[PIECES.bN] > 1) {
+        return BOOL.FALSE;
+    }
+    if (brd_pceNum[PIECES.wN] != 0 && brd_pceNum[PIECES.wB] != 0) {
+        return BOOL.FALSE;
+    }
+    if (brd_pceNum[PIECES.bN] != 0 && brd_pceNum[PIECES.bB] != 0) {
+        return BOOL.FALSE;
+    }
+
     return BOOL.TRUE;
 }
 
-function CapturedPieces()
-{
+function CapturedPieces() {
     var cwP = 9 - brd_pceNum[PIECES.wP];
     var cwN = 2 - brd_pceNum[PIECES.wN];
     var cwB = 2 - brd_pceNum[PIECES.wB];
@@ -66,17 +74,14 @@ function CapturedPieces()
     var cbS = 1 - brd_pceNum[PIECES.bS];
     var cbF = 2 - brd_pceNum[PIECES.bF];
     var cbQ = 1 - brd_pceNum[PIECES.bQ];
-    var white_captured_pieces = "White P["+ cwP + "]N[" + cwN + "]B[" + cwB + "]R[" + cwR + "]S[" + cwS + "]F[" + cwF + "]Q[" + cwQ + "]";
-    var black_captured_pieces = "Black p["+ cbP + "]n[" + cbN + "]b[" + cbB + "]r[" + cbR + "]s[" + cbS + "]f[" + cbF + "]q[" + cbQ + "]";
+    var white_captured_pieces = "White P[" + cwP + "]N[" + cwN + "]B[" + cwB + "]R[" + cwR + "]S[" + cwS + "]F[" + cwF + "]Q[" + cwQ + "]";
+    var black_captured_pieces = "Black p[" + cbP + "]n[" + cbN + "]b[" + cbB + "]r[" + cbR + "]s[" + cbS + "]f[" + cbF + "]q[" + cbQ + "]";
 
     var is_piece_captured = cwP + cwN + cwB + cwR + cwS + cwF + cwQ + cbP + cbN + cbB + cbR + cbS + cbF + cbQ;
 
-    if (is_piece_captured > 0)
-    {
+    if (is_piece_captured > 0) {
         return "Captured Pieces: \r\n" + white_captured_pieces + "\r\n" + black_captured_pieces;
-    }
-    else
-    {
+    } else {
         return "";
     }
 }
@@ -84,5 +89,4 @@ function CapturedPieces()
 
 
 // ════════════════════════════════════════════════════
-debuglog ("Protocol.js is loaded.")
-
+debuglog("Protocol.js is loaded.");
