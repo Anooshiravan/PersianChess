@@ -19,30 +19,30 @@
 //  Variants
 // ══════════════════════════
 
-function setVariantDefs(this_variant) {
+function setVariantDefs(this_variant)
+{
     variant = this_variant;
-    switch (variant) {
+    switch(variant) {
         case "Persian":
-            LoopSlidePce = [PIECES.wB, PIECES.wR, PIECES.wS, PIECES.wF, PIECES.wQ, 0, PIECES.bB, PIECES.bR, PIECES.bS, PIECES.bF, PIECES.bQ, 0];
-            LoopNonSlidePce = [PIECES.wN, 0, 0, PIECES.wS, PIECES.wF, PIECES.wK, 0, PIECES.bN, 0, 0, PIECES.bS, PIECES.bF, PIECES.bK, 0];
+            var LoopSlidePce = [ PIECES.wB, PIECES.wR, PIECES.wS, PIECES.wF, PIECES.wQ, 0, PIECES.bB, PIECES.bR, PIECES.bS, PIECES.bF, PIECES.bQ, 0 ];
+            var LoopNonSlidePce = [ PIECES.wN, 0, 0, PIECES.wS, PIECES.wF, PIECES.wK, 0, PIECES.bN, 0, 0, PIECES.bS, PIECES.bF, PIECES.bK, 0 ];
             START_FEN = "f111111111f/1rnbqksbnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKSBNR1/F111111111F w KQkq - 0 1";
 
-            
             START_FEN = "f111111111f/1rnbqkbsnr1/1ppp11pppp1/11111111111/1111pp11111/11111111111/11111PP1111/11111111111/1PPPP11PPP1/1RNBQKBSNR1/F111111111F w KQkq - 1 2.5";
             break;
         case "ASE":
-            LoopSlidePce = [PIECES.wB, PIECES.wR, PIECES.wS, PIECES.wF, PIECES.wQ, 0, PIECES.bB, PIECES.bR, PIECES.bS, PIECES.bF, PIECES.bQ, 0];
-            LoopNonSlidePce = [PIECES.wN, 0, 0, PIECES.wS, PIECES.wF, PIECES.wK, 0, PIECES.bN, 0, 0, PIECES.bS, PIECES.bF, PIECES.bK, 0];
+            var LoopSlidePce = [ PIECES.wB, PIECES.wR, PIECES.wS, PIECES.wF, PIECES.wQ, 0, PIECES.bB, PIECES.bR, PIECES.bS, PIECES.bF, PIECES.bQ, 0 ];
+            var LoopNonSlidePce = [ PIECES.wN, 0, 0, PIECES.wS, PIECES.wF, PIECES.wK, 0, PIECES.bN, 0, 0, PIECES.bS, PIECES.bF, PIECES.bK, 0 ];
             START_FEN = "f111111111f/1rnbqksbnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKSBNR1/F111111111F w KQkq - 0 1";
             break;
         case "Citadel":
-            LoopSlidePce = [PIECES.wB, PIECES.wR, PIECES.wS, PIECES.wF, PIECES.wQ, 0, PIECES.bB, PIECES.bR, PIECES.bS, PIECES.bF, PIECES.bQ, 0];
-            LoopNonSlidePce = [PIECES.wN, 0, 0, PIECES.wS, PIECES.wF, PIECES.wK, 0, PIECES.bN, 0, 0, PIECES.bS, PIECES.bF, PIECES.bK, 0];
+            var LoopSlidePce = [ PIECES.wB, PIECES.wR, PIECES.wS, PIECES.wF, PIECES.wQ, 0, PIECES.bB, PIECES.bR, PIECES.bS, PIECES.bF, PIECES.bQ, 0 ];
+            var LoopNonSlidePce = [ PIECES.wN, 0, 0, PIECES.wS, PIECES.wF, PIECES.wK, 0, PIECES.bN, 0, 0, PIECES.bS, PIECES.bF, PIECES.bK, 0 ];
             START_FEN = "f111111111f/1rnbqkbsnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKBSNR1/F111111111F w KQkq - 0 1";
             break;
         case "Oriental":
-            LoopSlidePce = [PIECES.wB, PIECES.wR, 0, 0, PIECES.wQ, 0, PIECES.bB, PIECES.bR, 0, 0, PIECES.bQ, 0];
-            LoopNonSlidePce = [PIECES.wN, PIECES.wW, PIECES.wC, 0, 0, PIECES.wK, 0, PIECES.bN, PIECES.bW, PIECES.bC, 0, 0, PIECES.bK, 0];
+            var LoopSlidePce = [ PIECES.wB, PIECES.wR, 0, 0, PIECES.wQ, 0, PIECES.bB, PIECES.bR, 0, 0, PIECES.bQ, 0 ];
+            var LoopNonSlidePce = [ PIECES.wN, PIECES.wW, PIECES.wC, 0, 0, PIECES.wK, 0, PIECES.bN, PIECES.bW, PIECES.bC, 0, 0, PIECES.bK, 0 ];
             START_FEN = "w111111111w/1rnbqkcbnr1/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKCBNR1/W111111111W w KQkq - 0 1";
             break;
         default:
@@ -55,10 +55,11 @@ function setVariantDefs(this_variant) {
 //  Training Positions
 // ══════════════════════════
 
-function Get_TP_Fen(tp) {
+function Get_TP_Fen(tp)
+{
     var tp_fen = START_FEN;
 
-    switch (tp) {
+    switch(tp) {
         case "TP_FEN_1_Citadel":
             tp_fen = "11111111111/11111k1s111/1ppppppppp1/11111111111/11111111111/11111111111/11111111111/11111111111/1PPPPPPPPP1/1RNBQKBSNR1/F111111111F w KQkq - 0 1";
             break;
@@ -178,4 +179,4 @@ function Get_TP_Fen(tp) {
 }
 
 // ════════════════════════════════════════════════════
-debuglog("Variants.js is loaded.");
+debuglog ("Variants.js is loaded.")
