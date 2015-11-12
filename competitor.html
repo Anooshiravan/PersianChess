@@ -1,0 +1,47 @@
+<html>
+<head>
+<title>Play 2 Engines</title>
+<script>
+window.onmessage = function(e){
+
+	if (e.data.split('-')[0] == "fen")
+	{
+		var fen = e.data.split('-')[1];
+		engine2.contentWindow.postMessage("fen-"+fen, '*');
+		return;
+	}
+	
+	var engine = e.data.split('-')[0];
+	var move = e.data.split('-')[1] + '-' + e.data.split('-')[2];
+	if (engine == 'engine1') 
+		{
+			timeout = setTimeout(function(){ 
+				engine2.contentWindow.postMessage(move, '*');
+			}, 300);
+		}
+	else if (engine == 'engine2') 
+		{
+			timeout = setTimeout(function(){ 
+				engine1.contentWindow.postMessage(move, '*');
+			}, 300);
+		}
+}
+</script>
+</head>
+<body>
+	<div>
+		<iframe id="engine1" src="PersianChess/index.html" frameborder="0" scrolling="no" width="100%" align="left"></iframe>
+	</div>
+	<div>
+		<iframe id="engine2" src="PersianChess.old/index.html" frameborder="0" scrolling="no" width="100%" align="left"></iframe>
+	</div>
+	<script>
+		function setHeight(){
+			var h = (window.innerHeight/2) - 4 ;
+			document.getElementById("engine1").style.height = h + 'px';
+			document.getElementById("engine2").style.height = h + 'px';
+		}
+		setHeight();
+	</script>
+</body>
+</html>
