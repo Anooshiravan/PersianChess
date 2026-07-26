@@ -398,14 +398,6 @@ function handleBestMove(body: string): void {
 
     GameController.engineThinking = false;
     setEngineThinkingUI(false);
-
-    if (GameController.engineAutoPlay && !GameController.gameOver) {
-        setTimeout(() => {
-            if (GameController.engine && GameController.engineAutoPlay && !GameController.gameOver) {
-                enginePost('do::forward');
-            }
-        }, 1500);
-    }
 }
 
 function handleParsed(body: string): void {
