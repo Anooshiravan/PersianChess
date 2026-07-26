@@ -1,0 +1,34 @@
+{
+  "name": "persian-chess",
+  "version": "2.0.0",
+  "type": "module",
+  "scripts": {
+    "build:engine": "esbuild src/engine/engine-worker.ts --bundle --format=iife --outfile=app/js/engine-worker.mjs",
+    "build:app": "esbuild src/app.ts --bundle --format=iife --outfile=app/js/app.mjs",
+    "build:board": "esbuild src/board.ts --bundle --format=iife --outfile=app/js/board.mjs",
+    "build:bundles": "npm run build:engine && npm run build:app && npm run build:board",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check",
+    "lint:fix": "biome check --write",
+    "format": "biome format --write",
+    "check": "npm run typecheck && npm run lint",
+    "build": "npm run check && npm run build:bundles",
+    "serve": "tsx server/server.ts",
+    "dev": "npm run build && npm run serve",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "probe": "tsx scripts/probe.ts",
+    "probe:live": "node scripts/probe-live.mjs"
+  },
+  "dependencies": {
+    "puppeteer": "^25.3.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.5",
+    "@types/node": "^26.1.1",
+    "esbuild": "^0.28.1",
+    "tsx": "^4.23.1",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10"
+  }
+}

@@ -1,0 +1,737 @@
+/*
+   _____              _                _____ _
+   |  __ \            (_)              / ____| |
+   | |__) |__ _ __ ___ _  __ _ _ __   | |    | |__   ___  ___ ___
+   |  ___/ _ \ '__/ __| |/ _` | '_ \  | |    | '_ \ / _ \/ __/ __|
+   | |  |  __/ |  \__ \ | (_| | | | | | |____| | | |  __/\__ \__ \
+   |_|   \___|_|  |___/_|\__,_|_| |_|  \_____|_| |_|\___||___/___/
+
+   Persian Chess v2.0.0 — Full Stylesheet
+   CSS Grid, Flexbox, custom properties
+*/
+
+/* ═══════════════════════════════════════════════════
+   Custom Properties & Reset
+   ═══════════════════════════════════════════════════ */
+:root {
+    --board-light: #f0d9b5;
+    --board-dark: #b58863;
+    --board-bg: #4a4a4a;
+    --frame-color: #333F33;
+    --panel-bg: #1c1c1c;
+    --panel-text: #d4d4d4;
+    --accent: #9ca3af;
+    --accent-hover: #c0c6cf;
+    --danger: #C0392B;
+    --success: #27AE60;
+    --highlight-from: rgba(255, 255, 0, 0.4);
+    --highlight-to: rgba(255, 255, 0, 0.5);
+    --highlight-check: radial-gradient(circle, rgba(255,0,0,0.6) 0%, transparent 70%);
+    --highlight-mate: radial-gradient(circle, rgba(255,0,0,0.9) 0%, transparent 70%);
+    --selected: rgba(155, 199, 0, 0.45);
+    --shadow: 0 2px 8px rgba(0,0,0,0.4);
+    --radius: 8px;
+    --font-mono: 'Courier New', Courier, monospace;
+    --transition: 0.2s ease;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+button, select, input, textarea { font: inherit; }
+
+html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-weight: 600;
+    background: var(--board-bg);
+    color: var(--panel-text);
+    overflow: hidden;
+    height: 100dvh;
+    width: 100vw;
+}
+
+/* ═══════════════════════════════════════════════════
+   App Layout
+   ═══════════════════════════════════════════════════ */
+#app {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    width: 100vw;
+}
+
+#board-area {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1vh;
+    position: relative;
+    min-width: 0;
+    container-type: size;
+}
+
+#side-panel {
+    flex: 1;
+    min-width: 240px;
+    max-width: 360px;
+    background: var(--panel-bg);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: -2px 0 12px rgba(0,0,0,0.5);
+}
+
+/* ═══════════════════════════════════════════════════
+    Board — CSS Grid 11×11
+    ═══════════════════════════════════════════════════ */
+.board {
+    display: grid;
+    grid-template-columns: repeat(11, 1fr);
+    grid-template-rows: repeat(11, 1fr);
+    aspect-ratio: 1 / 1;
+    touch-action: none;
+    /* Largest square that fits inside #board-area. cqw/cqh come from the
+       container-type: size on #board-area, so it re-computes on any resize
+       without hard-coded side-panel widths. */
+    width: min(100cqw, 100cqh);
+    height: auto;
+    min-height: 0;
+    border: 0;
+    border-radius: 2px;
+    box-shadow: var(--shadow);
+    position: relative;
+}
+
+.grid-cell {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.grid-cell.off-board {
+    background: var(--board-bg);
+    cursor: default;
+}
+
+.grid-cell.playable {
+    cursor: pointer;
+}
+
+.grid-cell.light {
+    background-color: var(--board-light);
+}
+
+.grid-cell.dark {
+    background-color: var(--board-dark);
+}
+
+.grid-cell.centre-persian {
+    background-image: url("../img/persian.png");
+    background-size: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.grid-cell.centre-pyramid {
+    background-image: url("../img/pyramid.png");
+    background-size: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.grid-cell.highlight-from {
+    background-color: var(--highlight-from) !important;
+}
+
+.grid-cell.highlight-to {
+    background-color: var(--highlight-to) !important;
+}
+
+.grid-cell.selected {
+    background-color: var(--selected) !important;
+}
+
+.grid-cell.highlight-check {
+    background: var(--highlight-check);
+}
+
+.grid-cell.highlight-mate {
+    background: var(--highlight-mate);
+}
+
+.grid-cell::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transition: background var(--transition);
+}
+
+/* Piece elements */
+.piece {
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: relative;
+    z-index: 1;
+    pointer-events: none;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+/* ═══════════════════════════════════════════════════
+   Board Status Bar
+   ═══════════════════════════════════════════════════ */
+.grid-cell.off-board[data-status]::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 30%;
+    height: 30%;
+    transform: translate(-50%, -50%);
+    border: 1px solid rgba(0,0,0,0.5);
+}
+
+.grid-cell.off-board[data-status="white"]::after { background: #fff; }
+.grid-cell.off-board[data-status="black"]::after { background: #000; }
+.grid-cell.off-board[data-status="white-wins"]::after { background: #fff; box-shadow: 0 0 6px 2px var(--accent); }
+.grid-cell.off-board[data-status="black-wins"]::after { background: #000; box-shadow: 0 0 6px 2px var(--accent); }
+.grid-cell.off-board[data-status="paused"]::after { background: transparent; border-color: rgba(255,255,255,0.4); }
+.grid-cell.off-board[data-status="thinking"]::after {
+    background: transparent;
+    border: 2px solid var(--accent);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+/* ═══════════════════════════════════════════════════
+   Side Panel — Header
+   ═══════════════════════════════════════════════════ */
+.panel-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    background: rgba(0,0,0,0.2);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.panel-toggle-btn {
+    display: none; /* Hidden on desktop */
+    background: none;
+    border: none;
+    color: var(--panel-text);
+    cursor: pointer;
+    padding: 4px;
+}
+
+.logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+}
+
+.panel-title {
+    flex: 1;
+}
+
+.panel-title b {
+    font-size: 1rem;
+    color: var(--accent);
+    display: block;
+    line-height: 1.2;
+}
+
+.version {
+    font-size: 0.7rem;
+    opacity: 0.6;
+}
+
+/* ═══════════════════════════════════════════════════
+   Tabs
+   ═══════════════════════════════════════════════════ */
+.tab-nav {
+    display: flex;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 10px 8px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--panel-text);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.tab-btn:hover { background: rgba(255,255,255,0.05); }
+
+.tab-btn.active {
+    border-bottom-color: var(--accent);
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.tab-content {
+    display: none;
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+}
+
+.tab-content.active { display: flex; flex-direction: column; gap: 12px; }
+
+/* ═══════════════════════════════════════════════════
+   Game Tab
+   ═══════════════════════════════════════════════════ */
+.action-bar {
+    display: flex;
+    gap: 6px;
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+}
+
+.menu-btn {
+    flex: 1;
+    padding: 0 8px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    background: rgba(156, 163, 175, 0.15);
+    border: 1px solid rgba(156, 163, 175, 0.3);
+    border-radius: var(--radius);
+    color: var(--accent);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.menu-btn:hover {
+    background: rgba(156, 163, 175, 0.3);
+    border-color: var(--accent);
+}
+
+.menu-btn:active { transform: scale(0.97); }
+
+.menu-select {
+    flex: 1;
+    padding: 8px;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius);
+    color: var(--panel-text);
+    font-size: 0.85rem;
+}
+
+.action-btn {
+    flex: 1;
+    padding: 10px 8px;
+    background: rgba(156, 163, 175, 0.15);
+    border: 1px solid rgba(156, 163, 175, 0.3);
+    border-radius: var(--radius);
+    color: var(--accent);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.action-btn:hover {
+    background: rgba(156, 163, 175, 0.3);
+    border-color: var(--accent);
+}
+
+.action-btn:active { transform: scale(0.97); }
+
+.move-list {
+    flex: 1;
+    min-height: 120px;
+    max-height: 40vh;
+    overflow-y: auto;
+    background: rgba(0,0,0,0.2);
+    border-radius: var(--radius);
+    padding: 8px;
+    font-size: 0.85rem;
+    line-height: 1.6;
+}
+
+.move-list .move-row {
+    display: flex;
+    gap: 4px;
+}
+
+.move-list .move-num {
+    color: rgba(255,255,255,0.3);
+    min-width: 30px;
+    text-align: right;
+    margin-right: 8px;
+}
+
+.move-list .move-text {
+    color: var(--panel-text);
+    font-family: var(--font-mono);
+}
+
+.console-area {
+    margin-top: 12px;
+}
+
+.console-textarea {
+    width: 100%;
+    height: 200px;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius);
+    color: var(--panel-text);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    padding: 8px;
+    resize: none;
+}
+
+/* ═══════════════════════════════════════════════════
+   Settings Tab
+   ═══════════════════════════════════════════════════ */
+.setting-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.setting-label {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.setting-select,
+.form-select {
+    width: 100%;
+    padding: 8px 10px;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: var(--radius);
+    color: var(--panel-text);
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.setting-select:focus,
+.form-select:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.setting-range {
+    width: 100%;
+    accent-color: var(--accent);
+}
+
+.setting-value {
+    text-align: right;
+    font-size: 0.85rem;
+    color: var(--accent);
+}
+
+/* ═══════════════════════════════════════════════════
+   Moves Tab
+   ═══════════════════════════════════════════════════ */
+.pgn-viewer {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.pgn-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.pgn-btn {
+    flex: 1;
+    padding: 8px;
+    background: rgba(156, 163, 175, 0.1);
+    border: 1px solid rgba(156, 163, 175, 0.25);
+    border-radius: var(--radius);
+    color: var(--accent);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.pgn-btn:hover {
+    background: rgba(156, 163, 175, 0.25);
+}
+
+.pgn-slot {
+    padding: 6px 10px;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: var(--radius);
+    color: var(--panel-text);
+    font-size: 0.85rem;
+}
+
+.demo-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.demo-buttons {
+    display: flex;
+    gap: 6px;
+}
+
+/* ═══════════════════════════════════════════════════
+   Dialogs
+   ═══════════════════════════════════════════════════ */
+.dialog {
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius);
+    background: var(--panel-bg);
+    color: var(--panel-text);
+    padding: 0;
+    max-width: 380px;
+    width: 90vw;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+}
+
+.dialog::backdrop {
+    background: rgba(0,0,0,0.7);
+}
+
+.dialog h2 {
+    padding: 16px 20px 8px;
+    font-size: 1.1rem;
+    color: var(--accent);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.dialog-form {
+    padding: 16px 20px;
+}
+
+.dialog-form .form-group {
+    margin-bottom: 12px;
+}
+
+.dialog-form .form-group:last-child {
+    margin-bottom: 0;
+}
+
+.dialog-form label {
+    display: block;
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.dialog-form .form-select {
+    width: 100%;
+}
+
+.dialog-actions {
+    display: flex;
+    gap: 8px;
+    padding: 12px 20px 16px;
+    justify-content: flex-end;
+}
+
+.dialog-btn {
+    padding: 8px 20px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: var(--radius);
+    color: var(--panel-text);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.dialog-btn:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+.dialog-btn.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--panel-bg);
+    font-weight: 600;
+}
+
+.dialog-btn.primary:hover {
+    background: var(--accent-hover);
+}
+
+#gameover-result {
+    padding: 16px 20px;
+    font-size: 1rem;
+    text-align: center;
+}
+
+/* ═══════════════════════════════════════════════════
+   Toast Notifications
+   ═══════════════════════════════════════════════════ */
+.toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 24px;
+    background: rgba(43, 26, 14, 0.95);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    color: var(--accent);
+    font-size: 0.9rem;
+    z-index: 2000;
+    transition: opacity 0.3s ease;
+    box-shadow: var(--shadow);
+    pointer-events: none;
+}
+
+.toast.hidden { opacity: 0; }
+
+/* ═══════════════════════════════════════════════════
+   Theme Classes
+   ═══════════════════════════════════════════════════ */
+.theme-green .grid-cell.light { background-color: #FFFFFA; }
+.theme-green .grid-cell.dark { background-color: #869E86; }
+.theme-green .grid-cell.off-board.light,
+.theme-green .grid-cell.off-board.dark {
+    background-color: #333F33 !important;
+}
+
+.theme-brown .grid-cell.light { background-color: #f0d9b5; }
+.theme-brown .grid-cell.dark { background-color: #b58863; }
+.theme-brown .grid-cell.off-board.light,
+.theme-brown .grid-cell.off-board.dark {
+    background-color: #3E2C1E !important;
+}
+
+.theme-blue .grid-cell.light { background-color: #CCCFD1; }
+.theme-blue .grid-cell.dark { background-color: #688DBC; }
+.theme-blue .grid-cell.off-board.light,
+.theme-blue .grid-cell.off-board.dark {
+    background-color: #232F3F !important;
+}
+
+.theme-oriental .grid-cell.light { background-color: #EFEFEF; }
+.theme-oriental .grid-cell.dark { background-color: #888888; }
+.theme-oriental .grid-cell.off-board.light,
+.theme-oriental .grid-cell.off-board.dark {
+    background-color: #1F281F !important;
+}
+
+/* ═══════════════════════════════════════════════════
+   Flip animation
+   ═══════════════════════════════════════════════════ */
+.board { transition: transform 0.4s ease; }
+
+/* ═══════════════════════════════════════════════════
+   Scrollbar styling
+   ═══════════════════════════════════════════════════ */
+.move-list::-webkit-scrollbar,
+.console-textarea::-webkit-scrollbar,
+.tab-content::-webkit-scrollbar {
+    width: 4px;
+}
+
+.move-list::-webkit-scrollbar-track,
+.tab-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.move-list::-webkit-scrollbar-thumb,
+.tab-content::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.15);
+    border-radius: 2px;
+}
+
+/* ═══════════════════════════════════════════════════
+   Responsive — Mobile
+   ═══════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+    #app {
+        flex-direction: column;
+    }
+
+    #board-area {
+        flex: 0 0 100vw;
+        height: 100vw;
+        padding: 0;
+    }
+
+    .board {
+        max-width: 100vw;
+    }
+
+    #side-panel {
+        flex: 1 1 auto;
+        min-width: 0;
+        max-width: 100%;
+        min-height: 0;
+        width: 100%;
+    }
+
+    .panel-header {
+        padding: 10px 8px;
+    }
+
+    .move-list {
+        max-height: 30vh;
+    }
+}
+
+@media (max-width: 480px) {
+    .board {
+        border-width: 2px;
+    }
+
+    .action-btn {
+        padding: 8px 4px;
+        font-size: 0.75rem;
+    }
+
+    .tab-btn {
+        padding: 8px 4px;
+        font-size: 0.75rem;
+    }
+}
+
+/* ═══════════════════════════════════════════════════
+   Print styles (minimal)
+   ═══════════════════════════════════════════════════ */
+@media print {
+    #side-panel, .toast { display: none !important; }
+    #app { flex-direction: column; }
+    body { background: white; }
+}

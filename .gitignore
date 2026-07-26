@@ -1,0 +1,20 @@
+node_modules/
+local/
+chrome_cache/
+.DS_Store
+*.log
+
+# Editor / tooling
+.claude/
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build artefacts
+dist/
+coverage/
+*.tsbuildinfo
+
+# OS junk
+Thumbs.db

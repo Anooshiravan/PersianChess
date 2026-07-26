@@ -1,0 +1,26 @@
+{
+    "Persian": {
+        "depth_1": 25,
+        "depth_2": 625,
+        "depth_3": 17842,
+        "depth_4": 507907
+    },
+    "Pyramid": {
+        "depth_1": 25,
+        "depth_2": 625,
+        "depth_3": 17792,
+        "depth_4": 505059
+    },
+    "Citadel": {
+        "depth_1": 24,
+        "depth_2": 576,
+        "depth_3": 15976,
+        "depth_4": 440880
+    },
+    "Oriental": {
+        "depth_1": 25,
+        "depth_2": 625,
+        "depth_3": 17396,
+        "depth_4": 483493
+    }
+}

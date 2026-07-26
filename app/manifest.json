@@ -1,0 +1,32 @@
+{
+    "name": "Persian Chess",
+    "short_name": "PersianChess",
+    "description": "Play Persian Chess — A 2000-year-old chess variant with unique pieces and rules",
+    "start_url": "./",
+    "display": "standalone",
+    "background_color": "#3E2C1E",
+    "theme_color": "#3E2C1E",
+    "orientation": "any",
+    "icons": [
+        {
+            "src": "res/android/ldpi.png",
+            "sizes": "36x36",
+            "type": "image/png"
+        },
+        {
+            "src": "res/android/mdpi.png",
+            "sizes": "48x48",
+            "type": "image/png"
+        },
+        {
+            "src": "res/android/hdpi.png",
+            "sizes": "72x72",
+            "type": "image/png"
+        },
+        {
+            "src": "res/android/xhdpi.png",
+            "sizes": "96x96",
+            "type": "image/png"
+        }
+    ]
+}

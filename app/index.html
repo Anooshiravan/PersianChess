@@ -1,0 +1,228 @@
+<!--
+  _____              _                _____ _
+  |  __ \            (_)              / ____| |
+  | |__) |__ _ __ ___ _  __ _ _ __   | |    | |__   ___  ___ ___
+  |  ___/ _ \ '__/ __| |/ _` | '_ \  | |    | '_ \ / _ \/ __/ __|
+  | |  |  __/ |  \__ \ | (_| | | | | | |____| | | |  __/\__ \__ \
+  |_|   \___|_|  |___/_|\__,_|_| |_|  \_____|_| |_|\___||___/___/
+
+----------------------------------------------------------------
+ Persian Chess (www.PersianChess.com)
+ Copyright 2014 Anooshiravan Ahmadi - MCE @ Schuberg Philis
+ Released under the GPL license
+ Based on the open source projects mentioned at:
+ http://www.PersianChess.com/About
+ Redistribution of this game design, rules and the engine
+ requires written permission from the author.
+----------------------------------------------------------------
+-->
+
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#3E2C1E">
+<meta name="description" content="Play Persian Chess - A 2000-year-old chess variant with unique pieces and rules">
+<meta name="keywords" content="persian chess, chess variant, ancient chess, princess chess, persianchess">
+<title>Play Persian Chess</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" href="res/android/xhdpi.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="app">
+  <div id="board-area">
+    <div id="board" class="board"></div>
+  </div>
+
+  <aside id="side-panel" class="side-panel">
+    <div class="panel-header">
+      <button id="panel-toggle" class="panel-toggle-btn" aria-label="Toggle panel" type="button">
+        <span class="hamburger"></span>
+      </button>
+      <img src="img/logo48.png" alt="Persian Chess" class="logo">
+      <div class="panel-title">
+        <b>Persian Chess</b>
+        <span class="version">v2.0.0</span>
+      </div>
+    </div>
+
+    <nav class="tab-nav">
+      <button class="tab-btn active" data-tab="game" type="button">Game</button>
+      <button class="tab-btn" data-tab="settings" type="button">Settings</button>
+      <button class="tab-btn" data-tab="moves" type="button">Extras</button>
+    </nav>
+
+    <div class="tab-content active" id="tab-game">
+      <div class="menu-grid">
+        <button id="btn-new-game" class="menu-btn" type="button">New Game</button>
+        <button id="btn-flip" class="menu-btn" type="button">Flip</button>
+        <button id="btn-hint" class="menu-btn" type="button">Hint</button>
+        <button id="btn-move-now" class="menu-btn" type="button">Move Now</button>
+        <button id="btn-start" class="menu-btn" type="button" title="Start of Game">⏮</button>
+        <button id="btn-undo" class="menu-btn" type="button" title="Take Back">◀</button>
+        <button id="btn-forward" class="menu-btn" type="button" title="Step Forward">▶</button>
+        <button id="btn-end" class="menu-btn" type="button" title="End of Game">⏭</button>
+        <button id="btn-save" class="menu-btn" type="button">Save</button>
+        <button id="btn-load" class="menu-btn" type="button">Load</button>
+        <button id="btn-import" class="menu-btn" type="button">Import</button>
+        <button id="btn-export" class="menu-btn" type="button">Export</button>
+      </div>
+      <div class="move-list" id="move-list"></div>
+    </div>
+
+    <div class="tab-content" id="tab-settings">
+      <div class="setting-group">
+        <label class="setting-label">Engine</label>
+        <select id="engine-switch" class="setting-select">
+          <option value="on">On</option>
+          <option value="off">Off</option>
+        </select>
+      </div>
+      <div class="setting-group">
+        <label class="setting-label">Think Time (seconds)</label>
+        <input type="range" id="think-time" class="setting-range" min="3" max="100" value="3">
+        <span id="think-time-value" class="setting-value">3s</span>
+      </div>
+      <div class="setting-group">
+        <label class="setting-label">Audio</label>
+        <select id="audio-switch" class="setting-select">
+          <option value="on">On</option>
+          <option value="off">Off</option>
+        </select>
+      </div>
+      <div class="setting-group">
+        <label class="setting-label">Hint</label>
+        <select id="hint-switch" class="setting-select">
+          <option value="off">Off</option>
+          <option value="on">On</option>
+        </select>
+      </div>
+      <div class="setting-group">
+        <label class="setting-label">Theme</label>
+        <select id="theme-select" class="setting-select">
+          <option value="green">Caspian</option>
+          <option value="brown">Pyramid</option>
+          <option value="blue">River</option>
+          <option value="oriental">Oriental</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tab-moves">
+      <div class="pgn-viewer">
+        <label class="setting-label">Training Positions</label>
+        <select id="tp-choice" class="setting-select">
+          <option value="0">Standard</option>
+          <option value="7">Ashavan</option>
+          <option value="6">Byarshan</option>
+          <option value="5">Chamru</option>
+          <option value="4">Darshinika</option>
+          <option value="3">Erezavant</option>
+          <option value="2">Frayazenta</option>
+          <option value="1">Garshta</option>
+        </select>
+      </div>
+      <div class="demo-actions">
+        <label class="setting-label">Engine AutoPlay</label>
+        <div class="demo-buttons">
+          <button id="btn-demo-start" class="action-btn" type="button">Start</button>
+          <button id="btn-demo-stop" class="action-btn" type="button">Stop</button>
+        </div>
+      </div>
+      <div class="console-area" id="console-area">
+        <textarea id="console" class="console-textarea" readonly></textarea>
+      </div>
+    </div>
+  </aside>
+
+  <dialog id="new-game-dialog" class="dialog">
+    <h2>New Game</h2>
+    <div class="dialog-form">
+      <div class="form-group">
+        <label for="variant-choice">Variant</label>
+        <select id="variant-choice" class="form-select">
+          <option value="Persian">Persian Princess</option>
+          <option value="Citadel">Celtic Citadel</option>
+          <option value="Pyramid">Egyptian Eye</option>
+          <option value="Oriental">Oriental Omega</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="color-choice">Play as</label>
+        <select id="color-choice" class="form-select">
+          <option value="White">White</option>
+          <option value="Black">Black</option>
+        </select>
+      </div>
+    </div>
+    <div class="dialog-actions">
+      <button id="btn-cancel-game" class="dialog-btn" type="button">Cancel</button>
+      <button id="btn-start-game" class="dialog-btn primary" type="button">Start</button>
+    </div>
+  </dialog>
+
+  <dialog id="slot-dialog" class="dialog">
+    <h2 id="slot-dialog-title">Save Game</h2>
+    <div class="dialog-form">
+      <div class="form-group">
+        <label for="save-load-slot">Slot</label>
+        <select id="save-load-slot" class="form-select">
+          <option value="g1">Slot 1</option>
+          <option value="g2">Slot 2</option>
+          <option value="g3">Slot 3</option>
+          <option value="g4">Slot 4</option>
+          <option value="g5">Slot 5</option>
+          <option value="g6">Slot 6</option>
+          <option value="g7">Slot 7</option>
+        </select>
+      </div>
+    </div>
+    <div class="dialog-actions">
+      <button id="btn-slot-cancel" class="dialog-btn" type="button">Cancel</button>
+      <button id="btn-slot-ok" class="dialog-btn primary" type="button">OK</button>
+    </div>
+  </dialog>
+
+  <dialog id="import-dialog" class="dialog">
+    <h2>Import PGN</h2>
+    <div class="dialog-form">
+      <textarea id="import-pgn-text" rows="10" style="width:100%;box-sizing:border-box;" placeholder="Paste PGN here..."></textarea>
+    </div>
+    <div class="dialog-actions">
+      <button id="btn-import-cancel" class="dialog-btn" type="button">Cancel</button>
+      <button id="btn-import-ok" class="dialog-btn primary" type="button">Import</button>
+    </div>
+  </dialog>
+
+  <dialog id="export-dialog" class="dialog">
+    <h2>Export PGN</h2>
+    <div class="dialog-form">
+      <textarea id="export-pgn-text" rows="10" style="width:100%;box-sizing:border-box;" readonly></textarea>
+    </div>
+    <div class="dialog-actions">
+      <button id="btn-export-close" class="dialog-btn" type="button">Close</button>
+      <button id="btn-export-copy" class="dialog-btn primary" type="button">Copy</button>
+    </div>
+  </dialog>
+
+  <dialog id="gameover-dialog" class="dialog">
+    <h2>Game Over</h2>
+    <p id="gameover-result"></p>
+    <div class="dialog-actions">
+      <button id="btn-ok-from-over" class="dialog-btn primary" type="button">OK</button>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast hidden"></div>
+</div>
+
+<script src="js/board.mjs"></script>
+<script src="js/app.mjs"></script>
+</body>
+</html>
