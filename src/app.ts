@@ -137,20 +137,23 @@ const AudioSystem: {
     play(name: string): void {
         if (!GameController.audioEnabled) return;
         const src = this.sounds[name];
-        if (!src) return;
+        if (!src) {
+            dlog(`Sound "${name}" is not loaded, cannot play.`);
+            return;
+        }
         const inst = new Audio(src.src);
+        inst.preload = 'auto';
         this.playing.push(inst);
-        const cleanup = (): void => {
+        dlog(`Playing sound "${name}".`);
+        const cleanup = (why: string): void => {
             const idx = this.playing.indexOf(inst);
             if (idx >= 0) this.playing.splice(idx, 1);
+            dlog(`Sound "${name}" ${why}.`);
         };
-        inst.addEventListener('ended', cleanup);
-        inst.addEventListener('error', cleanup);
+        inst.addEventListener('ended', () => cleanup('finished playing'));
+        inst.addEventListener('error', () => cleanup('failed with an error'));
         const p = inst.play();
-        if (p && typeof p.catch === 'function')
-            p.catch(() => {
-                cleanup();
-            });
+        if (p && typeof p.catch === 'function') p.catch(() => cleanup('was blocked by the browser'));
     },
 
     stop(name: string): void {
@@ -426,16 +429,21 @@ function handleParsed(body: string): void {
     // @ts-expect-error — highlightMove is global from board.ts
     highlightMove(fromSq, toSq);
 
-    if (flag === 'capture') {
-        AudioSystem.play('capture');
-    } else {
-        AudioSystem.play('move');
+    if (!importing) {
+        if (flag === 'capture') {
+            AudioSystem.play('capture');
+        } else {
+            AudioSystem.play('move');
+        }
     }
 
     addMoveToList(moveStr);
 
     if (importQueue.length > 0) {
         setTimeout(pumpImportQueue, 20);
+    } else if (importing) {
+        importing = false;
+        if (GameController.engine) enginePost('init::turn_on');
     }
 }
 
@@ -814,6 +822,7 @@ function loadGame(slot: string): void {
 // ═══════════════════════════════════════════════════
 
 let importQueue: string[] = [];
+let importing = false;
 
 function exportPgn(): string {
     const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
@@ -863,10 +872,13 @@ function importPgn(text: string): void {
         return;
     }
     startNewGame(parsed.variant, parsed.playerColor);
-    // Replay via engine parse/move chain. Each parsed event fires the next.
+    // Engine must be OFF during replay, otherwise every move:: triggers a
+    // MoveNow scheduled 100ms later and the engine starts playing on its own.
+    if (GameController.engineOn && GameController.engine) enginePost('init::turn_off');
     importQueue = parsed.moves.slice();
-    // Give the new_game_started handler a moment, then start pumping.
+    importing = true;
     setTimeout(pumpImportQueue, 100);
+    showToast('Imported PGN');
 }
 
 function loadTrainingPosition(index: number): void {

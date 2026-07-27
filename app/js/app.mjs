@@ -66,20 +66,23 @@
     play(name) {
       if (!GameController.audioEnabled) return;
       const src = this.sounds[name];
-      if (!src) return;
+      if (!src) {
+        dlog(`Sound "${name}" is not loaded, cannot play.`);
+        return;
+      }
       const inst = new Audio(src.src);
+      inst.preload = "auto";
       this.playing.push(inst);
-      const cleanup = () => {
+      dlog(`Playing sound "${name}".`);
+      const cleanup = (why) => {
         const idx = this.playing.indexOf(inst);
         if (idx >= 0) this.playing.splice(idx, 1);
+        dlog(`Sound "${name}" ${why}.`);
       };
-      inst.addEventListener("ended", cleanup);
-      inst.addEventListener("error", cleanup);
+      inst.addEventListener("ended", () => cleanup("finished playing"));
+      inst.addEventListener("error", () => cleanup("failed with an error"));
       const p = inst.play();
-      if (p && typeof p.catch === "function")
-        p.catch(() => {
-          cleanup();
-        });
+      if (p && typeof p.catch === "function") p.catch(() => cleanup("was blocked by the browser"));
     },
     stop(name) {
       const sound = this.sounds[name];
@@ -294,14 +297,19 @@
     const fromSq = sqFromAlg(moveParts[0]);
     const toSq = sqFromAlg(moveParts[1]);
     highlightMove(fromSq, toSq);
-    if (flag === "capture") {
-      AudioSystem.play("capture");
-    } else {
-      AudioSystem.play("move");
+    if (!importing) {
+      if (flag === "capture") {
+        AudioSystem.play("capture");
+      } else {
+        AudioSystem.play("move");
+      }
     }
     addMoveToList(moveStr);
     if (importQueue.length > 0) {
       setTimeout(pumpImportQueue, 20);
+    } else if (importing) {
+      importing = false;
+      if (GameController.engine) enginePost("init::turn_on");
     }
   }
   function handleGameOver(body) {
@@ -604,6 +612,7 @@
     showToast(`Game loaded from ${slot}`);
   }
   var importQueue = [];
+  var importing = false;
   function exportPgn() {
     const dateStr = (/* @__PURE__ */ new Date()).toISOString().slice(0, 10).replace(/-/g, ".");
     let pgn = "";
@@ -649,8 +658,11 @@
       return;
     }
     startNewGame(parsed.variant, parsed.playerColor);
+    if (GameController.engineOn && GameController.engine) enginePost("init::turn_off");
     importQueue = parsed.moves.slice();
+    importing = true;
     setTimeout(pumpImportQueue, 100);
+    showToast("Imported PGN");
   }
   function loadTrainingPosition(index) {
     if (!GameController.engine) return;
